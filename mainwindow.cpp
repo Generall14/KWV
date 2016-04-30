@@ -269,6 +269,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         else                                                                        //W przeciwnym razie wyłącz program
             this->close();
     }
+    else if((event->key()==Qt::Key_Enter)||(event->key()==Qt::Key_Return))          //Przycisk Enter
+        this->ToggleFullscreen();                                                   //Przełączenie trybu
     else
         QMainWindow::keyPressEvent(event);                                          //Przekazanie nieprzechwyconych eventów
 }
