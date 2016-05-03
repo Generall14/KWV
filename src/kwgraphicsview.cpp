@@ -264,12 +264,12 @@ QRect KWGraphicsView::DodajMar(QRect rwe)
 
 void KWGraphicsView::ZoomIn()
 {
-    SetZoom(floor(zum*10)*.1+.1);                                                   //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
+    SetZoom(floor(zum*(1/deltaZoom))*deltaZoom+deltaZoom);                          //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
 }
 
 void KWGraphicsView::ZoomOut()
 {
-    SetZoom(ceil(zum*10)*.1-.1);                                                    //Dopasowanie wartości do szerego 1 + x*0,1 i zmniejszenie o jeden stopień
+    SetZoom(ceil(zum*(1/deltaZoom)-deltaZoom)*deltaZoom-deltaZoom);                 //Dopasowanie wartości do szerego 1 + x*0,1 i zmniejszenie o jeden stopień
 }
 
 void KWGraphicsView::SetZoom(float z)
@@ -372,7 +372,10 @@ void KWGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 void KWGraphicsView::keyPressEvent(QKeyEvent *event)
 {
     if(gifVec.isEmpty())
+    {
+        QGraphicsView::keyPressEvent(event);                                        //Wywołanie standardowej obsługi klawiszy
         return;
+    }
 
     QRect trect = gifVec.at(currFrame).rect();
     QRect max;

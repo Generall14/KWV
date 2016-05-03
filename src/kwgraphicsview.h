@@ -26,6 +26,7 @@ public:
     static constexpr float maxZoom = 5;                                                                                     //Maksymalne powiększenie
     static const int fastest = 5;                                                                                           //Minimalne opóźnienie pomiędzy klatkami
     static const int slowest = 200;                                                                                         //Maksymalne opóźnienie pomiędzy klatkami
+    static constexpr float deltaZoom = .05;                                                                                 //Inkrementacja/dekrementacja powiększenia
 
     void Wyswietl(QVector<QPixmap> nowyObraz, int t=0);                                                                     //Wyświetla nowy obraz
     void Odswiez();                                                                                                         //Odświeża rozmiar okna i obrazu
