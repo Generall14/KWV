@@ -13,6 +13,10 @@ MainWindow::MainWindow(QWidget *parent)
     if(tempList.length()>1)                                                         //Jeżeli podano dodatkowe argumenty
         startOpen = tempList[1];                                                    //Przypisywanie drugiego argumentu jako adresu do otwarcia
 
+    cursorTimer = new QTimer();                                                     //Tworzenie nowego timera
+    cursorTimer->setInterval(2000);                                                 //Ustawianie czasu ukrywania
+    connect(cursorTimer, SIGNAL(timeout()), this, SLOT(HideCursor()));              //Tworzenie połączenia
+
     InitWidgets();                                                                  //Tworzenie obiektów
     InitConnections();                                                              //Tworzenie połączeń
     InitShortcuts();                                                                //Tworzenie skrótów
@@ -56,14 +60,16 @@ MainWindow::~MainWindow()
     for(int i=0;i<rep.length();++i)
         delete rep[i];
     rep.clear();
+
+    delete cursorTimer;
 }
 
 void MainWindow::InitWidgets()
 {
-    menu = new KWMenu(this);                                                        //Tworzenie menu
-
     wyswietlacz = new KWGraphicsView(this);                                         //Tworzenie wyświetlacza obrazów
     this->setCentralWidget(wyswietlacz);
+
+    menu = new KWMenu(this);                                                        //Tworzenie menu
 
     motor = new KWMotor(wyswietlacz, this);                                         //Tworzenie silnika
 
@@ -123,6 +129,11 @@ void MainWindow::InitShortcuts()
 
     s =  new QShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_O), this);        //Otwieranie nowego obrazu
     connect(s, SIGNAL(activated()), motor, SLOT(Otworz()));
+    s->setEnabled(false);
+    rep.push_back(s);
+
+    s =  new QShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_H), this);        //Zoom reset
+    connect(s, SIGNAL(activated()), wyswietlacz, SLOT(ResetZoom()));
     s->setEnabled(false);
     rep.push_back(s);
 }
@@ -236,6 +247,8 @@ void MainWindow::setFullsscreen()
     for(int i=0;i<rep.length();++i)                                                 //Aktywacja skrótów
         rep[i]->setEnabled(true);
 
+    cursorTimer->start();                                                           //Uruchamianie timera
+
     //wyswietlacz->ResetZoom();
 }
 
@@ -257,7 +270,16 @@ void MainWindow::resetFullscreen()
     for(int i=0;i<rep.length();++i)                                                 //Deaktywacja skrótów
         rep[i]->setEnabled(false);
 
+    cursorTimer->stop();                                                            //Zatrzymywanie timera
+    QApplication::restoreOverrideCursor();                                          //Przywracanie kursora
+
     //wyswietlacz->ResetZoom();
+}
+
+void MainWindow::HideCursor()
+{
+    cursorTimer->stop();                                                            //Zatrzymywanie timera
+    QApplication::setOverrideCursor(Qt::BlankCursor);                               //Ukrywanie kursora
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -317,15 +339,8 @@ void MainWindow::Usun()
     if(msgBox.exec() == QMessageBox::No)                                            //Anuluj -> wyjście
         return;
 
-    QString kom;                                                                    //Komenda
-
-#ifdef WIN                                                                          //Dla wersji na Windows
-    kom += "win";
-#else                                                                               //Dla wersji na Linux
-    kom += QString("rm ") + QString(" \"") + motor->Adres() + QString("\" &");      //Tworzenie komendy
-#endif
-
-    system(kom.toStdString().c_str());                                              //Wywołanie komendy
+    QFile plik(motor->Adres());                                                     //Usuwanie pliku
+    plik.remove();
 
     if(motor->DlugoscListy()>1)                                                     //Jeżeli na liście były inne pliki
     {

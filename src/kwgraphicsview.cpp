@@ -16,6 +16,8 @@ KWGraphicsView::KWGraphicsView(MainWindow *mw):
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(GifUpd()));
 
+    setMouseTracking(true);                                                         //Ustawianie śledzenia myszy
+
 #ifdef TEST
     scena->setBackgroundBrush(QBrush(QColor(100, 200, 150)));                       //Ustawianie tła
 #else
@@ -272,6 +274,9 @@ void KWGraphicsView::ZoomOut()
 
 void KWGraphicsView::SetZoom(float z)
 {
+    if(gifVec.isEmpty())
+        return;
+
     Zoom(z);                                                                        //Przeskalowanie obrazu
 
     QRect temp = scena->sceneRect().toRect();                                       //Pobranie rozmiaru sceny
@@ -339,6 +344,12 @@ void KWGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 
 void KWGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
+    if(MWw->isFullScreen())                                                         //Wykrywanie trybu fullscreen
+    {
+        MWw->cursorTimer->start();                                                  //Restart timera
+        QApplication::restoreOverrideCursor();                                      //Przywracanie kursora
+    }
+
     if(przeciaganie)                                                                //Jeżeli ustawiony tryb przeciągania
     {
         QPoint temp = event->globalPos();                                           //Pobranie pozycji kursora
@@ -360,6 +371,9 @@ void KWGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void KWGraphicsView::keyPressEvent(QKeyEvent *event)
 {
+    if(gifVec.isEmpty())
+        return;
+
     QRect trect = gifVec.at(currFrame).rect();
     QRect max;
 

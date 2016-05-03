@@ -14,6 +14,7 @@
 #include <QWindowStateChangeEvent>
 #include <QLabel>
 #include <QApplication>
+#include <QFile>
 
 #include <chrono>
 
@@ -28,6 +29,9 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+    friend class KWMenu;
+    friend class KWGraphicsView;
 
     enum trybOkna{Normalny, Zmaksymalizowany};
 public:
@@ -50,6 +54,8 @@ private:
     QPushButton* invisibleCloser;                                                                                           //Służy jako przycisk zamykania trybu fullscreen
 
     QVector<QShortcut*> rep;                                                                                                //Skróty powtórzone z paska menu (włączane tylko w fullscreen)
+
+    QTimer* cursorTimer = NULL;                                                                                             //Timer do ukrywania kursora w trybie fullscreen
 
     KW3rdGif* okno = NULL;
 
@@ -81,6 +87,8 @@ private slots:
     void ToggleFullscreen();                                                                                                //Przełącza tryb fullscreen
 
     void NoweOkno();                                                                                                        //Otwiera nowe okno programu
+
+    void HideCursor();                                                                                                      //Ukrywa kursor
 
     virtual bool event(QEvent* event);                                                                                      //Obsługa eventów
 };

@@ -1,5 +1,6 @@
 #include "kwmenu.h"
 #include "../mainwindow.h"
+#include "kwgraphicsview.h"
 
 #include <QDebug>
 
@@ -40,17 +41,27 @@ void KWMenu::InitMenus()
     MWw->menuBar()->addMenu(menuPlik);                                              //Dodawanie do menu głównego okna
 
     //-----------------------------------Menu Edycja--------------------------------
-    menuEdycja = new QMenu(tr("&Edycja"), 0);                                       //Menu -> Pomoc
+    menuEdycja = new QMenu(tr("&Edycja"), 0);                                       //Menu -> Edycja
 
-    akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Plik -> Usuń
+    akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Edycja -> Usuń
     connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));
     menuEdycja->addAction(akcjaUsun);
 
-    akcjaGifManager = new QAction(tr("Gif manager"), menuEdycja);                           //Menu -> Gif Manager
+    akcjaGifManager = new QAction(tr("Gif manager"), menuEdycja);                           //Edycja -> Gif Manager
     connect(akcjaGifManager, SIGNAL(triggered(bool)), MWw, SLOT(GifManager()));
     menuEdycja->addAction(akcjaGifManager);
 
     MWw->menuBar()->addMenu(menuEdycja);                                            //Dodawanie do menu głównego okna
+
+    //-----------------------------------Menu Widok---------------------------------
+    menuWidok = new QMenu(tr("&Widok"), 0);                                         //Menu -> Widok
+
+    akcjaResetZoom = new QAction(tr("&Oryginalny rozmiar"), menuWidok);                     //Widok -> Oryginalny rozmiar
+    akcjaResetZoom->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_H));
+    connect(akcjaResetZoom, SIGNAL(triggered(bool)), MWw->wyswietlacz, SLOT(ResetZoom()));
+    menuWidok->addAction(akcjaResetZoom);
+
+    MWw->menuBar()->addMenu(menuWidok);                                             //Dodawanie do menu głównego okna
 
     //-----------------------------------Menu Pomoc---------------------------------
     menuPomoc = new QMenu(tr("P&omoc"), 0);                                         //Menu -> Pomoc
