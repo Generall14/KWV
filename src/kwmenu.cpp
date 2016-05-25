@@ -47,7 +47,7 @@ void KWMenu::InitMenus()
     connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));
     menuEdycja->addAction(akcjaUsun);
 
-    akcjaGifManager = new QAction(tr("Gif manager"), menuEdycja);                           //Edycja -> Gif Manager
+    akcjaGifManager = new QAction(tr("&Gif manager"), menuEdycja);                          //Edycja -> Gif Manager
     connect(akcjaGifManager, SIGNAL(triggered(bool)), MWw, SLOT(GifManager()));
     menuEdycja->addAction(akcjaGifManager);
 

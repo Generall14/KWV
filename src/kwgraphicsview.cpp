@@ -64,6 +64,8 @@ void KWGraphicsView::Wyswietl(QVector<QPixmap> nowyObraz, int tv)
     emit Zoomed(zum*100);                                                           //Wysyłanie sygnału
     emit Nowy();
     czas_end = std::chrono::steady_clock::now();                                    //Pomiar czasu
+
+    qApp->processEvents();                                                          //Zapewnia wyświetlanie obrazu w stanie zamulenia
 }
 
 void KWGraphicsView::GifNext()
@@ -264,7 +266,7 @@ QRect KWGraphicsView::DodajMar(QRect rwe)
 
 void KWGraphicsView::ZoomIn()
 {
-    SetZoom(floor(zum*(1/deltaZoom))*deltaZoom+deltaZoom);                          //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
+    SetZoom(floor(zum*(1/deltaZoom)+deltaZoom)*deltaZoom+deltaZoom);                //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
 }
 
 void KWGraphicsView::ZoomOut()

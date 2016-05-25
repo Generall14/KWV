@@ -6,13 +6,14 @@
 
 QT       += core gui
 
+RC_ICONS = ikona.ico
+
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = KWView
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \

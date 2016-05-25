@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include <QProcess>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -351,17 +353,10 @@ void MainWindow::Usun()
 
 void MainWindow::NoweOkno()
 {
-    QString kom;                                                                    //Komenda
-
-#ifdef WIN                                                                          //Dla wersji na Windows
-    kom += "win";
-#else                                                                               //Dla wersji na Linux
-    kom = "\"" + qApp->arguments()[0] + "\"";                                       //Tworzenie komendy
+    QStringList arguments;
     if(motor->isOpened())
-        kom += " \"" + motor->Adres() + "\" &";                                     //Dodawanie adresu obrazu
-    else
-        kom += " &";                                                                //Bez obrazu
-#endif
+        arguments << motor->Adres();                                                //Tworzenie argumentów programu
 
-    system(kom.toStdString().c_str());                                              //Wywołanie komendy
+    QProcess *myProcess = new QProcess(NULL);
+    myProcess->start(qApp->arguments()[0], arguments);                              //Uruchamianie nowego procesu
 }
