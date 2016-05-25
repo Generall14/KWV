@@ -19,17 +19,21 @@ void KWStatusBar::Init()
     zoom->setMinimumWidth(60);
     zoom->setFrameShape(QFrame::StyledPanel);
 
-    resetZoom = new QPushButton("X");                                               //Nowy przycisk resetu powiększenia
+    resetZoom = new QToolButton();                                                  //Nowy przycisk resetu powiększenia
     int ms = pasek->height()*.6;
     resetZoom->setMinimumSize(ms, ms);
     resetZoom->setMaximumSize(ms, ms);
     resetZoom->setToolTip(tr("Oryginalny rozmiar"));
+    resetZoom->setIcon(QIcon("ics/resetZoom.ico"));
+    resetZoom->setIconSize(QSize(12, 12));
     connect(resetZoom, SIGNAL(clicked(bool)), this, SIGNAL(ResetZoom()));
 
-    btnBack = new QPushButton("<");                                                 //Nowy przycisk "Back"
+    btnBack = new QToolButton();                                                    //Nowy przycisk "Back"
     btnBack->setMinimumSize(ms, ms);
     btnBack->setMaximumSize(ms, ms);
     btnBack->setToolTip(tr("Poprzedni obraz"));
+    btnBack->setIcon(QIcon("ics/prevImage.ico"));
+    btnBack->setIconSize(QSize(12, 12));
     connect(btnBack, SIGNAL(clicked(bool)), this, SIGNAL(Back()));
 
     plikia = new QLineEdit("0");                                                    //Nowy obiekt do wyświetlania aktualnego pliku
@@ -43,10 +47,12 @@ void KWStatusBar::Init()
     plikib->setMinimumWidth(50);
     plikib->setFrameShape(QFrame::StyledPanel);
 
-    btnNext = new QPushButton(">");                                                 //Nowy przycisk "Next"
+    btnNext = new QToolButton();                                                    //Nowy przycisk "Next"
     btnNext->setMinimumSize(ms, ms);
     btnNext->setMaximumSize(ms, ms);
     btnNext->setToolTip(tr("Kolejny obraz"));
+    btnNext->setIcon(QIcon("ics/nextImage.ico"));
+    btnNext->setIconSize(QSize(12, 12));
     connect(btnNext, SIGNAL(clicked(bool)), this, SIGNAL(Next()));
 
     data = new QLabel("-");                                                         //Nowy obiekt do wyświetlania daty

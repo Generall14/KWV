@@ -11,16 +11,16 @@ KW3rdGif::KW3rdGif(KWGraphicsView* gg):
     QDialog(gg),
     GV(gg)
 {
-    qDebug() << "Konstruktor gif";
-
     InitWidgets();                                                                  //Tworzenie widgetów
     InitConnections();                                                              //Tworzenie połączeń
     Update();                                                                       //Uaktualnianie parametrów
+
+    setWindowTitle("Gif manager");                                                  //Ustawianie napisu na belce okna
 }
 
 KW3rdGif::~KW3rdGif()
 {
-    qDebug() << "Destruktor gif";
+
 }
 
 void KW3rdGif::InitWidgets()
@@ -42,6 +42,7 @@ void KW3rdGif::InitWidgets()
     speedSliderLay2->addWidget(speedLab);
 
     speedButtonDef = new QToolButton(this);                                         //Domyślna prędkość odtwarzania
+    speedButtonDef->setIcon(QIcon("ics/defSpeed.ico"));
     speedSliderLay2->addWidget(speedButtonDef);
 
     QHBoxLayout* speedSliderLay = new QHBoxLayout();
@@ -66,12 +67,15 @@ void KW3rdGif::InitWidgets()
     sterLay->addItem(spacer);
 
     sterBack = new QToolButton(this);                                               //Poprzednia klatka
+    sterBack->setIcon(QIcon("ics/prevFrame.ico"));
     sterLay->addWidget(sterBack);
 
     sterPlay = new QToolButton(this);                                               //Odtwarzanie / zatrzymanie
+    sterPlay->setIcon(QIcon("ics/pause.ico"));
     sterLay->addWidget(sterPlay);
 
     sterNext = new QToolButton(this);                                               //Kolejna klatka
+    sterNext->setIcon(QIcon("ics/nextFrame.ico"));
     sterLay->addWidget(sterNext);
 
     spacer = new QSpacerItem(2, 2, QSizePolicy::Expanding, QSizePolicy::Minimum);

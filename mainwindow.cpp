@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     InitConnections();                                                              //Tworzenie połączeń
     InitShortcuts();                                                                //Tworzenie skrótów
 
+    setWindowIcon(QIcon("ics/ikona.ico"));                                          //Ustawianie ikony na belce okna
+
 #ifdef TEST                                                                         //Wersja testowa
     this->setWindowTitle("KWView (Wersja testowa)");
 #else
@@ -161,15 +163,11 @@ void MainWindow::About()
     t = "KWView\n\nAutor: " + ab.autor + "\n\nWersja programu: " + ab.wersja + "\nZ dnia ";
     t += ab.data + "\n\nWersja ";
 #ifdef TEST
-    t += "testowa dla systemów ";
+    t += "testowa.";
 #else
-    t += "docelowa dla systemów ";
+    t += "docelowa.";
 #endif
-#ifdef WIN
-    t += "Windows.";
-#else
-    t += "Linux.";
-#endif
+
     t += "\n\nStan programu: " + ab.stan;
     QMessageBox msgBox;
     msgBox.setWindowTitle("O programie");

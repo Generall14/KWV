@@ -8,7 +8,8 @@
 #include <QLineEdit>
 #include <QDateTime>
 #include <QString>
-#include <QPushButton>
+#include <QToolButton>
+#include <QIcon>
 
 class MainWindow;
 
@@ -30,9 +31,9 @@ private:
     QLabel* rozmiar;                                                                                                        //Rozmiar pliku
 
     //-----------------------------------------------Obiekty QPushButton na pasku-------------------------------------------
-    QPushButton* resetZoom;                                                                                                 //Przycisk resetujący zoom
-    QPushButton* btnNext;                                                                                                   //Następny obraz
-    QPushButton* btnBack;                                                                                                   //Poprzedni obraz
+    QToolButton* resetZoom;                                                                                                 //Przycisk resetujący zoom
+    QToolButton* btnNext;                                                                                                   //Następny obraz
+    QToolButton* btnBack;                                                                                                   //Poprzedni obraz
 
     //-----------------------------------------------Obiekty QLabel dla trybu pełnoekranowego-------------------------------
     QLabel* plikiF;                                                                                                         //Liczba plików w trybie fullscreen

@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-RC_ICONS = ikona.ico
+RC_ICONS = ics/ikona.ico
 
 CONFIG += c++11
 
