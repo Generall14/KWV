@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ics/defSpeed.ico</file>
+        <file>ics/ikona.ico</file>
+        <file>ics/nextFrame.ico</file>
+        <file>ics/nextImage.ico</file>
+        <file>ics/pause.ico</file>
+        <file>ics/play.ico</file>
+        <file>ics/prevFrame.ico</file>
+        <file>ics/prevImage.ico</file>
+        <file>ics/resetZoom.ico</file>
+    </qresource>
+</RCC>

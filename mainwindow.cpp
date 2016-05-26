@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     InitConnections();                                                              //Tworzenie połączeń
     InitShortcuts();                                                                //Tworzenie skrótów
 
-    setWindowIcon(QIcon("ics/ikona.ico"));                                          //Ustawianie ikony na belce okna
+    setWindowIcon(QIcon(":/ics/ikona.ico"));                                        //Ustawianie ikony na belce okna
 
 #ifdef TEST                                                                         //Wersja testowa
     this->setWindowTitle("KWView (Wersja testowa)");

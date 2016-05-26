@@ -32,3 +32,6 @@ HEADERS  += mainwindow.h \
     src/kwstatusbar.h \
     src/kwmotor.h \
     src/3rdforms/kw3rdgif.h
+
+RESOURCES += \
+    ikony.qrc

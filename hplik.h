@@ -1,5 +1,5 @@
 /**
- * 			WKView, wersja 0.10.07, z dnia 2016.05.25.
+ * 			WKView, wersja 0.10.08, z dnia 2016.05.26.
  *          Początek projektu, 2016.04.08. Prymitywnie kompletny.
  *
  * 			Autor: Kogut Wojciech
@@ -15,8 +15,8 @@
 
 struct about
 {
-    QString wersja = "v0.10.07";
-    QString data = "2016.05.25";
+    QString wersja = "v0.10.08";
+    QString data = "2016.05.26";
     QString autor = "Kogut Wojciech";
     QString stan = "Prymitywnie kompletny.";
 };

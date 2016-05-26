@@ -24,7 +24,7 @@ void KWStatusBar::Init()
     resetZoom->setMinimumSize(ms, ms);
     resetZoom->setMaximumSize(ms, ms);
     resetZoom->setToolTip(tr("Oryginalny rozmiar"));
-    resetZoom->setIcon(QIcon("ics/resetZoom.ico"));
+    resetZoom->setIcon(QIcon(":/ics/resetZoom.ico"));
     resetZoom->setIconSize(QSize(12, 12));
     connect(resetZoom, SIGNAL(clicked(bool)), this, SIGNAL(ResetZoom()));
 
@@ -32,7 +32,7 @@ void KWStatusBar::Init()
     btnBack->setMinimumSize(ms, ms);
     btnBack->setMaximumSize(ms, ms);
     btnBack->setToolTip(tr("Poprzedni obraz"));
-    btnBack->setIcon(QIcon("ics/prevImage.ico"));
+    btnBack->setIcon(QIcon(":/ics/prevImage.ico"));
     btnBack->setIconSize(QSize(12, 12));
     connect(btnBack, SIGNAL(clicked(bool)), this, SIGNAL(Back()));
 
@@ -51,7 +51,7 @@ void KWStatusBar::Init()
     btnNext->setMinimumSize(ms, ms);
     btnNext->setMaximumSize(ms, ms);
     btnNext->setToolTip(tr("Kolejny obraz"));
-    btnNext->setIcon(QIcon("ics/nextImage.ico"));
+    btnNext->setIcon(QIcon(":/ics/nextImage.ico"));
     btnNext->setIconSize(QSize(12, 12));
     connect(btnNext, SIGNAL(clicked(bool)), this, SIGNAL(Next()));
 
