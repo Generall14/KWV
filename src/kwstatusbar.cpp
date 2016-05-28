@@ -36,7 +36,7 @@ void KWStatusBar::Init()
     btnBack->setIconSize(QSize(12, 12));
     connect(btnBack, SIGNAL(clicked(bool)), this, SIGNAL(Back()));
 
-    plikia = new QLineEdit("0");                                                    //Nowy obiekt do wyświetlania aktualnego pliku
+    plikia = new MyQLineEdit("0");                                                  //Nowy obiekt do wyświetlania aktualnego pliku
     plikia->setMinimumWidth(40);
     plikia->setMaximumWidth(40);
     plikia->setAlignment(Qt::AlignRight);

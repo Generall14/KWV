@@ -60,8 +60,7 @@ void KWMotor::Otworz(QString adres) throw(QString)
         }
     }
 
-    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-        return;
+    OtworzPlik(adres);                                                           //Otwieranie pliku
 
     Sygnaly();                                                                      //Rozsyłanie sygnałów
 }
@@ -104,6 +103,7 @@ bool KWMotor::OtworzGif(QString adr)
         }
         else return 666;
     }
+    GV->Wyswietl(gifVec);
     emit Error("Nie można otworzyć pliku " + adr + ".");                            //Zgłoszenie błędu
     delete mv;
     return 666;
@@ -115,6 +115,7 @@ bool KWMotor::OtworzImg(QString adr)
     gifVec.push_back(QPixmap(adr));                                                 //Odczytywanie obrazu
     if(gifVec.at(0).isNull())                                                       //Sprawdzanie poprawności
     {
+        GV->Wyswietl(gifVec);
         emit Error("Nie można otworzyć pliku " + adr + ".");                        //Zgłaszanie błędu
         return 666;
     }
@@ -149,8 +150,7 @@ void KWMotor::Next()
 
     QString adres = katalog.absolutePath() + "/" + pliki[next];                     //Pełen adres nowego pliku
 
-    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-        return;
+    OtworzPlik(adres);                                                              //Otwieranie pliku
 
     aktualny = next;                                                                //Ustawianie znacznika
 
@@ -170,8 +170,7 @@ void KWMotor::Back()
 
     QString adres = katalog.absolutePath() + "/" + pliki[next];                     //Pełen adres nowego pliku
 
-    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-        return;
+    OtworzPlik(adres);                                                              //Otwieranie pliku
 
     aktualny = next;                                                                //Ustawianie znacznika
 
@@ -187,8 +186,7 @@ void KWMotor::Otworz(int nr)
 
     QString adres = katalog.absolutePath() + "/" + pliki[nr];                       //Pełen adres nowego pliku
 
-    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-        return;
+    OtworzPlik(adres);                                                              //Otwieranie pliku
 
     aktualny = nr;                                                                  //Ustawianie znacznika
 

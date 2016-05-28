@@ -2,6 +2,7 @@
 #define KWSTATUSBAR_H
 
 #include "mwptr.h"
+#include "osrc/MyQLineEdit.hpp"
 #include <QStatusBar>
 #include <QLabel>
 #include <QLine>
@@ -25,7 +26,7 @@ private:
     //-----------------------------------------------Obiekty QLabel do wyświetlania tekstu----------------------------------
     QLabel* zoom;                                                                                                           //Powiększenie
     QLabel* res;                                                                                                            //Rozdzielczość
-    QLineEdit* plikia;                                                                                                      //Aktualny plik
+    MyQLineEdit* plikia;                                                                                                      //Aktualny plik
     QLabel* plikib;                                                                                                         //Liczba plików
     QLabel* data;                                                                                                           //Data modyfikacji
     QLabel* rozmiar;                                                                                                        //Rozmiar pliku

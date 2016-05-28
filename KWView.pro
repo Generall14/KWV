@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     src/kwgraphicsview.cpp \
     src/kwstatusbar.cpp \
     src/kwmotor.cpp \
-    src/3rdforms/kw3rdgif.cpp
+    src/3rdforms/kw3rdgif.cpp \
+    src/osrc/MyQLineEdit.cpp
 
 HEADERS  += mainwindow.h \
     hplik.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     src/kwgraphicsview.h \
     src/kwstatusbar.h \
     src/kwmotor.h \
-    src/3rdforms/kw3rdgif.h
+    src/3rdforms/kw3rdgif.h \
+    src/osrc/MyQLineEdit.hpp
 
 RESOURCES += \
     ikony.qrc
