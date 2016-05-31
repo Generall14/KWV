@@ -18,11 +18,10 @@ KWGraphicsView::KWGraphicsView(MainWindow *mw):
 
     setMouseTracking(true);                                                         //Ustawianie śledzenia myszy
 
-#ifdef TEST
-    scena->setBackgroundBrush(QBrush(QColor(100, 200, 150)));                       //Ustawianie tła
-#else
-    scena->setBackgroundBrush(QBrush(QColor(0, 0, 0)));                             //Ustawianie tła
-#endif
+    if(MWw->testRun)
+        scena->setBackgroundBrush(QBrush(QColor(100, 200, 150)));
+    else
+        scena->setBackgroundBrush(QBrush(QColor(0, 0, 0)));                         //Ustawianie tła
 }
 
 KWGraphicsView::~KWGraphicsView()

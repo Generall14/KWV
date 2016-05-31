@@ -11,9 +11,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     setMinimumSize(QSize(minSzerokosc, minWysokosc));                               //Ustawianie minimalnego rozmiaru okna
 
-    QStringList tempList = qApp->arguments();                                       //Pobieranie listy argumentów
-    if(tempList.length()>1)                                                         //Jeżeli podano dodatkowe argumenty
-        startOpen = tempList[1];                                                    //Przypisywanie drugiego argumentu jako adresu do otwarcia
+    QStringList lista =  qApp->arguments();                                         //Pobieranie listy argumentów
+    for(int i=0;i<lista.length();++i)                                               //Przeszukiwanie argumentów
+    {
+        if((!lista.at(i).compare("-t", Qt::CaseInsensitive))||(!lista.at(i).compare("--test", Qt::CaseInsensitive)))
+        {
+            testRun = true;
+            lista.removeAt(i);
+        }
+    }
+    if(lista.length()>1)                                                            //Jeżeli zostały dodatkowe argumenty
+        startOpen = lista[1];                                                       //Przypisywanie drugiego argumentu jako adresu do otwarcia
 
     cursorTimer = new QTimer();                                                     //Tworzenie nowego timera
     cursorTimer->setInterval(2000);                                                 //Ustawianie czasu ukrywania
@@ -25,38 +33,36 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowIcon(QIcon(":/ics/ikona.ico"));                                        //Ustawianie ikony na belce okna
 
-#ifdef TEST                                                                         //Wersja testowa
-    this->setWindowTitle("KWView (Wersja testowa)");
-#else
-    this->setWindowTitle("KWView");                                                 //Główny pasek okna
-#endif
+    if(testRun)                                                                     //Wersja testowa
+    {
+        this->setWindowTitle("KWView <Tryb testowy>");
 
-#ifdef TEST                                                                         //testy
+        QPushButton* pba = new QPushButton("A", this);
+        pba->setGeometry(10, 30, 30, 30);
+        connect(pba, SIGNAL(clicked(bool)), this, SLOT(testOpenA()));
 
-    QPushButton* pba = new QPushButton("A", this);
-    pba->setGeometry(10, 30, 30, 30);
-    connect(pba, SIGNAL(clicked(bool)), this, SLOT(testOpenA()));
+        QPushButton* pbback = new QPushButton("<", this);
+        pbback->setGeometry(40, 30, 30, 30);
+        connect(pbback, SIGNAL(clicked(bool)), motor, SLOT(Back()));
 
-    QPushButton* pbback = new QPushButton("<", this);
-    pbback->setGeometry(40, 30, 30, 30);
-    connect(pbback, SIGNAL(clicked(bool)), motor, SLOT(Back()));
+        QPushButton* pbnext = new QPushButton(">", this);
+        pbnext->setGeometry(70, 30, 30, 30);
+        connect(pbnext, SIGNAL(clicked(bool)), motor, SLOT(Next()));
 
-    QPushButton* pbnext = new QPushButton(">", this);
-    pbnext->setGeometry(70, 30, 30, 30);
-    connect(pbnext, SIGNAL(clicked(bool)), motor, SLOT(Next()));
+        QPushButton* pbminus = new QPushButton("-", this);
+        pbminus->setGeometry(100, 30, 30, 30);
+        connect(pbminus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomOut()));
 
-    QPushButton* pbminus = new QPushButton("-", this);
-    pbminus->setGeometry(100, 30, 30, 30);
-    connect(pbminus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomOut()));
+        QPushButton* pbplus = new QPushButton("+", this);
+        pbplus->setGeometry(130, 30, 30, 30);
+        connect(pbplus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomIn()));
 
-    QPushButton* pbplus = new QPushButton("+", this);
-    pbplus->setGeometry(130, 30, 30, 30);
-    connect(pbplus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomIn()));
-
-    QPushButton* pbtest = new QPushButton("t", this);
-    pbtest->setGeometry(160, 30, 30, 30);
-    connect(pbtest, SIGNAL(clicked(bool)), this, SLOT(publicTest()));
-#endif                                                                              //koniec testów
+        QPushButton* pbtest = new QPushButton("t", this);
+        pbtest->setGeometry(160, 30, 30, 30);
+        connect(pbtest, SIGNAL(clicked(bool)), this, SLOT(publicTest()));
+    }
+    else
+        this->setWindowTitle("KWView");                                             //Główny pasek okna
 }
 
 MainWindow::~MainWindow()
@@ -73,9 +79,9 @@ void MainWindow::InitWidgets()
     wyswietlacz = new KWGraphicsView(this);                                         //Tworzenie wyświetlacza obrazów
     this->setCentralWidget(wyswietlacz);
 
-    menu = new KWMenu(this);                                                        //Tworzenie menu
-
     motor = new KWMotor(wyswietlacz, this);                                         //Tworzenie silnika
+
+    menu = new KWMenu(this);                                                        //Tworzenie menu
 
     pasekDolny = new KWStatusBar(QMainWindow::statusBar(), this);                   //Tworzenie paska stanu
 
@@ -98,7 +104,7 @@ void MainWindow::InitConnections()
     connect(wyswietlacz, SIGNAL(Back()), motor, SLOT(Back()));
     connect(wyswietlacz, SIGNAL(ToggleFullscreen()), this, SLOT(ToggleFullscreen()));
 
-    connect(motor, SIGNAL(Rozdzielczosc(int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int)));      //Sygnały po otworzeniu nowego pliku
+    connect(motor, SIGNAL(Rozdzielczosc(int,int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int,int)));  //Sygnały po otworzeniu nowego pliku
     connect(motor, SIGNAL(Rozmiar(int)), pasekDolny, SLOT(UstawRozmiar(int)));
     connect(motor, SIGNAL(Licznik(int,int)), pasekDolny, SLOT(UstawLicznik(int,int)));
     connect(motor, SIGNAL(Data(QDateTime)), pasekDolny, SLOT(UstawDate(QDateTime)));
@@ -140,6 +146,11 @@ void MainWindow::InitShortcuts()
     connect(s, SIGNAL(activated()), wyswietlacz, SLOT(ResetZoom()));
     s->setEnabled(false);
     rep.push_back(s);
+
+    s =  new QShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_M), this);        //Losowy obraz
+    connect(s, SIGNAL(activated()), motor, SLOT(RandImg()));
+    s->setEnabled(false);
+    rep.push_back(s);
 }
 
 void MainWindow::testOpenA()
@@ -149,11 +160,10 @@ void MainWindow::testOpenA()
 
 void MainWindow::TitleBar(QString name)
 {
-#ifdef TEST                                                                         //Wersja testowa
-    this->setWindowTitle("KWView (Wersja testowa) - " + name);
-#else
-    this->setWindowTitle("KWView - " + name);                                       //Główny pasek okna
-#endif
+    if(testRun)                                                                     //Wersja testowa
+        this->setWindowTitle("KWView <Tryb testowy> - " + name);
+    else
+        this->setWindowTitle("KWView - " + name);                                   //Główny pasek okna
 }
 
 void MainWindow::About()
@@ -161,12 +171,10 @@ void MainWindow::About()
     QString t;
     about ab;
     t = "KWView\n\nAutor: " + ab.autor + "\n\nWersja programu: " + ab.wersja + "\nZ dnia ";
-    t += ab.data + "\n\nWersja ";
-#ifdef TEST
-    t += "testowa.";
-#else
-    t += "docelowa.";
-#endif
+    t += ab.data;
+
+    if(testRun)
+        t += "\n\nTryb testowy.";
 
     t += "\n\nStan programu: " + ab.stan;
     QMessageBox msgBox;
@@ -354,6 +362,9 @@ void MainWindow::NoweOkno()
     QStringList arguments;
     if(motor->isOpened())
         arguments << motor->Adres();                                                //Tworzenie argumentów programu
+
+    if(testRun)
+        arguments << "--test";
 
     QProcess *myProcess = new QProcess(NULL);
     myProcess->start(qApp->arguments()[0], arguments);                              //Uruchamianie nowego procesu

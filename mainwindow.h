@@ -44,6 +44,8 @@ public:
     QString startOpen;                                                                                                      //Adres obrazu podanego jako argument
 
 private:
+    bool testRun = false;                                                                                                   //Tryb testowy
+
     //-----------------------------------------------Obiekty składowe programu----------------------------------------------
     KWMenu* menu;                                                                                                           //Tworzy pasek menu
     KWGraphicsView* wyswietlacz;                                                                                            //Tworzy wyświetlacz obrazów

@@ -52,7 +52,7 @@ private:
     bool OtworzPlik(QString adr);                                                                                           //Otwiera plik
 
 signals:
-    void Rozdzielczosc(int w, int h, int k);                                                                                //Zmiana rozdzielczości otwartego obrazu
+    void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu
     void Licznik(int c, int a);                                                                                             //Zmiana wartości licznika plików
     void Data(QDateTime);                                                                                                   //Zmiana daty
     void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru
@@ -66,6 +66,7 @@ public slots:
     void Next();                                                                                                            //Następny plik na liście
     void Back();                                                                                                            //Poprzedni plik na liście
     void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście
+    void RandImg();                                                                                                         //Otwiera losowy obraz
 };
 
 #endif // KWMOTOR_H

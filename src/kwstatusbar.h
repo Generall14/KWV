@@ -54,7 +54,7 @@ signals:
 
 public slots:
     void UstawZoom(int z);                                                                                                  //Ustawia wyświetlane powiększenie
-    void UstawRozdzielczosc(int w, int h, int k=0);                                                                         //Ustawia wyświetlaną rozdzielczość
+    void UstawRozdzielczosc(int w, int h, int k=0, int d=0);                                                                //Ustawia wyświetlaną rozdzielczość
     void UstawLicznik(int c, int a);                                                                                        //Ustawia wyświetlany licznik plików
     void UstawDate(QDateTime d);                                                                                            //Ustawia wyświetlaną datę
     void UstawRozmiar(int KiB);                                                                                             //Ustawia wyświetlany rozmiar

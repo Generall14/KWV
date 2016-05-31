@@ -27,6 +27,7 @@ private:
 
     QMenu* menuWidok;
     QAction* akcjaResetZoom;
+    QAction* akcjaLosowy;
 
     QMenu* menuPomoc;
     QAction* akcjaOProgramie;

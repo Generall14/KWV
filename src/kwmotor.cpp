@@ -16,7 +16,8 @@ KWMotor::KWMotor(KWGraphicsView *gv, QObject *parent):
            << tr("Pliki pgm") + " (*.pgm)"
            << tr("Pliki ppm") + " (*.ppm)"
            << tr("Pliki xbm") + " (*.xbm)"
-           << tr("Pliki xpm") + " (*.xpm)";
+           << tr("Pliki xpm") + " (*.xpm)"
+           << tr("Pliki ico") + " (*.ico)";
 
     for(int i=0;i<filtry.length();i++)                                              //Tworzenie listy obsługiwanych rozszerzeń
     {
@@ -60,7 +61,7 @@ void KWMotor::Otworz(QString adres) throw(QString)
         }
     }
 
-    OtworzPlik(adres);                                                           //Otwieranie pliku
+    OtworzPlik(adres);                                                              //Otwieranie pliku
 
     Sygnaly();                                                                      //Rozsyłanie sygnałów
 }
@@ -132,7 +133,12 @@ void KWMotor::Otworz()
 
 void KWMotor::Sygnaly()
 {
-    emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0);//Zmiana rozdzielczości
+    int bpp = 0;
+    if(!gifVec.at(0).hasAlpha())
+        bpp = gifVec.at(0).depth()*75/100;
+    else
+        bpp = gifVec.at(0).depth();
+    emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, bpp);//Zmiana rozdzielczości
     emit Licznik(aktualny+1, pliki.length());                                       //Zmiana listy plików
     emit Data(plik.created());                                                      //Zmiana daty
     emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
@@ -193,6 +199,11 @@ void KWMotor::Otworz(int nr)
     plik.setFile(adres);                                                            //Pobieranie informacji o nowym pliku
 
     Sygnaly();                                                                      //Rozsyłanie sygnałów
+}
+
+void KWMotor::RandImg()
+{
+    this->Otworz((aktualny+qrand())%pliki.length());
 }
 
 QString KWMotor::Adres()

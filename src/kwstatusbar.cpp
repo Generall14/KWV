@@ -12,7 +12,7 @@ KWStatusBar::KWStatusBar(QStatusBar *bar, MainWindow *mw):
 void KWStatusBar::Init()
 {
     res = new QLabel("-");                                                          //Nowy obiekt do wyświetlania rozdzielczości
-    res->setMinimumWidth(100);                                                      //Minimalna szerokość
+    res->setMinimumWidth(130);                                                      //Minimalna szerokość
     res->setFrameShape(QFrame::StyledPanel);                                        //Styl ramki
 
     zoom = new QLabel("-");                                                         //Nowy obiekt do wyświetlania powiększenia
@@ -109,11 +109,13 @@ void KWStatusBar::UstawZoom(int z)
     zoomF->setText(QString::number(z)+"%");
 }
 
-void KWStatusBar::UstawRozdzielczosc(int w, int h, int k)
+void KWStatusBar::UstawRozdzielczosc(int w, int h, int k, int d)
 {
     QString temp = QString::number(w)+"x"+QString::number(h);                       //Podstawowy ciąg
     if(k)
         temp += " (" + QString::number(k) + "kl)";                                  //Dodawanie informacji o liczbie klatek
+    else if(d)
+        temp += " (" + QString::number(d) + "BPP)";                                 //Dodawanie informacji o głębi
     res->setText(temp);
 }
 

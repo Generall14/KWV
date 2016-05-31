@@ -61,6 +61,11 @@ void KWMenu::InitMenus()
     connect(akcjaResetZoom, SIGNAL(triggered(bool)), MWw->wyswietlacz, SLOT(ResetZoom()));
     menuWidok->addAction(akcjaResetZoom);
 
+    akcjaLosowy = new QAction(tr("&Losowy obraz"), menuWidok);                      //Widok -> Losowy obraz
+    akcjaLosowy->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_M));
+    connect(akcjaLosowy, SIGNAL(triggered(bool)), MWw->motor, SLOT(RandImg()));
+    menuWidok->addAction(akcjaLosowy);
+
     MWw->menuBar()->addMenu(menuWidok);                                             //Dodawanie do menu głównego okna
 
     //-----------------------------------Menu Pomoc---------------------------------
