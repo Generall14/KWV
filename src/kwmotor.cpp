@@ -133,12 +133,7 @@ void KWMotor::Otworz()
 
 void KWMotor::Sygnaly()
 {
-    int bpp = 0;
-    if(!gifVec.at(0).hasAlpha())
-        bpp = gifVec.at(0).depth()*75/100;
-    else
-        bpp = gifVec.at(0).depth();
-    emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, bpp);//Zmiana rozdzielczości
+    emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, gifVec.at(0).defaultDepth());//Zmiana rozdzielczości
     emit Licznik(aktualny+1, pliki.length());                                       //Zmiana listy plików
     emit Data(plik.created());                                                      //Zmiana daty
     emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
@@ -221,6 +216,23 @@ bool KWMotor::isOpened()
 int KWMotor::DlugoscListy()
 {
     return pliki.length();
+}
+
+QFileInfo KWMotor::fileInfo() const
+{
+    return plik;
+}
+
+QPixmap KWMotor::fileSample() const
+{
+    if(!gifVec.isEmpty())
+        return gifVec.at(0);
+    return QPixmap();
+}
+
+int KWMotor::fileFrames() const
+{
+    return gifVec.length();
 }
 
 long KWMotor::getTimeUs()

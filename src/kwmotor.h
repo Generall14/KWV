@@ -27,6 +27,10 @@ public:
 
     long getTimeUs();                                                                                                       //Zwraca czas otwierania ostatniego pliku
 
+    QFileInfo fileInfo() const;                                                                                             //Zwraca informację o pliku
+    QPixmap fileSample() const;                                                                                             //Zwraca jeden obraz
+    int fileFrames() const;                                                                                                 //Zwraca liczbę klatek
+
 private:
     KWGraphicsView* GV;                                                                                                     //Wskaźnik na obiekt wyświetlający obrazy
 

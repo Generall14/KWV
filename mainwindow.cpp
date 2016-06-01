@@ -41,9 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
         pba->setGeometry(10, 30, 30, 30);
         connect(pba, SIGNAL(clicked(bool)), this, SLOT(testOpenA()));
 
-        QPushButton* pbback = new QPushButton("<", this);
+        QPushButton* pbback = new QPushButton("ta", this);
         pbback->setGeometry(40, 30, 30, 30);
-        connect(pbback, SIGNAL(clicked(bool)), motor, SLOT(Back()));
+        connect(pbback, SIGNAL(clicked(bool)), this, SLOT(FileInfo()));
 
         QPushButton* pbnext = new QPushButton(">", this);
         pbnext->setGeometry(70, 30, 30, 30);
@@ -70,6 +70,9 @@ MainWindow::~MainWindow()
     for(int i=0;i<rep.length();++i)
         delete rep[i];
     rep.clear();
+
+    delete okno;
+    delete fileInfo;
 
     delete cursorTimer;
 }
@@ -331,6 +334,17 @@ void MainWindow::GifManager()
     if(!okno)
         okno = new KW3rdGif(wyswietlacz);
     okno->show();
+}
+
+void MainWindow::FileInfo()
+{
+    if(!fileInfo)
+        fileInfo = new KW3rdFileInfo(this);
+    if(motor->isOpened())
+        fileInfo->GenInfo(motor->fileInfo(), motor->fileSample(), motor->fileFrames());
+    else
+        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0);
+    fileInfo->show();
 }
 
 void MainWindow::Usun()

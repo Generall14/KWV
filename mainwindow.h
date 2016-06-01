@@ -25,6 +25,7 @@
 #include "src/kwstatusbar.h"
 #include "src/kwmotor.h"
 #include "src/3rdforms/kw3rdgif.h"
+#include "src/3rdforms/kw3rdfileinfo.h"
 
 class MainWindow : public QMainWindow
 {
@@ -59,7 +60,8 @@ private:
 
     QTimer* cursorTimer = NULL;                                                                                             //Timer do ukrywania kursora w trybie fullscreen
 
-    KW3rdGif* okno = NULL;
+    KW3rdGif* okno = NULL;                                                                                                  //Gif manager
+    KW3rdFileInfo* fileInfo = NULL;                                                                                         //Informacje o obrazie
 
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
@@ -82,6 +84,7 @@ public slots:
     void Error(QString er);                                                                                                 //Wyświetlenie błędu
 
     void GifManager();                                                                                                      //Wyświetla okno menedżera animacji
+    void FileInfo();                                                                                                        //Wyświetla informacje o obrazie
 
 private slots:
     void setFullsscreen();                                                                                                  //Włącza tryb fullscreen
