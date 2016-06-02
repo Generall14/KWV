@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QDir>
 #include <algorithm>
+#include <QDateTime>
 
 KW3rdFileInfo::KW3rdFileInfo(QWidget *parent):
     QDialog(parent)
@@ -14,7 +15,7 @@ KW3rdFileInfo::KW3rdFileInfo(QWidget *parent):
     this->setWindowTitle(tr("Informacje o obrazie"));
 }
 
-void KW3rdFileInfo::GenInfo(QFileInfo fi, QPixmap ob, int kl)
+void KW3rdFileInfo::GenInfo(QFileInfo fi, QPixmap ob, int kl, int ms)
 {
     if(kl>0)
     {
@@ -27,7 +28,17 @@ void KW3rdFileInfo::GenInfo(QFileInfo fi, QPixmap ob, int kl)
         int gcd = std::__gcd(w, h);
         rozmiarObrazu->setText(QString::number(w)+" x "+QString::number(h)+tr(" pikseli")+" ("+QString::number(w/gcd)+":"+QString::number(h/gcd)+")");
 
-        nazwaPliku->setText(QString::number(ob.defaultDepth()));
+        glebiaKolorow->setText(QString("%1").arg(pow(2, ob.defaultDepth()), 0, 'E', 2)+" ("+QString::number(ob.defaultDepth())+" bits per pixel)");
+
+        long long B = fi.size();
+        int KiB = B/1024;
+        if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
+            rozmiarNaDysku->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB ("+QString("%L1").arg(B)+" B)");
+        else
+            rozmiarNaDysku->setText(QString::number(KiB)+" KiB ("+QString("%L1").arg(B)+" B)");
+
+        dataEdycji->setText(fi.lastModified().toString("yyyy-MM-dd, HH:mm:ss"));
+        czasLadowania->setText(QString("%L1").arg(ms)+" ms");
     }
     else
     {
@@ -35,6 +46,10 @@ void KW3rdFileInfo::GenInfo(QFileInfo fi, QPixmap ob, int kl)
         katalog->setText("-");
         sciezkaPliku->setText("-");
         rozmiarObrazu->setText("-");
+        glebiaKolorow->setText("-");
+        rozmiarNaDysku->setText("-");
+        dataEdycji->setText("-");
+        czasLadowania->setText("-");
     }
 }
 
@@ -81,6 +96,46 @@ void KW3rdFileInfo::InitWidgets()
     rozmiarObrazu->setMinimumSize(constSzerT, constWys);
     rozLayout->addWidget(rozmiarObrazu);
     mainLay->addLayout(rozLayout);
+
+    QHBoxLayout* glebiaLayout = new QHBoxLayout();                                  //Głębia
+    QLabel* glebiaLabel = new QLabel(tr("Liczba kolorów:"), this);
+    glebiaLabel->setMinimumSize(constSzer, constWys);
+    glebiaLayout->addWidget(glebiaLabel);
+    glebiaKolorow = new QLineEdit("-", this);
+    glebiaKolorow->setReadOnly(true);
+    glebiaKolorow->setMinimumSize(constSzerT, constWys);
+    glebiaLayout->addWidget(glebiaKolorow);
+    mainLay->addLayout(glebiaLayout);
+
+    QHBoxLayout* dyskLayout = new QHBoxLayout();                                    //Rozmiar pliku
+    QLabel* dyskLabel = new QLabel(tr("Rozmiar pliku na dysku:"), this);
+    dyskLabel->setMinimumSize(constSzer, constWys);
+    dyskLayout->addWidget(dyskLabel);
+    rozmiarNaDysku = new QLineEdit("-", this);
+    rozmiarNaDysku->setReadOnly(true);
+    rozmiarNaDysku->setMinimumSize(constSzerT, constWys);
+    dyskLayout->addWidget(rozmiarNaDysku);
+    mainLay->addLayout(dyskLayout);
+
+    QHBoxLayout* edycjaLayout = new QHBoxLayout();                                    //Data ostatniej edycji
+    QLabel* edycjaLabel = new QLabel(tr("Ostatnio modyfikowany:"), this);
+    edycjaLabel->setMinimumSize(constSzer, constWys);
+    edycjaLayout->addWidget(edycjaLabel);
+    dataEdycji = new QLineEdit("-", this);
+    dataEdycji->setReadOnly(true);
+    dataEdycji->setMinimumSize(constSzerT, constWys);
+    edycjaLayout->addWidget(dataEdycji);
+    mainLay->addLayout(edycjaLayout);
+
+    QHBoxLayout* czasLayout = new QHBoxLayout();                                    //Czas ładowania
+    QLabel* czasLabel = new QLabel(tr("Czas ładowania:"), this);
+    czasLabel->setMinimumSize(constSzer, constWys);
+    czasLayout->addWidget(czasLabel);
+    czasLadowania = new QLineEdit("-", this);
+    czasLadowania->setReadOnly(true);
+    czasLadowania->setMinimumSize(constSzerT, constWys);
+    czasLayout->addWidget(czasLadowania);
+    mainLay->addLayout(czasLayout);
 
     QHBoxLayout* butLayout = new QHBoxLayout();                                     //Przycisk "OK"
     butLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding));

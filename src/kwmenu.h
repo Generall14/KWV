@@ -25,6 +25,9 @@ private:
     QAction* akcjaUsun;
     QAction* akcjaGifManager;
 
+    QMenu* menuObraz;
+    QAction* akcjaFileInfo;
+
     QMenu* menuWidok;
     QAction* akcjaResetZoom;
     QAction* akcjaLosowy;

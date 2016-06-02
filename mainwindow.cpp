@@ -154,6 +154,11 @@ void MainWindow::InitShortcuts()
     connect(s, SIGNAL(activated()), motor, SLOT(RandImg()));
     s->setEnabled(false);
     rep.push_back(s);
+
+    s =  new QShortcut(QKeySequence(Qt::Key_I), this);                              //Informacje o pliku
+    connect(s, SIGNAL(activated()), this, SLOT(FileInfo()));
+    s->setEnabled(false);
+    rep.push_back(s);
 }
 
 void MainWindow::testOpenA()
@@ -341,9 +346,9 @@ void MainWindow::FileInfo()
     if(!fileInfo)
         fileInfo = new KW3rdFileInfo(this);
     if(motor->isOpened())
-        fileInfo->GenInfo(motor->fileInfo(), motor->fileSample(), motor->fileFrames());
+        fileInfo->GenInfo(motor->fileInfo(), motor->fileSample(), motor->fileFrames(), motor->getTimeUs()/1000);
     else
-        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0);
+        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0, 0);
     fileInfo->show();
 }
 

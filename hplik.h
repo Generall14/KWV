@@ -13,8 +13,8 @@
 
 struct about
 {
-    QString wersja = "v0.10.11";
-    QString data = "2016.06.01";
+    QString wersja = "v0.10.12";
+    QString data = "2016.06.02";
     QString autor = "Kogut Wojciech";
     QString stan = "Prymitywnie kompletny.";
 };

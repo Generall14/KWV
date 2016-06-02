@@ -53,6 +53,16 @@ void KWMenu::InitMenus()
 
     MWw->menuBar()->addMenu(menuEdycja);                                            //Dodawanie do menu głównego okna
 
+    //-----------------------------------Menu Obraz---------------------------------
+    menuObraz = new QMenu(tr("&Informacje o obrazie"), 0);                          //Menu -> Obraz
+
+    akcjaFileInfo = new QAction(tr("&Usuń"), menuEdycja);                                   //Obraz -> Informacje o pliku
+    akcjaFileInfo->setShortcut(QKeySequence(Qt::Key_I));
+    connect(akcjaFileInfo, SIGNAL(triggered(bool)), MWw, SLOT(FileInfo()));
+    menuObraz->addAction(akcjaFileInfo);
+
+    MWw->menuBar()->addMenu(menuObraz);                                            //Dodawanie do menu głównego okna
+
     //-----------------------------------Menu Widok---------------------------------
     menuWidok = new QMenu(tr("&Widok"), 0);                                         //Menu -> Widok
 

@@ -13,16 +13,20 @@ class KW3rdFileInfo : public QDialog
 public:
     KW3rdFileInfo(QWidget* parent);                                                                                         //Konstruktor
 
-    void GenInfo(QFileInfo fi, QPixmap ob, int kl);                                                                         //Generuje informacje o pliku
+    void GenInfo(QFileInfo fi, QPixmap ob, int kl, int ms);                                                                 //Generuje informacje o pliku
 
 private:
     QLineEdit* nazwaPliku;
     QLineEdit* katalog;
     QLineEdit* sciezkaPliku;
     QLineEdit* rozmiarObrazu;
+    QLineEdit* glebiaKolorow;
+    QLineEdit* rozmiarNaDysku;
+    QLineEdit* czasLadowania;
+    QLineEdit* dataEdycji;
 
-    const int constSzer = 120;
-    const int constSzerT = 150;
+    const int constSzer = 155;
+    const int constSzerT = 230;
     const int constWys = 23;
 
     void InitWidgets();                                                                                                     //Inicjalizacja widgetów
