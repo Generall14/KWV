@@ -66,6 +66,8 @@ private:
 
     QVector<QString> recentFiles;                                                                                           //Ostatnio otwierane pliki
 
+    QString baseDirectory;                                                                                                  //Folder bazowy
+
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
     void InitConnections();                                                                                                 //Inicjalizuje połączenia

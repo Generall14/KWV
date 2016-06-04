@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
     if(lista.length()>1)                                                            //Jeżeli zostały dodatkowe argumenty
         startOpen = lista[1];                                                       //Przypisywanie drugiego argumentu jako adresu do otwarcia
 
+    QFileInfo fff(qApp->arguments().at(0));                                         //Pobieranie katalogu bazowego
+    baseDirectory = fff.path()+"/";
+
     cursorTimer = new QTimer();                                                     //Tworzenie nowego timera
     cursorTimer->setInterval(2000);                                                 //Ustawianie czasu ukrywania
     connect(cursorTimer, SIGNAL(timeout()), this, SLOT(HideCursor()));              //Tworzenie połączenia
@@ -403,7 +406,7 @@ void MainWindow::Rename()
 
 void MainWindow::LoadRecentFIles()
 {
-    QFile plik("recent.kwv");
+    QFile plik(baseDirectory+"recent.kwv");
     if(!plik.open(QIODevice::ReadOnly))                                             //Otwieranie pliku z danymi
         return;
 
@@ -416,7 +419,7 @@ void MainWindow::LoadRecentFIles()
 
 void MainWindow::SaveRecentFIles()
 {
-    QFile plik("recent.kwv");
+    QFile plik(baseDirectory+"recent.kwv");
     if(!plik.open(QIODevice::WriteOnly | QIODevice::Truncate))                      //Otwieranie pliku z danymi
         return;
 
