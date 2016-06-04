@@ -61,6 +61,7 @@ signals:
     void Data(QDateTime);                                                                                                   //Zmiana daty
     void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru
     void Plik(QString p);                                                                                                   //Zmiana pliku
+    void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
 
     void Error(QString);                                                                                                    //Zgłoszenie błędu
 

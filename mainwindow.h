@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+ #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -39,8 +39,9 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static const int minSzerokosc = 600;
-    static const int minWysokosc = 700;
+    static const int minSzerokosc = 600;                                                                                    //Minimalna szerokość okna
+    static const int minWysokosc = 700;                                                                                     //Maksymalna wysokość okna
+    static const int maxRecentFiles = 8;                                                                                    //Liczba pamiętanych plików
 
     QString startOpen;                                                                                                      //Adres obrazu podanego jako argument
 
@@ -63,6 +64,8 @@ private:
     KW3rdGif* okno = NULL;                                                                                                  //Gif manager
     KW3rdFileInfo* fileInfo = NULL;                                                                                         //Informacje o obrazie
 
+    QVector<QString> recentFiles;                                                                                           //Ostatnio otwierane pliki
+
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
     void InitConnections();                                                                                                 //Inicjalizuje połączenia
@@ -71,6 +74,9 @@ private:
     virtual void keyPressEvent(QKeyEvent *event);                                                                           //Wciśnięcie klawisza klawiatury
 
     void Benchmark();                                                                                                       //Testy prędkości
+
+    void LoadRecentFIles();                                                                                                 //Otwiera listę ostatnich plików z pliku
+    void SaveRecentFIles();                                                                                                 //Zapisuje listę ostatnich plików z pliku
 
 public slots:
     void testOpenA();
@@ -85,6 +91,11 @@ public slots:
 
     void GifManager();                                                                                                      //Wyświetla okno menedżera animacji
     void FileInfo();                                                                                                        //Wyświetla informacje o obrazie
+
+    void AddToRec(QString rec);                                                                                             //Dodaj plik do listy ostatnio otwieranych
+    void OpenRec(int i);                                                                                                    //Otwiera plik z listy recentFiles
+
+    void Rename();                                                                                                          //Zmiana nazwy pliku
 
 private slots:
     void setFullsscreen();                                                                                                  //Włącza tryb fullscreen

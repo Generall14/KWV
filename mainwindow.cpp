@@ -3,6 +3,8 @@
 #include <QDebug>
 
 #include <QProcess>
+#include <QTextStream>
+#include <QInputDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     InitShortcuts();                                                                //Tworzenie skrótów
 
     setWindowIcon(QIcon(":/ics/ikona.ico"));                                        //Ustawianie ikony na belce okna
+    LoadRecentFIles();                                                              //Czytanie listy ostatnich plików
+    AddToRec(startOpen);
 
     if(testRun)                                                                     //Wersja testowa
     {
@@ -67,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    SaveRecentFIles();
+
     for(int i=0;i<rep.length();++i)
         delete rep[i];
     rep.clear();
@@ -114,9 +120,11 @@ void MainWindow::InitConnections()
     connect(motor, SIGNAL(Plik(QString)), this, SLOT(TitleBar(QString)));
     connect(motor, SIGNAL(Plik(QString)), pasekDolny, SLOT(UstawPlik(QString)));
     connect(motor, SIGNAL(Error(QString)), this, SLOT(Error(QString)));
+    connect(motor, SIGNAL(NewOpened(QString)), this, SLOT(AddToRec(QString)));
 
     connect(menu, SIGNAL(About()), this, SLOT(About()));                                                        //Połączenia z menu
     connect(menu, SIGNAL(Otworz()), motor, SLOT(Otworz()));
+    connect(menu, SIGNAL(OpenRec(int)), this, SLOT(OpenRec(int)));
 
     connect(pasekDolny, SIGNAL(Zmiana(int)), motor, SLOT(Otworz(int)));                                         //Sygnały z paska stanu
     connect(pasekDolny, SIGNAL(ResetZoom()), wyswietlacz, SLOT(ResetZoom()));
@@ -157,6 +165,11 @@ void MainWindow::InitShortcuts()
 
     s =  new QShortcut(QKeySequence(Qt::Key_I), this);                              //Informacje o pliku
     connect(s, SIGNAL(activated()), this, SLOT(FileInfo()));
+    s->setEnabled(false);
+    rep.push_back(s);
+
+    s =  new QShortcut(QKeySequence(Qt::Key_F2), this);                             //Zmiana nazwy
+    connect(s, SIGNAL(activated()), this, SLOT(Rename()));
     s->setEnabled(false);
     rep.push_back(s);
 }
@@ -350,6 +363,68 @@ void MainWindow::FileInfo()
     else
         fileInfo->GenInfo(QFileInfo(), QPixmap(), 0, 0);
     fileInfo->show();
+}
+
+void MainWindow::AddToRec(QString rec)
+{
+    if(!rec.isEmpty())
+        recentFiles.push_back(rec);                                                 //Dodawanie adresu
+    while(recentFiles.length()>maxRecentFiles)
+        recentFiles.removeFirst();                                                  //Usuwanie najstarszych elementów po przekroczeniu limitu
+
+    menu->UpdateRecent(recentFiles);                                                //Uaktualnianie menu
+}
+
+void MainWindow::OpenRec(int i)
+{
+    if((i>=0)&&(i<recentFiles.length()))
+        motor->Otworz(recentFiles.at(i));
+}
+
+void MainWindow::Rename()
+{
+    bool ok;
+    QString oldName = motor->Adres();
+    QFile plik(oldName);                                                            //Obiekt pliku
+    QFileInfo fi(plik);
+
+    QString newName = QInputDialog::getText(this, tr("Zmiana nazwy"), tr("Podaj nową nazwę"), QLineEdit::Normal, fi.baseName(), &ok);
+    if (ok && !newName.isEmpty())
+    {
+        if(!newName.endsWith("."+fi.suffix()))
+            newName+="."+fi.suffix();                                               //Dodawanie rozszerzenia
+        if(plik.rename(newName))                                                    //Zmiana nazwy
+        {
+            QFileInfo fi2(plik);
+            motor->Otworz(fi2.absoluteFilePath());                                  //Ponowne otwieranie pliku
+        }
+    }
+}
+
+void MainWindow::LoadRecentFIles()
+{
+    QFile plik("recent.kwv");
+    if(!plik.open(QIODevice::ReadOnly))                                             //Otwieranie pliku z danymi
+        return;
+
+    QTextStream ts(&plik);
+    while(!ts.atEnd())
+        recentFiles.push_back(ts.readLine());
+
+    plik.close();                                                                   //Zamykanie pliku
+}
+
+void MainWindow::SaveRecentFIles()
+{
+    QFile plik("recent.kwv");
+    if(!plik.open(QIODevice::WriteOnly | QIODevice::Truncate))                      //Otwieranie pliku z danymi
+        return;
+
+    QTextStream ts(&plik);
+    for(int i=0;i<recentFiles.length();++i)
+        ts << recentFiles.at(i)+"\r\n";
+
+    plik.close();
 }
 
 void MainWindow::Usun()

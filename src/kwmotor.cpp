@@ -38,6 +38,9 @@ KWMotor::KWMotor(KWGraphicsView *gv, QObject *parent):
 
 void KWMotor::Otworz(QString adres) throw(QString)
 {
+    if(OtworzPlik(adres))                                                           //Otwieranie pliku
+        return;
+
     plik.setFile(adres);                                                            //Ładowanie opisu pliku
 
     katalog.setPath(plik.path());                                                   //Ładowanie katalogu
@@ -60,8 +63,6 @@ void KWMotor::Otworz(QString adres) throw(QString)
             break;
         }
     }
-
-    OtworzPlik(adres);                                                              //Otwieranie pliku
 
     Sygnaly();                                                                      //Rozsyłanie sygnałów
 }
@@ -129,6 +130,7 @@ void KWMotor::Otworz()
     QString adres = QFileDialog::getOpenFileName(0, tr("Otwórz plik"), "", filtr);  //Wyświetlanie okna wybierania pliku
     if(!adres.isEmpty())
         this->Otworz(adres);
+    emit NewOpened(adres);
 }
 
 void KWMotor::Sygnaly()
@@ -198,6 +200,8 @@ void KWMotor::Otworz(int nr)
 
 void KWMotor::RandImg()
 {
+    if(pliki.length()<2)
+        return;
     this->Otworz((aktualny+qrand())%pliki.length());
 }
 

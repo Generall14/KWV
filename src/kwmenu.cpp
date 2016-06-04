@@ -9,6 +9,8 @@ KWMenu::KWMenu(MainWindow* mw):
     MWPtr(mw)
 {
     InitMenus();
+    QVector<QString> tv;
+    UpdateRecent(tv);
 }
 
 KWMenu::~KWMenu()
@@ -26,6 +28,14 @@ void KWMenu::InitMenus()
     akcjaOtworz->setShortcut(QKeySequence::Open);
     connect(akcjaOtworz, SIGNAL(triggered(bool)), this, SIGNAL(Otworz()));
     menuPlik->addAction(akcjaOtworz);
+
+    menuRecent = new QMenu(tr("O&Statnio otwierane"), 0);                                   //Menu -> Ostatnio otwierane
+    menuPlik->addMenu(menuRecent);
+
+    akcjaRename = new QAction(tr("Z&Mień nazwę pliku"), menuPlik);                          //Plik -> Rename
+    akcjaRename->setShortcut(QKeySequence(Qt::Key_F2));
+    connect(akcjaRename, SIGNAL(triggered(bool)), MWw, SLOT(Rename()));
+    menuPlik->addAction(akcjaRename);
 
     akcjaNoweOkno = new QAction(tr("Otwórz &Nowe okno"), menuPlik);                         //Plik -> Otwórz nowe okno
     akcjaNoweOkno->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_N));
@@ -86,4 +96,31 @@ void KWMenu::InitMenus()
     menuPomoc->addAction(akcjaOProgramie);
 
     MWw->menuBar()->addMenu(menuPomoc);                                             //Dodawanie do menu głównego okna
+}
+
+void KWMenu::UpdateRecent(QVector<QString> recVec)
+{
+    menuRecent->clear();                                                            //Odłączanie akcji z menu
+
+    for(int i=0;i<recentActions.length();++i)                                       //Usuwanie starych obiektów
+        delete recentActions[i];
+    recentActions.clear();
+
+    if(recVec.isEmpty())
+    {
+        QAction* emptyAction = new QAction(tr("Brak"), NULL);                       //Brak plików
+        emptyAction->setEnabled(false);
+        menuRecent->addAction(emptyAction);
+        recentActions.push_back(emptyAction);
+    }
+    else
+    {
+        for(int i=recVec.length()-1;i>=0;--i)
+        {
+            QAction* newAction = new QAction(recVec.at(i), NULL);
+            connect(newAction, &QAction::triggered, this, [=](bool){emit OpenRec(i);});
+            menuRecent->addAction(newAction);
+            recentActions.push_back(newAction);
+        }
+    }
 }

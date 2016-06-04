@@ -15,11 +15,15 @@ public:
     KWMenu(MainWindow* mw);
     ~KWMenu();
 
+    void UpdateRecent(QVector<QString> recVec);                                                                             //Wyświetlanie listy poprzednich plików
+
 private:
     QMenu* menuPlik;
     QAction* akcjaOtworz;
-    QAction* akcjaZamknij;
+    QMenu* menuRecent;
+    QAction* akcjaRename;
     QAction* akcjaNoweOkno;
+    QAction* akcjaZamknij;
 
     QMenu* menuEdycja;
     QAction* akcjaUsun;
@@ -35,11 +39,14 @@ private:
     QMenu* menuPomoc;
     QAction* akcjaOProgramie;
 
+    QVector<QAction*> recentActions;
+
     void InitMenus();
 
 signals:
     void Otworz();
     void About();
+    void OpenRec(int nr);                                                                                                   //Otwieranie poprzednich plików
 
 public slots:
 };
