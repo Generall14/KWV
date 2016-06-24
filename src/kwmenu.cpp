@@ -11,6 +11,13 @@ KWMenu::KWMenu(MainWindow* mw):
     InitMenus();
     QVector<QString> tv;
     UpdateRecent(tv);
+
+    fileDependent.push_back(akcjaKopiujPlik);
+    fileDependent.push_back(akcjaUsun);
+    fileDependent.push_back(akcjaRename);
+    fileDependent.push_back(akcjaResetZoom);
+
+    this->FileOff();
 }
 
 KWMenu::~KWMenu()
@@ -32,17 +39,27 @@ void KWMenu::InitMenus()
     menuRecent = new QMenu(tr("O&Statnio otwierane"), 0);                                   //Menu -> Ostatnio otwierane
     menuPlik->addMenu(menuRecent);
 
+    menuPlik->addSeparator();                                                               //Separator
+
     akcjaRename = new QAction(tr("Z&Mień nazwę pliku"), menuPlik);                          //Plik -> Rename
     akcjaRename->setShortcut(QKeySequence(Qt::Key_F2));
     connect(akcjaRename, SIGNAL(triggered(bool)), MWw, SLOT(Rename()));
     menuPlik->addAction(akcjaRename);
 
+    akcjaKopiujPlik = new QAction(tr("&Kopiuj plik"), menuPlik);                            //Plik -> Kopiuj plik
+    connect(akcjaKopiujPlik, SIGNAL(triggered(bool)), MWw, SLOT(Kopiuj()));
+    menuPlik->addAction(akcjaKopiujPlik);
+
+    akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Edycja -> Usuń
+    connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));
+    menuPlik->addAction(akcjaUsun);
+
+    menuPlik->addSeparator();                                                               //Separator
+
     akcjaNoweOkno = new QAction(tr("Otwórz &Nowe okno"), menuPlik);                         //Plik -> Otwórz nowe okno
     akcjaNoweOkno->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_N));
     connect(akcjaNoweOkno, SIGNAL(triggered(bool)), MWw, SLOT(NoweOkno()));
     menuPlik->addAction(akcjaNoweOkno);
-
-    menuPlik->addSeparator();                                                               //Separator
 
     akcjaZamknij = new QAction(tr("&Zamknij"), menuPlik);                                   //Plik -> Zamknij
     connect(akcjaZamknij, SIGNAL(triggered(bool)), MWw, SLOT(close()));
@@ -53,10 +70,6 @@ void KWMenu::InitMenus()
     //-----------------------------------Menu Edycja--------------------------------
     menuEdycja = new QMenu(tr("&Edycja"), 0);                                       //Menu -> Edycja
 
-    akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Edycja -> Usuń
-    connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));
-    menuEdycja->addAction(akcjaUsun);
-
     akcjaGifManager = new QAction(tr("&Gif manager"), menuEdycja);                          //Edycja -> Gif Manager
     connect(akcjaGifManager, SIGNAL(triggered(bool)), MWw, SLOT(GifManager()));
     menuEdycja->addAction(akcjaGifManager);
@@ -64,9 +77,9 @@ void KWMenu::InitMenus()
     MWw->menuBar()->addMenu(menuEdycja);                                            //Dodawanie do menu głównego okna
 
     //-----------------------------------Menu Obraz---------------------------------
-    menuObraz = new QMenu(tr("&Informacje o obrazie"), 0);                          //Menu -> Obraz
+    menuObraz = new QMenu(tr("&Obraz"), 0);                                         //Menu -> Obraz
 
-    akcjaFileInfo = new QAction(tr("&Usuń"), menuEdycja);                                   //Obraz -> Informacje o pliku
+    akcjaFileInfo = new QAction(tr("&Informacje o obrazie"), menuEdycja);                   //Obraz -> Informacje o pliku
     akcjaFileInfo->setShortcut(QKeySequence(Qt::Key_I));
     connect(akcjaFileInfo, SIGNAL(triggered(bool)), MWw, SLOT(FileInfo()));
     menuObraz->addAction(akcjaFileInfo);
@@ -124,3 +137,16 @@ void KWMenu::UpdateRecent(QVector<QString> recVec)
         }
     }
 }
+
+void KWMenu::FileOn()
+{
+    for(int i=0;i<fileDependent.length();++i)
+        fileDependent.at(i)->setEnabled(true);
+}
+
+void KWMenu::FileOff()
+{
+    for(int i=0;i<fileDependent.length();++i)
+        fileDependent.at(i)->setEnabled(false);
+}
+

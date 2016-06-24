@@ -140,6 +140,7 @@ void KWMotor::Sygnaly()
     emit Data(plik.created());                                                      //Zmiana daty
     emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
     emit Plik(plik.fileName());                                                     //ZMiana nazwy pliku
+    emit FileOn();
 }
 
 void KWMotor::Next()

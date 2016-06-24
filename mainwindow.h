@@ -68,6 +68,9 @@ private:
 
     QString baseDirectory;                                                                                                  //Folder bazowy
 
+    //-----------------------------------------------Ostatnio używane ścieżki-----------------------------------------------
+    QString lastCopyDir;                                                                                                    //Ostatni folder kopiowania
+
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
     void InitConnections();                                                                                                 //Inicjalizuje połączenia
@@ -79,6 +82,8 @@ private:
 
     void LoadRecentFIles();                                                                                                 //Otwiera listę ostatnich plików z pliku
     void SaveRecentFIles();                                                                                                 //Zapisuje listę ostatnich plików z pliku
+    void LoadRecentPlaces();                                                                                                //Wczytuje ostatnio używane ścieżki
+    void SaveRecentPlaces();                                                                                                //Zapisuje ostatnio używane ścieżki
 
 public slots:
     void testOpenA();
@@ -86,6 +91,7 @@ public slots:
 
     void Otworz(QString adres);                                                                                             //Otwarcie pliku
     void Usun();                                                                                                            //Usunięcie pliku
+    void Kopiuj();                                                                                                          //Kopiuje plik
 
     void TitleBar(QString name);                                                                                            //Ustawia napis na pasku okna
     void About();                                                                                                           //Wyświetla informacje o programie

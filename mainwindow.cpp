@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowIcon(QIcon(":/ics/ikona.ico"));                                        //Ustawianie ikony na belce okna
     LoadRecentFIles();                                                              //Czytanie listy ostatnich plików
+    LoadRecentPlaces();
     AddToRec(startOpen);
 
     if(testRun)                                                                     //Wersja testowa
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     SaveRecentFIles();
+    SaveRecentPlaces();
 
     for(int i=0;i<rep.length();++i)
         delete rep[i];
@@ -124,6 +126,8 @@ void MainWindow::InitConnections()
     connect(motor, SIGNAL(Plik(QString)), pasekDolny, SLOT(UstawPlik(QString)));
     connect(motor, SIGNAL(Error(QString)), this, SLOT(Error(QString)));
     connect(motor, SIGNAL(NewOpened(QString)), this, SLOT(AddToRec(QString)));
+    connect(motor, SIGNAL(FileOn()), menu, SLOT(FileOn()));
+    connect(motor, SIGNAL(FileOff()), menu, SLOT(FileOff()));
 
     connect(menu, SIGNAL(About()), this, SLOT(About()));                                                        //Połączenia z menu
     connect(menu, SIGNAL(Otworz()), motor, SLOT(Otworz()));
@@ -430,6 +434,44 @@ void MainWindow::SaveRecentFIles()
     plik.close();
 }
 
+void MainWindow::LoadRecentPlaces()
+{
+    lastCopyDir = "./";                                                             //Domyślne wartości
+
+    QFile plik(baseDirectory+"lastDirs.kwv");
+    if(!plik.open(QIODevice::ReadOnly))                                             //Otwieranie pliku z danymi
+        return;
+
+    QTextStream ts(&plik);
+    QStringList linie;
+    while(!ts.atEnd())
+        linie << ts.readLine();
+
+    plik.close();
+
+    for(int i=0;i<linie.length();++i)                                               //Czytanie wartości
+    {
+        if(linie.at(i).mid(0, 3)=="-CD")                                            //Ostatni folder kopiowania
+        {
+            QFileInfo td(linie.at(i).mid(3));
+            if(td.isDir())
+                lastCopyDir = td.path();
+        }
+    }
+}
+
+void MainWindow::SaveRecentPlaces()
+{
+    QFile plik(baseDirectory+"lastDirs.kwv");
+    if(!plik.open(QIODevice::WriteOnly | QIODevice::Truncate))                      //Otwieranie pliku z danymi
+        return;
+
+    QTextStream ts(&plik);
+    ts << "-CD"+lastCopyDir+"/";
+
+    plik.close();
+}
+
 void MainWindow::Usun()
 {
     if(!motor->isOpened())                                                          //Jeżeli żaden obraz nie jest wczytany
@@ -451,6 +493,26 @@ void MainWindow::Usun()
     {
         motor->Next();                                                              //Otwórz kolejny obraz
         motor->Otworz(motor->Adres());
+    }
+}
+
+void MainWindow::Kopiuj()
+{
+    if(!motor->isOpened())                                                          //Brak pliku do skopiowania
+        return;
+    QFile startPlik(motor->Adres());
+
+    QString startString = lastCopyDir+"/"+startPlik.fileName();                     //Początkowy adres
+    QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Wskaż adres docelowego pliku"), startString, suffixes, 0, QFileDialog::ReadOnly);
+
+    if(!fileName.isEmpty())
+    {
+        QFileInfo endFile(fileName);
+        lastCopyDir = endFile.path();                                               //Zapisywanie użytego adresu
+
+        startPlik.copy(fileName);                                                   //Kopiowanie pliku
     }
 }
 

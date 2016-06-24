@@ -62,6 +62,8 @@ signals:
     void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru
     void Plik(QString p);                                                                                                   //Zmiana pliku
     void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
+    void FileOn();                                                                                                          //Otwarto plik
+    void FileOff();                                                                                                         //Zamknięto plik
 
     void Error(QString);                                                                                                    //Zgłoszenie błędu
 
