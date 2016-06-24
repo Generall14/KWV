@@ -31,6 +31,8 @@ public:
     QPixmap fileSample() const;                                                                                             //Zwraca jeden obraz
     int fileFrames() const;                                                                                                 //Zwraca liczbę klatek
 
+    QString Filters();                                                                                                      //Zwraca filtry plików
+
 private:
     KWGraphicsView* GV;                                                                                                     //Wskaźnik na obiekt wyświetlający obrazy
 
@@ -61,7 +63,7 @@ signals:
     void Data(QDateTime);                                                                                                   //Zmiana daty
     void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru
     void Plik(QString p);                                                                                                   //Zmiana pliku
-    void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
+    //void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
     void FileOn();                                                                                                          //Otwarto plik
     void FileOff();                                                                                                         //Zamknięto plik
 
@@ -69,7 +71,7 @@ signals:
 
 public slots:
     void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik
-    void Otworz();                                                                                                          //Wywołuje procedurę otwierania pliku
+    //void Otworz();                                                                                                          //Wywołuje procedurę otwierania pliku
     void Next();                                                                                                            //Następny plik na liście
     void Back();                                                                                                            //Poprzedni plik na liście
     void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście

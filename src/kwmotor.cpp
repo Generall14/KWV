@@ -125,13 +125,13 @@ bool KWMotor::OtworzImg(QString adr)
     return 0;
 }
 
-void KWMotor::Otworz()
-{
-    QString adres = QFileDialog::getOpenFileName(0, tr("Otwórz plik"), "", filtr);  //Wyświetlanie okna wybierania pliku
-    if(!adres.isEmpty())
-        this->Otworz(adres);
-    emit NewOpened(adres);
-}
+//void KWMotor::Otworz()
+//{
+//    QString adres = QFileDialog::getOpenFileName(0, tr("Otwórz plik"), "", filtr);  //Wyświetlanie okna wybierania pliku
+//    if(!adres.isEmpty())
+//        this->Otworz(adres);
+//    emit NewOpened(adres);
+//}
 
 void KWMotor::Sygnaly()
 {
@@ -243,4 +243,9 @@ int KWMotor::fileFrames() const
 long KWMotor::getTimeUs()
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+}
+
+QString KWMotor::Filters()
+{
+    return filtr;
 }

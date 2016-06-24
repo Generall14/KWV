@@ -70,6 +70,7 @@ private:
 
     //-----------------------------------------------Ostatnio używane ścieżki-----------------------------------------------
     QString lastCopyDir;                                                                                                    //Ostatni folder kopiowania
+    QString lastOpenedDir;                                                                                                  //Ostatni otwierany plik
 
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
@@ -90,6 +91,7 @@ public slots:
     void publicTest();
 
     void Otworz(QString adres);                                                                                             //Otwarcie pliku
+    void Otworz();                                                                                                          //Otwarcie pliku
     void Usun();                                                                                                            //Usunięcie pliku
     void Kopiuj();                                                                                                          //Kopiuje plik
 
