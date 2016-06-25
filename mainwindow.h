@@ -71,6 +71,7 @@ private:
     //-----------------------------------------------Ostatnio używane ścieżki-----------------------------------------------
     QString lastCopyDir;                                                                                                    //Ostatni folder kopiowania
     QString lastOpenedDir;                                                                                                  //Ostatni otwierany plik
+    QString lastMoveDir;                                                                                                    //Ostatni folder przenoszenia
 
     //-----------------------------------------------Funkcje inicjalizujące obiekt------------------------------------------
     void InitWidgets();                                                                                                     //Inicjalizuje widżety
@@ -92,8 +93,12 @@ public slots:
 
     void Otworz(QString adres);                                                                                             //Otwarcie pliku
     void Otworz();                                                                                                          //Otwarcie pliku
+    void Reopen();                                                                                                          //Ponownie otwiera aktualny plik
+
     void Usun();                                                                                                            //Usunięcie pliku
     void Kopiuj();                                                                                                          //Kopiuje plik
+    void Przenies();                                                                                                        //Przenosi plik
+    void Rename();                                                                                                          //Zmiana nazwy pliku
 
     void TitleBar(QString name);                                                                                            //Ustawia napis na pasku okna
     void About();                                                                                                           //Wyświetla informacje o programie
@@ -104,8 +109,6 @@ public slots:
 
     void AddToRec(QString rec);                                                                                             //Dodaj plik do listy ostatnio otwieranych
     void OpenRec(int i);                                                                                                    //Otwiera plik z listy recentFiles
-
-    void Rename();                                                                                                          //Zmiana nazwy pliku
 
 private slots:
     void setFullsscreen();                                                                                                  //Włącza tryb fullscreen

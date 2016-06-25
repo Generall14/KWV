@@ -107,6 +107,7 @@ bool KWMotor::OtworzGif(QString adr)
     }
     GV->Wyswietl(gifVec);
     emit Error("Nie można otworzyć pliku " + adr + ".");                            //Zgłoszenie błędu
+    emit FileOff();
     delete mv;
     return 666;
 }
@@ -119,10 +120,28 @@ bool KWMotor::OtworzImg(QString adr)
     {
         GV->Wyswietl(gifVec);
         emit Error("Nie można otworzyć pliku " + adr + ".");                        //Zgłaszanie błędu
+        emit FileOff();
         return 666;
     }
     GV->Wyswietl(gifVec);                                                           //Wyświetlanie obrazu
     return 0;
+}
+
+void KWMotor::Clear()
+{
+    gifVec.clear();                                                                 //Czyszczenie danych
+    gifVec.push_back(QPixmap());
+    pliki.clear();
+    plik.setFile("");
+
+    GV->Wyswietl(gifVec);                                                           //Wyświetlanie nicości
+
+    emit Rozdzielczosc(0, 0, 0, 0);                                                 //Sygnały
+    emit Licznik(0, 0);
+    emit Data(QDateTime());
+    emit Rozmiar(0);
+    emit Plik("-");
+    emit FileOff();
 }
 
 //void KWMotor::Otworz()

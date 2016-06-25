@@ -13,9 +13,12 @@ KWMenu::KWMenu(MainWindow* mw):
     UpdateRecent(tv);
 
     fileDependent.push_back(akcjaKopiujPlik);
+    fileDependent.push_back(akcjaPrzeniesPlik);
     fileDependent.push_back(akcjaUsun);
     fileDependent.push_back(akcjaRename);
     fileDependent.push_back(akcjaResetZoom);
+    fileDependent.push_back(akcjaZamknijPlik);
+    fileDependent.push_back(akcjaOtworzPonownie);
 
     this->FileOff();
 }
@@ -36,8 +39,16 @@ void KWMenu::InitMenus()
     connect(akcjaOtworz, SIGNAL(triggered(bool)), this, SIGNAL(Otworz()));
     menuPlik->addAction(akcjaOtworz);
 
+    akcjaOtworzPonownie = new QAction(tr("Otwórz &Ponownie"), menuPlik);                    //Plik -> Zamknij obraz
+    connect(akcjaOtworzPonownie, SIGNAL(triggered(bool)), MWw, SLOT(Reopen()));
+    menuPlik->addAction(akcjaOtworzPonownie);
+
     menuRecent = new QMenu(tr("O&Statnio otwierane"), 0);                                   //Menu -> Ostatnio otwierane
     menuPlik->addMenu(menuRecent);
+
+    akcjaZamknijPlik = new QAction(tr("Z&Amknij obraz"), menuPlik);                         //Plik -> Zamknij obraz
+    connect(akcjaZamknijPlik, SIGNAL(triggered(bool)), this, SIGNAL(CloseFile()));
+    menuPlik->addAction(akcjaZamknijPlik);
 
     menuPlik->addSeparator();                                                               //Separator
 
@@ -49,6 +60,10 @@ void KWMenu::InitMenus()
     akcjaKopiujPlik = new QAction(tr("&Kopiuj plik"), menuPlik);                            //Plik -> Kopiuj plik
     connect(akcjaKopiujPlik, SIGNAL(triggered(bool)), MWw, SLOT(Kopiuj()));
     menuPlik->addAction(akcjaKopiujPlik);
+
+    akcjaPrzeniesPlik = new QAction(tr("&Przenieś plik"), menuPlik);                        //Plik -> Kopiuj plik
+    connect(akcjaPrzeniesPlik, SIGNAL(triggered(bool)), MWw, SLOT(Przenies()));
+    menuPlik->addAction(akcjaPrzeniesPlik);
 
     akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Edycja -> Usuń
     connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));

@@ -72,6 +72,7 @@ signals:
 public slots:
     void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik
     //void Otworz();                                                                                                          //Wywołuje procedurę otwierania pliku
+    void Clear();                                                                                                           //Zamyka plik i czyści pamięć
     void Next();                                                                                                            //Następny plik na liście
     void Back();                                                                                                            //Poprzedni plik na liście
     void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście

@@ -22,9 +22,12 @@ private:
 
     QMenu* menuPlik;
     QAction* akcjaOtworz;
+    QAction* akcjaOtworzPonownie;
     QMenu* menuRecent;
+    QAction* akcjaZamknijPlik;
     QAction* akcjaRename;
     QAction* akcjaKopiujPlik;
+    QAction* akcjaPrzeniesPlik;
     QAction* akcjaNoweOkno;
     QAction* akcjaZamknij;
 
@@ -50,6 +53,7 @@ signals:
     void Otworz();
     void About();
     void OpenRec(int nr);                                                                                                   //Otwieranie poprzednich plików
+    void CloseFile();
 
 public slots:
     void FileOn();

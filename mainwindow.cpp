@@ -132,6 +132,7 @@ void MainWindow::InitConnections()
     connect(menu, SIGNAL(About()), this, SLOT(About()));                                                        //Połączenia z menu
     connect(menu, SIGNAL(Otworz()), this, SLOT(Otworz()));
     connect(menu, SIGNAL(OpenRec(int)), this, SLOT(OpenRec(int)));
+    connect(menu, SIGNAL(CloseFile()), motor, SLOT(Clear()));
 
     connect(pasekDolny, SIGNAL(Zmiana(int)), motor, SLOT(Otworz(int)));                                         //Sygnały z paska stanu
     connect(pasekDolny, SIGNAL(ResetZoom()), wyswietlacz, SLOT(ResetZoom()));
@@ -358,6 +359,11 @@ void MainWindow::Otworz()
     }
 }
 
+void MainWindow::Reopen()
+{
+    motor->Otworz(motor->Adres());
+}
+
 void MainWindow::Error(QString er)
 {
     QMessageBox msgBox(QMessageBox::Warning, tr("Błąd"), er, QMessageBox::Ok, this);
@@ -449,6 +455,7 @@ void MainWindow::LoadRecentPlaces()
 {
     lastCopyDir = "./";                                                             //Domyślne wartości
     lastOpenedDir = "./";
+    lastMoveDir = "./";
 
     QFile plik(baseDirectory+"lastDirs.kwv");
     if(!plik.open(QIODevice::ReadOnly))                                             //Otwieranie pliku z danymi
@@ -468,6 +475,11 @@ void MainWindow::LoadRecentPlaces()
             QFileInfo td(linie.at(i).mid(3));
             lastCopyDir = td.path();
         }
+        if(linie.at(i).mid(0, 3)=="-MD")                                            //Ostatni folder kopiowania
+        {
+            QFileInfo td(linie.at(i).mid(3));
+            lastMoveDir = td.path();
+        }
         if(linie.at(i).mid(0, 3)=="-OD")                                            //Ostatni folder otwierania
         {
             QFileInfo td(linie.at(i).mid(3));
@@ -484,6 +496,7 @@ void MainWindow::SaveRecentPlaces()
 
     QTextStream ts(&plik);
     ts << "-CD"+lastCopyDir+QString(lastCopyDir.endsWith('/')?"":"/")+"\n";
+    ts << "-MD"+lastMoveDir+QString(lastMoveDir.endsWith('/')?"":"/")+"\n";
     ts << "-OD"+lastOpenedDir+"\n";
 
     plik.close();
@@ -520,7 +533,6 @@ void MainWindow::Kopiuj()
     QFile startPlik(motor->Adres());
 
     QString startString = lastCopyDir+"/"+startPlik.fileName();                     //Początkowy adres
-
     QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
 
     QString fileName = QFileDialog::getSaveFileName(this, tr("Wskaż adres docelowego pliku"), startString, suffixes, 0, QFileDialog::ReadOnly);
@@ -531,6 +543,42 @@ void MainWindow::Kopiuj()
         lastCopyDir = endFile.path();                                               //Zapisywanie użytego adresu
 
         startPlik.copy(fileName);                                                   //Kopiowanie pliku
+    }
+}
+
+void MainWindow::Przenies()
+{
+    if(!motor->isOpened())                                                          //Brak pliku
+        return;
+    QFile startPlik(motor->Adres());
+
+    QString startString = lastMoveDir+"/"+startPlik.fileName();                     //Początkowy adres
+    QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Wskaż adres docelowego pliku"), startString, suffixes, 0);
+
+    if(fileName.isEmpty())
+        return;
+    if(!QFileInfo(fileName).absoluteFilePath().compare(QFileInfo(startPlik).absoluteFilePath()))
+        return;
+
+    bool rem = false;
+
+    QFileInfo endFile(fileName);
+    lastMoveDir = endFile.path();                                                   //Zapisywanie użytego adresu
+
+    if(startPlik.copy(fileName))                                                    //Kopiowanie pliku
+    {
+        if(startPlik.remove())                                                      //Usuwanie poprzedniego pliku
+            rem = true;
+    }
+
+    if(!rem)
+    {
+        QFile remFile(fileName);
+        remFile.remove();                                                           //Usuwanie skopiowanego pliku w przypadku niepowodzenia operacji
+
+        QMessageBox::information(this, tr("Błąd przenoszenia"), tr("Nie można przenieść pliku ")+startPlik.fileName()+".");
     }
 }
 
