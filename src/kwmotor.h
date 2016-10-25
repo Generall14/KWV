@@ -1,6 +1,7 @@
 #ifndef KWMOTOR_H
 #define KWMOTOR_H
 
+#include "usrc/kwpic.h"
 #include <QObject>
 #include <QDir>
 #include <QStringList>
@@ -42,6 +43,8 @@ private:
 
     //QPixmap obraz;                                                                                                          //Aktualny obraz
     QVector<QPixmap> gifVec;                                                                                                //Obrazy z animacji
+
+    KWPic obraz;                                                                                                            //Obiekt obrazu
 
     //-----------------------------------------------Zmienne opisujące zestaw plików----------------------------------------
     QDir katalog;                                                                                                           //Aktualny katalog

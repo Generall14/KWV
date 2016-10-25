@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QMenu>
 #include <QAction>
-#include "mwptr.h"
+#include "osrc/mwptr.h"
 
 class MainWindow;
 

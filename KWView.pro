@@ -17,25 +17,29 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    src/mwptr.cpp \
     src/kwmenu.cpp \
     src/kwgraphicsview.cpp \
     src/kwstatusbar.cpp \
     src/kwmotor.cpp \
     src/3rdforms/kw3rdgif.cpp \
     src/osrc/MyQLineEdit.cpp \
-	src/3rdforms/kw3rdfileinfo.cpp
+	src/3rdforms/kw3rdfileinfo.cpp \
+    src/usrc/kwpic.cpp \
+    src/osrc/mwptr.cpp \
+    src/usrc/kwpicinfo.cpp
 
 HEADERS  += mainwindow.h \
     hplik.h \
-    src/mwptr.h \
     src/kwmenu.h \
     src/kwgraphicsview.h \
     src/kwstatusbar.h \
     src/kwmotor.h \
     src/3rdforms/kw3rdgif.h \
     src/osrc/MyQLineEdit.hpp \
-	src/3rdforms/kw3rdfileinfo.h
+	src/3rdforms/kw3rdfileinfo.h \
+    src/usrc/kwpic.h \
+    src/osrc/mwptr.h \
+    src/usrc/kwpicinfo.h
 
 RESOURCES += \
     ikony.qrc

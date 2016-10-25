@@ -1,7 +1,7 @@
 #ifndef KWSTATUSBAR_H
 #define KWSTATUSBAR_H
 
-#include "mwptr.h"
+#include "osrc/mwptr.h"
 #include "osrc/MyQLineEdit.hpp"
 #include <QStatusBar>
 #include <QLabel>

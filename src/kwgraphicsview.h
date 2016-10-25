@@ -11,7 +11,7 @@
 #include <QVector>
 #include <QTimer>
 #include <chrono>
-#include "mwptr.h"
+#include "osrc/mwptr.h"
 
 class MainWindow;
 
