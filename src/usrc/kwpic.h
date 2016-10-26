@@ -3,11 +3,11 @@
 
 /**
  * \class KWPic
- * @brief Klasa zarządzająca otwartymi obrazami.
+ * @brief Klasa zarządzająca otwartymi plikami obrazów.
  *
- * Przechowuje obrazy w wektorze gifVec (obraz lub klatki animacji), zwraca obrazy poprzez funkcję GetFrame.
+ * Przechowuje obrazy w wektorze KWPic::gifVec (obraz lub klatki animacji), zwraca obrazy poprzez funkcję KWPic::GetFrame.
  *
- * Zlecenie otwarcia pliku odbywa się poprzez funkcje LoadFile, po zakończeniu operacji jest wysyłany sygnał Done lub Error w zależności od wyniku.
+ * Zlecenie otwarcia pliku odbywa się poprzez funkcje KWPic::LoadFile, po zakończeniu operacji jest wysyłany sygnał KWPic::Done lub KWPic::Error w zależności od wyniku.
  */
 
 #include <QObject>

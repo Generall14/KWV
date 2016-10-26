@@ -1,6 +1,11 @@
 #ifndef KWPICINFO_H
 #define KWPICINFO_H
 
+/**
+ * \class KWPicInfo
+ * @brief Klasa składuje informacje o wykorzystywanym pliku obrazu.
+ */
+
 #include <QFileInfo>
 
 class KWPicInfo
