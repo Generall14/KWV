@@ -27,11 +27,6 @@ void KWPlayer::Halt()
     timer->stop();
 }
 
-//void KWPlayer::TimerSlot()
-//{
-//    NextFrame();
-//}
-
 void KWPlayer::NewPic(const KWPicInfo *pi)
 {
     Halt();

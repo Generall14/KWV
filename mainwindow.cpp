@@ -93,7 +93,9 @@ void MainWindow::InitWidgets()
     wyswietlacz = new KWGraphicsView(this);                                         //Tworzenie wyświetlacza obrazów
     this->setCentralWidget(wyswietlacz);
 
-    motor = new KWMotor(wyswietlacz, this);                                         //Tworzenie silnika
+    picObj = new KWPic(this);
+
+    motor = new KWMotor(picObj, this);                                         //Tworzenie silnika
 
     menu = new KWMenu(this);                                                        //Tworzenie menu
 

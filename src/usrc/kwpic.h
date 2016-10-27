@@ -7,7 +7,7 @@
  *
  * Przechowuje obrazy w wektorze KWPic::gifVec (obraz lub klatki animacji), zwraca obrazy poprzez funkcję KWPic::GetFrame.
  *
- * Zlecenie otwarcia pliku odbywa się poprzez funkcje KWPic::LoadFile, po zakończeniu operacji jest wysyłany sygnał KWPic::Done lub KWPic::Error w zależności od wyniku.
+ * Zlecenie otwarcia pliku odbywa się poprzez funkcje KWPic::LoadFile, po zakończeniu operacji jest wysyłany sygnał KWPic::Done lub KWPic::Error w zależności od wyniku.<REF>
  */
 
 #include <QObject>
@@ -25,9 +25,11 @@ public:
     KWPic(QObject *parent = 0);
     ~KWPic();
 
-    void LoadFile(QString adres);                                                                                           //Załąduj plik z adresu
     QPixmap* GetFrame(int nrFrame=0);                                                                                       //Zwraca wskaźnik na klatkę
     const KWPicInfo* GetPicInfo();                                                                                          //Zwraca informacje o obrazie
+
+public slots:
+    void LoadFile(QString adres, int orderId);                                                                              //Załąduj plik z adresu
 
 private:
     QVector<QPixmap*> gifVec;                                                                                               //Obraz lub klatki animacji
@@ -43,8 +45,8 @@ private:
     void CalcPicInfo(QString adres);                                                                                        //Oblicza informacje o pliku
 
 signals:
-    void Done(const KWPicInfo *pi);                                                                                         //Prawidłowe odczytanie pliku
-    void Error(QString errorMsg);                                                                                           //Błędne odczytanie pliku
+    void Done(const KWPicInfo *pi, int orderId);                                                                            //Prawidłowe odczytanie pliku
+    void Error(QString errorMsg, int orderId);                                                                              //Błędne odczytanie pliku
 };
 
 #endif // KWPIC_H

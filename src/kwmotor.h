@@ -20,31 +20,31 @@ class KWMotor : public QObject
 {
     Q_OBJECT
 public:
-    KWMotor(KWGraphicsView* gv, QObject* parent=0);
+    KWMotor(KWPic* kp, QObject* parent=0);
 
-    QString Adres();                                                                                                        //Zwraca adres aktualnie otwartego pliku
-    bool isOpened();                                                                                                        //Zwraca true jeżeli jest wczytany jakiś plik
-    int DlugoscListy();                                                                                                     //Zwraca liczbę zdjęć na liście
+    QString Adres();                                                                                                        //Zwraca adres aktualnie otwartego pliku<REF>
+    bool isOpened();                                                                                                        //Zwraca true jeżeli jest wczytany jakiś plik<REF>
+    int DlugoscListy();                                                                                                     //Zwraca liczbę zdjęć na liście<REF>
 
-    long getTimeUs();                                                                                                       //Zwraca czas otwierania ostatniego pliku
+    long getTimeUs();                                                                                                       //Zwraca czas otwierania ostatniego pliku<REF>
 
-    QFileInfo fileInfo() const;                                                                                             //Zwraca informację o pliku
-    QPixmap fileSample() const;                                                                                             //Zwraca jeden obraz
-    int fileFrames() const;                                                                                                 //Zwraca liczbę klatek
+    QFileInfo fileInfo() const;                                                                                             //Zwraca informację o pliku<REF>
+    QPixmap fileSample() const;                                                                                             //Zwraca jeden obraz<REF>
+    int fileFrames() const;                                                                                                 //Zwraca liczbę klatek<REF>
 
     QString Filters();                                                                                                      //Zwraca filtry plików
 
 private:
-    KWGraphicsView* GV;                                                                                                     //Wskaźnik na obiekt wyświetlający obrazy
+    KWGraphicsView* GV;                                                                                                     //Wskaźnik na obiekt wyświetlający obrazy<REF>
 
     QStringList obslugiwane;                                                                                                //Lista obsługiwanych rozszerzeń
     QStringList filtry;                                                                                                     //FIltry otwierania olików
     QString filtr;                                                                                                          //Ostateczny filtr
 
     //QPixmap obraz;                                                                                                          //Aktualny obraz
-    QVector<QPixmap> gifVec;                                                                                                //Obrazy z animacji
+    QVector<QPixmap> gifVec;                                                                                                //Obrazy z animacji<REF>
 
-    KWPic obraz;                                                                                                            //Obiekt obrazu
+    KWPic obraz;                                                                                                            //Obiekt obrazu<REF>
 
     //-----------------------------------------------Zmienne opisujące zestaw plików----------------------------------------
     QDir katalog;                                                                                                           //Aktualny katalog
@@ -61,16 +61,18 @@ private:
     bool OtworzPlik(QString adr);                                                                                           //Otwiera plik
 
 signals:
-    void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu
-    void Licznik(int c, int a);                                                                                             //Zmiana wartości licznika plików
-    void Data(QDateTime);                                                                                                   //Zmiana daty
-    void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru
-    void Plik(QString p);                                                                                                   //Zmiana pliku
+    void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu<REF>
+    void Licznik(int c, int a);                                                                                             //Zmiana wartości licznika plików<REF>
+    void Data(QDateTime);                                                                                                   //Zmiana daty<REF>
+    void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru<REF>
+    void Plik(QString p);                                                                                                   //Zmiana pliku<REF>
     //void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
-    void FileOn();                                                                                                          //Otwarto plik
-    void FileOff();                                                                                                         //Zamknięto plik
+    void FileOn();                                                                                                          //Otwarto plik<REF>
+    void FileOff();                                                                                                         //Zamknięto plik<REF>
 
     void Error(QString);                                                                                                    //Zgłoszenie błędu
+
+    void LoadRequest(QString adres, int orderId);                                                                                        //Żądanie odczytu
 
 public slots:
     void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik
@@ -80,6 +82,9 @@ public slots:
     void Back();                                                                                                            //Poprzedni plik na liście
     void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście
     void RandImg();                                                                                                         //Otwiera losowy obraz
+
+    void PicDone(const KWPicInfo *pi, int orderId);                                                                                      //Odebrano potwierdzenie otwarcia pliku
+    void PicError(QString errorMsg, int orderId);                                                                                        //Odebrano błąd otwarcia pliku
 };
 
 #endif // KWMOTOR_H

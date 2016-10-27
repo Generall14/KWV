@@ -26,6 +26,7 @@
 #include "src/kwmotor.h"
 #include "src/3rdforms/kw3rdgif.h"
 #include "src/3rdforms/kw3rdfileinfo.h"
+#include "src/usrc/kwpic.h"
 
 class MainWindow : public QMainWindow
 {
@@ -53,6 +54,7 @@ private:
     KWGraphicsView* wyswietlacz;                                                                                            //Tworzy wyświetlacz obrazów
     KWStatusBar* pasekDolny;                                                                                                //Obsługuje pasek stanu
     KWMotor* motor;                                                                                                         //Silnik obsługujący pliki obrazów
+    KWPic* picObj;                                                                                                          //Obiekt obsługujący obraz
 
     trybOkna prev;                                                                                                          //Tryb okna przed wejściem do fullscreen
     QPushButton* invisibleCloser;                                                                                           //Służy jako przycisk zamykania trybu fullscreen

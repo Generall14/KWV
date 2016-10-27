@@ -3,9 +3,9 @@
 
 #include <QDebug>
 
-KWMotor::KWMotor(KWGraphicsView *gv, QObject *parent):
+KWMotor::KWMotor(KWPic *kp, QObject *parent):
     QObject(parent),
-    GV(gv)
+    GV(NULL)
 {
     filtry << tr("Pliki jpg") + " (*.jpg)"                                          //Filtry obsługiwanych plików
            << tr("Pliki jpeg") + " (*.jpeg)"
@@ -34,6 +34,10 @@ KWMotor::KWMotor(KWGraphicsView *gv, QObject *parent):
         filtr += ";;" + filtry.at(i);
 
     katalog.setFilter(QDir::Files | QDir::Hidden);                                  //Ustawienia ładowania katalogów
+
+    connect(this, SIGNAL(LoadRequest(QString, int)), kp, SLOT(LoadFile(QString, int)));
+    connect(kp, SIGNAL(Done(const KWPicInfo*, int)), this, SLOT(PicDone(const KWPicInfo*, int)));
+    connect(kp, SIGNAL(Error(QString, int)), this, SLOT(PicError(QString, int)));
 }
 
 void KWMotor::Otworz(QString adres) throw(QString)
@@ -267,4 +271,14 @@ long KWMotor::getTimeUs()
 QString KWMotor::Filters()
 {
     return filtr;
+}
+
+void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
+{
+
+}
+
+void KWMotor::PicError(QString errorMsg, int orderId)
+{
+
 }

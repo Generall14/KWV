@@ -15,13 +15,13 @@ KWPic::~KWPic()
     }
 }
 
-void KWPic::LoadFile(QString adres)
+void KWPic::LoadFile(QString adres, int orderId)
 {
     if(OtworzPlik(adres))
-        emit Error(tr("Nie można otworzyć pliku ") + adres + ".");
+        emit Error(tr("Nie można otworzyć pliku ") + adres + ".", orderId);
 
     this->CalcPicInfo(adres);
-    emit Done(&picInfo);
+    emit Done(&picInfo, orderId);
 }
 
 QPixmap* KWPic::GetFrame(int nrFrame)
