@@ -19,7 +19,7 @@ class KWZoomer : public QObject
 {
     Q_OBJECT
 public:
-    KWZoomer(QGraphicsScene* ngView);
+    KWZoomer(QGraphicsScene* ngView, QObject *parent = 0);
 
     static const int MIN_ZOOM = 5;
     static const int MAX_ZOOM = 500;

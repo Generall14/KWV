@@ -22,7 +22,7 @@ class KWPic : public QObject
 {
     Q_OBJECT
 public:
-    KWPic();
+    KWPic(QObject *parent = 0);
     ~KWPic();
 
     void LoadFile(QString adres);                                                                                           //Załąduj plik z adresu

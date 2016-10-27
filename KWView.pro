@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     src/usrc/kwpic.cpp \
     src/osrc/mwptr.cpp \
     src/usrc/kwpicinfo.cpp \
-    src/usrc/kwzoomer.cpp
+    src/usrc/kwzoomer.cpp \
+    src/usrc/kwplayer.cpp
 
 HEADERS  += mainwindow.h \
     hplik.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     src/usrc/kwpic.h \
     src/osrc/mwptr.h \
     src/usrc/kwpicinfo.h \
-    src/usrc/kwzoomer.h
+    src/usrc/kwzoomer.h \
+    src/usrc/kwplayer.h
 
 RESOURCES += \
     ikony.qrc

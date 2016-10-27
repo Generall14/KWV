@@ -1,6 +1,7 @@
 #include "kwpic.h"
 
-KWPic::KWPic()
+KWPic::KWPic(QObject *parent):
+    QObject(parent)
 {
 
 }

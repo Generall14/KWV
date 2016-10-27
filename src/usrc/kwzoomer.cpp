@@ -1,7 +1,8 @@
 #include "kwzoomer.h"
 #include <algorithm>
 
-KWZoomer::KWZoomer(QGraphicsScene* ngView):
+KWZoomer::KWZoomer(QGraphicsScene* ngView, QObject *parent):
+    QObject(parent),
     gView(ngView)
 {
     lastPic = NULL;
