@@ -40,11 +40,8 @@ KWMotor::KWMotor(KWPic *kp, QObject *parent):
     connect(kp, SIGNAL(Error(QString, int)), this, SLOT(PicError(QString, int)));
 }
 
-void KWMotor::Otworz(QString adres) throw(QString)
+void KWMotor::CalcFilesParams(QString adres)
 {
-    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-        return;
-
     plik.setFile(adres);                                                            //Ładowanie opisu pliku
 
     katalog.setPath(plik.path());                                                   //Ładowanie katalogu
@@ -67,8 +64,17 @@ void KWMotor::Otworz(QString adres) throw(QString)
             break;
         }
     }
+}
 
-    Sygnaly();                                                                      //Rozsyłanie sygnałów
+void KWMotor::Otworz(QString adres) throw(QString)
+{
+    lastRequestPath = adres;
+    lastRequestNumber = -1;
+    emit LoadRequest(adres, 0);
+//    if(OtworzPlik(adres))                                                           //Otwieranie pliku
+//        return;
+
+//    Sygnaly();                                                                      //Rozsyłanie sygnałów
 }
 
 bool KWMotor::OtworzPlik(QString adr)
@@ -177,13 +183,9 @@ void KWMotor::Next()
 
     QString adres = katalog.absolutePath() + "/" + pliki[next];                     //Pełen adres nowego pliku
 
-    OtworzPlik(adres);                                                              //Otwieranie pliku
-
-    aktualny = next;                                                                //Ustawianie znacznika
-
-    plik.setFile(adres);                                                            //Pobieranie informacji o nowym pliku
-
-    Sygnaly();                                                                      //Rozsyłanie sygnałów
+    lastRequestPath.clear();
+    lastRequestNumber = next;
+    emit LoadRequest(adres, 0);
 }
 
 void KWMotor::Back()
@@ -197,13 +199,9 @@ void KWMotor::Back()
 
     QString adres = katalog.absolutePath() + "/" + pliki[next];                     //Pełen adres nowego pliku
 
-    OtworzPlik(adres);                                                              //Otwieranie pliku
-
-    aktualny = next;                                                                //Ustawianie znacznika
-
-    plik.setFile(adres);                                                            //Pobieranie informacji o nowym pliku
-
-    Sygnaly();                                                                      //Rozsyłanie sygnałów
+    lastRequestPath.clear();
+    lastRequestNumber = next;
+    emit LoadRequest(adres, 0);
 }
 
 void KWMotor::Otworz(int nr)
@@ -213,13 +211,9 @@ void KWMotor::Otworz(int nr)
 
     QString adres = katalog.absolutePath() + "/" + pliki[nr];                       //Pełen adres nowego pliku
 
-    OtworzPlik(adres);                                                              //Otwieranie pliku
-
-    aktualny = nr;                                                                  //Ustawianie znacznika
-
-    plik.setFile(adres);                                                            //Pobieranie informacji o nowym pliku
-
-    Sygnaly();                                                                      //Rozsyłanie sygnałów
+    lastRequestPath.clear();
+    lastRequestNumber = nr;
+    emit LoadRequest(adres, 0);
 }
 
 void KWMotor::RandImg()
@@ -275,10 +269,27 @@ QString KWMotor::Filters()
 
 void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
 {
+    qDebug() << "KWMotor: PicDone slot";
 
+    if(lastRequestNumber>=0)
+    {
+        aktualny = lastRequestNumber;
+    }
+    else if(!lastRequestPath.isEmpty())
+    {
+        CalcFilesParams(lastRequestPath);
+    }
+    else
+        return;
+
+    emit NewLoaded(pi, aktualny+1, pliki.length());
+
+    lastRequestNumber = -1;
+    lastRequestPath.clear();
 }
 
 void KWMotor::PicError(QString errorMsg, int orderId)
 {
-
+    qDebug() << "KWMotor: PicError slot";
+    emit Error(errorMsg);
 }

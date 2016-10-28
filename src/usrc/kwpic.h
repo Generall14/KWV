@@ -38,6 +38,8 @@ private:
 
     std::chrono::steady_clock::time_point czas_start, czas_end;                                                             //Pomiar czasu
 
+    void ClearGifVec();                                                                                                     //Czyści gifVec
+
     bool OtworzPlik(QString adr);                                                                                           //Rozpoznanie i otwieranie pliku
     bool OtworzImg(QString adr);                                                                                            //Otwieranie plików obrazu
     bool OtworzGif(QString adr);                                                                                            //Otwieranie pliku gif

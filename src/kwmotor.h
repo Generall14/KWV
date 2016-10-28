@@ -46,19 +46,24 @@ private:
 
     KWPic obraz;                                                                                                            //Obiekt obrazu<REF>
 
+    QString lastRequestPath;                                                                                                //Po zleceniu odczytu poprzez wskazanie adresu
+    int lastRequestNumber;                                                                                                  //Po zleceniu odczytu next/back
+
     //-----------------------------------------------Zmienne opisujące zestaw plików----------------------------------------
     QDir katalog;                                                                                                           //Aktualny katalog
     QStringList pliki;                                                                                                      //Lista dostępnych plików w katalogu
     QFileInfo plik;                                                                                                         //Dane o aktualnym pliku
     int aktualny;                                                                                                           //Aktualny plik na liście
 
-    std::chrono::steady_clock::time_point czas_start, czas_end;                                                             //Pomiar czasu
+    std::chrono::steady_clock::time_point czas_start, czas_end;                                                             //Pomiar czasu<REF>
 
-    void Sygnaly();                                                                                                         //Rozsyła sygnały związane ze zmianą pliku
+    void Sygnaly();                                                                                                         //Rozsyła sygnały związane ze zmianą pliku<REF>
 
-    bool OtworzGif(QString adr);                                                                                            //Otwiera animację gif
-    bool OtworzImg(QString adr);                                                                                            //Otwiera obraz
-    bool OtworzPlik(QString adr);                                                                                           //Otwiera plik
+    bool OtworzGif(QString adr);                                                                                            //Otwiera animację gif<REF>
+    bool OtworzImg(QString adr);                                                                                            //Otwiera obraz<REF>
+    bool OtworzPlik(QString adr);                                                                                           //Otwiera plik<REF>
+
+    void CalcFilesParams(QString adres);                                                                                    //Oblicza parametry plików w folderze
 
 signals:
     void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu<REF>
@@ -73,11 +78,12 @@ signals:
     void Error(QString);                                                                                                    //Zgłoszenie błędu
 
     void LoadRequest(QString adres, int orderId);                                                                                        //Żądanie odczytu
+    void NewLoaded(const KWPicInfo *pi, int curr, int total);
 
 public slots:
     void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik
     //void Otworz();                                                                                                          //Wywołuje procedurę otwierania pliku
-    void Clear();                                                                                                           //Zamyka plik i czyści pamięć
+    void Clear();                                                                                                           //Zamyka plik i czyści pamięć<REF>
     void Next();                                                                                                            //Następny plik na liście
     void Back();                                                                                                            //Poprzedni plik na liście
     void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście

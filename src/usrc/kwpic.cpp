@@ -1,4 +1,5 @@
 #include "kwpic.h"
+#include <QDebug>
 
 KWPic::KWPic(QObject *parent):
     QObject(parent)
@@ -8,17 +9,27 @@ KWPic::KWPic(QObject *parent):
 
 KWPic::~KWPic()
 {
+    ClearGifVec();
+}
+
+void KWPic::ClearGifVec()
+{
     for(int i=0;i<gifVec.length();++i)
     {
-        if(gifVec.at(1)!=NULL)
+        if(gifVec.at(i)!=NULL)
             delete gifVec[i];
     }
+    gifVec.clear();
 }
 
 void KWPic::LoadFile(QString adres, int orderId)
 {
+    qDebug() << "KWPic: LoadFile slot";
     if(OtworzPlik(adres))
+    {
         emit Error(tr("Nie można otworzyć pliku ") + adres + ".", orderId);
+        return;
+    }
 
     this->CalcPicInfo(adres);
     emit Done(&picInfo, orderId);
@@ -39,6 +50,7 @@ const KWPicInfo* KWPic::GetPicInfo()
 bool KWPic::OtworzPlik(QString adr)
 {
     czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu
+
     if(adr.split('.').last()=="gif")                                                //Odczytywanie rozszerzenia
     {
         if(OtworzGif(adr))                                                          //Jeżeli plik ma rozszerzenie *.gif
@@ -62,12 +74,7 @@ bool KWPic::OtworzImg(QString adr)
         delete tpm;
         return 666;
     }
-
-    for(int i=0;i<gifVec.length();++i)                                              //Czyszczenie wektora
-    {
-        if(gifVec.at(1)!=NULL)
-            delete gifVec[i];
-    }
+    ClearGifVec();
 
     gifVec.push_back(tpm);
     tv = 0;
@@ -82,11 +89,7 @@ bool KWPic::OtworzGif(QString adr)
 
     if(mv->isValid())                                                               //Poprawny obiekt?
     {
-        for(int i=0;i<gifVec.length();++i)                                          //Czyszczenie wektora
-        {
-            if(gifVec.at(1)!=NULL)
-                delete gifVec[i];
-        }
+        ClearGifVec();
 
         for(int i=0;i<mv->frameCount();++i)                                         //Zapisywanie klatek do wektora
         {
