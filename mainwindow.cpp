@@ -243,27 +243,27 @@ void MainWindow::publicTest()
 
 void MainWindow::Benchmark()
 {
-    long long total=0, open=0, show=0, zoom=0;
-    std::chrono::steady_clock::time_point czas_start, czas_end;
-    motor->Otworz("bench/imga.jpg");
+//    long long total=0, open=0, show=0, zoom=0;
+//    std::chrono::steady_clock::time_point czas_start, czas_end;
+//    motor->Otworz("bench/imga.jpg");
 
-    for(int i=0;i<43;i++)
-    {
-        czas_start = std::chrono::steady_clock::now();
-        motor->Next();
-        czas_end = std::chrono::steady_clock::now();
-        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-        open += motor->getTimeUs();
-        show += wyswietlacz->getTimeUs();
+//    for(int i=0;i<43;i++)
+//    {
+//        czas_start = std::chrono::steady_clock::now();
+//        motor->Next();
+//        czas_end = std::chrono::steady_clock::now();
+//        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+//        open += motor->getTimeUs();
+//        show += wyswietlacz->getTimeUs();
 
-        wyswietlacz->SetZoom(1.95);
-        zoom += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-    }
-    printf("Wyniki pomiaru:\nCałkowity czas: %d ms\n", (int)(total/1000));
-    printf("Czas otwierania:: %d ms\n", (int)(open/1000));
-    printf("Czas wyświetlania:: %d ms\n", (int)(show/1000));
-    printf("Czas skalowania:: %d ms\n", (int)(zoom/1000));
+//        wyswietlacz->SetZoom(1.95);
+//        zoom += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+//        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+//    }
+//    printf("Wyniki pomiaru:\nCałkowity czas: %d ms\n", (int)(total/1000));
+//    printf("Czas otwierania:: %d ms\n", (int)(open/1000));
+//    printf("Czas wyświetlania:: %d ms\n", (int)(show/1000));
+//    printf("Czas skalowania:: %d ms\n", (int)(zoom/1000));
 }
 
 void MainWindow::ToggleFullscreen()
@@ -372,7 +372,7 @@ void MainWindow::Otworz()
 
 void MainWindow::Reopen()
 {
-    motor->Otworz(motor->Adres());
+    motor->Otworz(picObj->GetPicInfo()->fileInfo.filePath());
 }
 
 void MainWindow::Error(QString er)
@@ -393,10 +393,10 @@ void MainWindow::FileInfo()
 {
     if(!fileInfo)
         fileInfo = new KW3rdFileInfo(this);
-    if(motor->isOpened())
-        fileInfo->GenInfo(motor->fileInfo(), motor->fileSample(), motor->fileFrames(), motor->getTimeUs()/1000);
-    else
-        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0, 0);
+//    if(motor->isOpened())
+        fileInfo->GenInfo(picObj->GetPicInfo());
+//    else
+//        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0, 0);
     fileInfo->show();
 }
 
@@ -419,7 +419,7 @@ void MainWindow::OpenRec(int i)
 void MainWindow::Rename()
 {
     bool ok;
-    QString oldName = motor->Adres();
+    QString oldName = picObj->GetPicInfo()->fileInfo.filePath();
     QFile plik(oldName);                                                            //Obiekt pliku
     QFileInfo fi(plik);
 
@@ -515,10 +515,10 @@ void MainWindow::SaveRecentPlaces()
 
 void MainWindow::Usun()
 {
-    if(!motor->isOpened())                                                          //Jeżeli żaden obraz nie jest wczytany
+    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Jeżeli żaden obraz nie jest wczytany
         return;
 
-    QMessageBox msgBox(QMessageBox::Question, tr("Potwierdź"), tr("Czy jesteś pewien, że chcesz usunąć obraz ") + motor->Adres() + "?",
+    QMessageBox msgBox(QMessageBox::Question, tr("Potwierdź"), tr("Czy jesteś pewien, że chcesz usunąć obraz ") + picObj->GetPicInfo()->fileInfo.filePath() + "?",
                        QMessageBox::Yes | QMessageBox::No, this);
     msgBox.setButtonText(QMessageBox::Yes, tr("Tak"));
     msgBox.setButtonText(QMessageBox::No, tr("Anuluj"));
@@ -527,21 +527,21 @@ void MainWindow::Usun()
     if(msgBox.exec() == QMessageBox::No)                                            //Anuluj -> wyjście
         return;
 
-    QFile plik(motor->Adres());                                                     //Usuwanie pliku
+    QFile plik(picObj->GetPicInfo()->fileInfo.filePath());                          //Usuwanie pliku
     plik.remove();
 
     if(motor->DlugoscListy()>1)                                                     //Jeżeli na liście były inne pliki
     {
         motor->Next();                                                              //Otwórz kolejny obraz
-        motor->Otworz(motor->Adres());
+//        motor->Otworz(motor->Adres());
     }
 }
 
 void MainWindow::Kopiuj()
 {
-    if(!motor->isOpened())                                                          //Brak pliku do skopiowania
+    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku do skopiowania
         return;
-    QFile startPlik(motor->Adres());
+    QFile startPlik(picObj->GetPicInfo()->fileInfo.filePath());
 
     QString startString = lastCopyDir+"/"+startPlik.fileName();                     //Początkowy adres
     QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
@@ -559,9 +559,9 @@ void MainWindow::Kopiuj()
 
 void MainWindow::Przenies()
 {
-    if(!motor->isOpened())                                                          //Brak pliku
+    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku
         return;
-    QFile startPlik(motor->Adres());
+    QFile startPlik(picObj->GetPicInfo()->fileInfo.filePath());
 
     QString startString = lastMoveDir+"/"+startPlik.fileName();                     //Początkowy adres
     QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
@@ -596,8 +596,8 @@ void MainWindow::Przenies()
 void MainWindow::NoweOkno()
 {
     QStringList arguments;
-    if(motor->isOpened())
-        arguments << motor->Adres();                                                //Tworzenie argumentów programu
+    if(picObj->GetPicInfo()->fileInfo.isFile())
+        arguments << picObj->GetPicInfo()->fileInfo.filePath();                     //Tworzenie argumentów programu
 
     if(testRun)
         arguments << "--test";

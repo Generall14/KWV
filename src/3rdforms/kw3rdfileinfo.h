@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QFileInfo>
 #include <QPixmap>
+#include "../usrc/kwpicinfo.h"
 
 class KW3rdFileInfo : public QDialog
 {
@@ -13,7 +14,7 @@ class KW3rdFileInfo : public QDialog
 public:
     KW3rdFileInfo(QWidget* parent);                                                                                         //Konstruktor
 
-    void GenInfo(QFileInfo fi, QPixmap ob, int kl, int ms);                                                                 //Generuje informacje o pliku
+    void GenInfo(const KWPicInfo *pi);                                                                                      //Generuje informacje o pliku
 
 private:
     QLineEdit* nazwaPliku;

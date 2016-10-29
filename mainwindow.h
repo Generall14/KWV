@@ -86,7 +86,7 @@ private:
 
     virtual void keyPressEvent(QKeyEvent *event);                                                                           //Wciśnięcie klawisza klawiatury
 
-    void Benchmark();                                                                                                       //Testy prędkości
+    void Benchmark();                                                                                                       //Testy prędkości<REF>
 
     void LoadRecentFIles();                                                                                                 //Otwiera listę ostatnich plików z pliku
     void SaveRecentFIles();                                                                                                 //Zapisuje listę ostatnich plików z pliku
@@ -111,7 +111,7 @@ public slots:
     void Error(QString er);                                                                                                 //Wyświetlenie błędu
 
     void GifManager();                                                                                                      //Wyświetla okno menedżera animacji
-    void FileInfo();                                                                                                        //Wyświetla informacje o obrazie
+    void FileInfo();                                                                                                        //Wyświetla informacje o obrazie<REF>
 
     void AddToRec(QString rec);                                                                                             //Dodaj plik do listy ostatnio otwieranych
     void OpenRec(int i);                                                                                                    //Otwiera plik z listy recentFiles

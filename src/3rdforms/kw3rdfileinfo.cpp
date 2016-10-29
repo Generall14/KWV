@@ -15,30 +15,31 @@ KW3rdFileInfo::KW3rdFileInfo(QWidget *parent):
     this->setWindowTitle(tr("Informacje o obrazie"));
 }
 
-void KW3rdFileInfo::GenInfo(QFileInfo fi, QPixmap ob, int kl, int ms)
+void KW3rdFileInfo::GenInfo(const KWPicInfo* pi)
 {
-    if(kl>0)
+    //QFileInfo fi, QPixmap ob, int kl, int ms
+    if(pi->fileInfo.isFile())
     {
-        nazwaPliku->setText(fi.fileName());
-        katalog->setText(fi.dir().absolutePath());
-        sciezkaPliku->setText(fi.dir().absoluteFilePath(fi.fileName()));
+        nazwaPliku->setText(pi->fileInfo.fileName());
+        katalog->setText(pi->fileInfo.dir().absolutePath());
+        sciezkaPliku->setText(pi->fileInfo.dir().absoluteFilePath(pi->fileInfo.fileName()));
 
-        int w = ob.width();
-        int h = ob.height();
+        int w = pi->resWidth;
+        int h = pi->resHeight;
         int gcd = std::__gcd(w, h);
         rozmiarObrazu->setText(QString::number(w)+" x "+QString::number(h)+tr(" pikseli")+" ("+QString::number(w/gcd)+":"+QString::number(h/gcd)+")");
 
-        glebiaKolorow->setText(QString("%1").arg(pow(2, ob.defaultDepth()), 0, 'E', 2)+" ("+QString::number(ob.defaultDepth())+" bits per pixel)");
+        glebiaKolorow->setText(QString("%1").arg(pow(2, pi->picDepth), 0, 'E', 2)+" ("+QString::number(pi->picDepth)+" bits per pixel)");
 
-        long long B = fi.size();
+        long long B = pi->fileInfo.size();
         int KiB = B/1024;
         if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
             rozmiarNaDysku->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB ("+QString("%L1").arg(B)+" B)");
         else
             rozmiarNaDysku->setText(QString::number(KiB)+" KiB ("+QString("%L1").arg(B)+" B)");
 
-        dataEdycji->setText(fi.lastModified().toString("yyyy-MM-dd, HH:mm:ss"));
-        czasLadowania->setText(QString("%L1").arg(ms)+" ms");
+        dataEdycji->setText(pi->fileInfo.lastModified().toString("yyyy-MM-dd, HH:mm:ss"));
+        czasLadowania->setText(QString("%L1").arg(pi->loadTimeUs/1000)+" ms");
     }
     else
     {
