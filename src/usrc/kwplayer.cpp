@@ -1,6 +1,6 @@
 #include "kwplayer.h"
 
-KWPlayer::KWPlayer(KWPic *pic, QObject *parent):
+KWPlayer::KWPlayer(KWPic *pic, KWZoomer *zoomerPtr, QObject *parent):
     QObject(parent),
     picPtr(pic)
 {
@@ -8,6 +8,8 @@ KWPlayer::KWPlayer(KWPic *pic, QObject *parent):
     connect(timer, SIGNAL(timeout()), this, SLOT(NextFrame()));
 
     Halt();
+
+    connect(this, SIGNAL(ShowNewPic(QPixmap*,bool)), zoomerPtr, SLOT(NewPic(QPixmap*,bool)));
 }
 
 KWPlayer::~KWPlayer()

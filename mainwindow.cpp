@@ -94,6 +94,8 @@ void MainWindow::InitWidgets()
     this->setCentralWidget(wyswietlacz);
 
     picObj = new KWPic(this);
+    zoomerObj = new KWZoomer(wyswietlacz->Scena(), this);
+    playerObj = new KWPlayer(picObj, zoomerObj, this);
 
     motor = new KWMotor(picObj, this);                                         //Tworzenie silnika
 
@@ -115,21 +117,23 @@ void MainWindow::InitConnections()
 
     connect(invisibleCloser, SIGNAL(clicked(bool)), this, SLOT(resetFullscreen()));                             //Zamykanie trybu pełnoekranowego
 
-    connect(wyswietlacz, SIGNAL(Zoomed(int)), pasekDolny, SLOT(UstawZoom(int)));                                //Sygnały z wyświetlacza
+    //connect(wyswietlacz, SIGNAL(Zoomed(int)), pasekDolny, SLOT(UstawZoom(int)));                                //Sygnały z wyświetlacza
     connect(wyswietlacz, SIGNAL(Next()), motor, SLOT(Next()));
     connect(wyswietlacz, SIGNAL(Back()), motor, SLOT(Back()));
     connect(wyswietlacz, SIGNAL(ToggleFullscreen()), this, SLOT(ToggleFullscreen()));
 
-    connect(motor, SIGNAL(Rozdzielczosc(int,int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int,int)));  //Sygnały po otworzeniu nowego pliku
-    connect(motor, SIGNAL(Rozmiar(int)), pasekDolny, SLOT(UstawRozmiar(int)));
-    connect(motor, SIGNAL(Licznik(int,int)), pasekDolny, SLOT(UstawLicznik(int,int)));
-    connect(motor, SIGNAL(Data(QDateTime)), pasekDolny, SLOT(UstawDate(QDateTime)));
-    connect(motor, SIGNAL(Plik(QString)), this, SLOT(TitleBar(QString)));
-    connect(motor, SIGNAL(Plik(QString)), pasekDolny, SLOT(UstawPlik(QString)));
+
+    //connect(motor, SIGNAL(Rozdzielczosc(int,int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int,int)));  //Sygnały po otworzeniu nowego pliku
+    //connect(motor, SIGNAL(Rozmiar(int)), pasekDolny, SLOT(UstawRozmiar(int)));
+    //connect(motor, SIGNAL(Licznik(int,int)), pasekDolny, SLOT(UstawLicznik(int,int)));
+    //connect(motor, SIGNAL(Data(QDateTime)), pasekDolny, SLOT(UstawDate(QDateTime)));
+//    connect(motor, SIGNAL(Plik(QString)), this, SLOT(TitleBar(QString)));
+    //connect(motor, SIGNAL(Plik(QString)), pasekDolny, SLOT(UstawPlik(QString)));
     connect(motor, SIGNAL(Error(QString)), this, SLOT(Error(QString)));
     //connect(motor, SIGNAL(NewOpened(QString)), this, SLOT(AddToRec(QString)));
     connect(motor, SIGNAL(FileOn()), menu, SLOT(FileOn()));
     connect(motor, SIGNAL(FileOff()), menu, SLOT(FileOff()));
+    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), pasekDolny, SLOT(SetNewData(const KWPicInfo*,int,int)));
 
     connect(menu, SIGNAL(About()), this, SLOT(About()));                                                        //Połączenia z menu
     connect(menu, SIGNAL(Otworz()), this, SLOT(Otworz()));
@@ -140,6 +144,10 @@ void MainWindow::InitConnections()
     connect(pasekDolny, SIGNAL(ResetZoom()), wyswietlacz, SLOT(ResetZoom()));
     connect(pasekDolny, SIGNAL(Back()), motor, SLOT(Back()));
     connect(pasekDolny, SIGNAL(Next()), motor, SLOT(Next()));
+
+    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), playerObj, SLOT(NewPic(const KWPicInfo*)));
+    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), this, SLOT(TitleBar(const KWPicInfo*)));
+    connect(zoomerObj, SIGNAL(ReZoomed(int)), pasekDolny, SLOT(UstawZoom(int)));
 }
 
 void MainWindow::InitShortcuts()
@@ -189,8 +197,9 @@ void MainWindow::testOpenA()
     motor->Otworz("imga.jpg");
 }
 
-void MainWindow::TitleBar(QString name)
+void MainWindow::TitleBar(const KWPicInfo *pi)
 {
+    QString name = pi->fileInfo.fileName();
     if(testRun)                                                                     //Wersja testowa
         this->setWindowTitle("KWView <Tryb testowy> - " + name);
     else

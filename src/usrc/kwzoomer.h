@@ -35,9 +35,14 @@ public:
     void SetDefaultMode(defTypes newType, int newWidth=-1, int newHeight=-1);                                               //Ustawia domyślny trub powiększenia
     void SetLimits(int newWidth, int newHeight);                                                                            //Ustawia nowe limity startowe obrazu
     void ResetZoom();                                                                                                       //Resetuje powiększenie
-    void NewPic(QPixmap* newPic, bool resetZoom=true);                                                                      //Ustawia nowy obraz oraz resetuje powiększenie
 
     void SetZoom(float newZoom);                                                                                            //Ustawia nowe powiększenie
+
+public slots:
+    void NewPic(QPixmap* newPic, bool resetZoom=true);                                                                      //Ustawia nowy obraz oraz resetuje powiększenie
+
+signals:
+    void ReZoomed(int newZoom);                                                                                             //Sygnał zmiany powiększenia
 
 private:
     QGraphicsScene* gView;                                                                                                  //Wskaźnik na wyświetlacz
@@ -51,9 +56,6 @@ private:
     Qt::TransformationMode tranMode;                                                                                        //Metoda skalowania
 
     void sendZoom();                                                                                                        //Wysyła przeskalowany obraz
-
-signals:
-    void ReZoomed(int newZoom);                                                                                             //Sygnał zmiany powiększenia
 };
 
 #endif // KWZOOMER_H

@@ -1,15 +1,18 @@
 #ifndef KWPLAYER_H
 #define KWPLAYER_H
 
+//Automatycznie tworzy połączenia z KWZoomer
+
 #include <QObject>
 #include <QTimer>
 #include "kwpic.h"
+#include "kwzoomer.h"
 
 class KWPlayer : public QObject
 {
     Q_OBJECT
 public:
-    KWPlayer(KWPic* pic, QObject* parent = 0);
+    KWPlayer(KWPic* pic, KWZoomer* zoomerPtr, QObject* parent = 0);
     ~KWPlayer();
 
     int getFrameDelay() const;

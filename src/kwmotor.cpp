@@ -36,6 +36,7 @@ KWMotor::KWMotor(KWPic *kp, QObject *parent):
     katalog.setFilter(QDir::Files | QDir::Hidden);                                  //Ustawienia ładowania katalogów
 
     connect(this, SIGNAL(LoadRequest(QString, int)), kp, SLOT(LoadFile(QString, int)));
+    connect(this, SIGNAL(ClearRequest(int)), kp, SLOT(ClearData(int)));
     connect(kp, SIGNAL(Done(const KWPicInfo*, int)), this, SLOT(PicDone(const KWPicInfo*, int)));
     connect(kp, SIGNAL(Error(QString, int)), this, SLOT(PicError(QString, int)));
 }
@@ -47,6 +48,9 @@ void KWMotor::CalcFilesParams(QString adres)
     katalog.setPath(plik.path());                                                   //Ładowanie katalogu
 
     pliki.clear();                                                                  //Czyszczenie listy plików
+
+    if(adres.isEmpty())
+        return;
 
     QFileInfoList lista = katalog.entryInfoList();                                  //Lista wszystkich plików w folderze
     for(int i=0;i<lista.size();++i)                                                 //Wybieranie plików z obsługiwanymi rozszerzeniami i tworzenie z nich nowej listy plików
@@ -139,19 +143,22 @@ bool KWMotor::OtworzImg(QString adr)
 
 void KWMotor::Clear()
 {
-    gifVec.clear();                                                                 //Czyszczenie danych
-    gifVec.push_back(QPixmap());
-    pliki.clear();
-    plik.setFile("");
+//    gifVec.clear();                                                                 //Czyszczenie danych
+//    gifVec.push_back(QPixmap());
+//    pliki.clear();
+//    plik.setFile("");
 
-    GV->Wyswietl(gifVec);                                                           //Wyświetlanie nicości
+//    GV->Wyswietl(gifVec);                                                           //Wyświetlanie nicości
 
-    emit Rozdzielczosc(0, 0, 0, 0);                                                 //Sygnały
-    emit Licznik(0, 0);
-    emit Data(QDateTime());
-    emit Rozmiar(0);
-    emit Plik("-");
-    emit FileOff();
+    //emit Rozdzielczosc(0, 0, 0, 0);                                                 //Sygnały
+    //emit Licznik(0, 0);
+    //emit Data(QDateTime());
+    //emit Rozmiar(0);
+    //emit Plik("-");
+//    emit FileOff();
+    lastRequestPath.clear();
+    lastRequestNumber = -1;
+    emit ClearRequest(0);
 }
 
 //void KWMotor::Otworz()
@@ -164,11 +171,11 @@ void KWMotor::Clear()
 
 void KWMotor::Sygnaly()
 {
-    emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, gifVec.at(0).defaultDepth());//Zmiana rozdzielczości
-    emit Licznik(aktualny+1, pliki.length());                                       //Zmiana listy plików
-    emit Data(plik.created());                                                      //Zmiana daty
-    emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
-    emit Plik(plik.fileName());                                                     //ZMiana nazwy pliku
+    //emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, gifVec.at(0).defaultDepth());//Zmiana rozdzielczości
+    //emit Licznik(aktualny+1, pliki.length());                                       //Zmiana listy plików
+    //emit Data(plik.created());                                                      //Zmiana daty
+    //emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
+    //emit Plik(plik.fileName());                                                     //ZMiana nazwy pliku
     emit FileOn();
 }
 
@@ -280,9 +287,15 @@ void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
         CalcFilesParams(lastRequestPath);
     }
     else
-        return;
+        CalcFilesParams("");
 
     emit NewLoaded(pi, aktualny+1, pliki.length());
+    if(pi->fileInfo.isFile())
+    {
+        emit FileOn();
+    }
+    else
+        emit FileOff();
 
     lastRequestNumber = -1;
     lastRequestPath.clear();
@@ -292,4 +305,5 @@ void KWMotor::PicError(QString errorMsg, int orderId)
 {
     qDebug() << "KWMotor: PicError slot";
     emit Error(errorMsg);
+    emit FileOff();
 }

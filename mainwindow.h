@@ -27,6 +27,8 @@
 #include "src/3rdforms/kw3rdgif.h"
 #include "src/3rdforms/kw3rdfileinfo.h"
 #include "src/usrc/kwpic.h"
+#include "src/usrc/kwplayer.h"
+#include "src/usrc/kwzoomer.h"
 
 class MainWindow : public QMainWindow
 {
@@ -55,6 +57,8 @@ private:
     KWStatusBar* pasekDolny;                                                                                                //Obsługuje pasek stanu
     KWMotor* motor;                                                                                                         //Silnik obsługujący pliki obrazów
     KWPic* picObj;                                                                                                          //Obiekt obsługujący obraz
+    KWPlayer* playerObj;                                                                                                    //Obiekt odtwarzający obrazy
+    KWZoomer* zoomerObj;                                                                                                    //Obiekt odpowiedzialny za skalowanie obrazów
 
     trybOkna prev;                                                                                                          //Tryb okna przed wejściem do fullscreen
     QPushButton* invisibleCloser;                                                                                           //Służy jako przycisk zamykania trybu fullscreen
@@ -102,7 +106,7 @@ public slots:
     void Przenies();                                                                                                        //Przenosi plik
     void Rename();                                                                                                          //Zmiana nazwy pliku
 
-    void TitleBar(QString name);                                                                                            //Ustawia napis na pasku okna
+    void TitleBar(const KWPicInfo *pi);                                                                                     //Ustawia napis na pasku okna
     void About();                                                                                                           //Wyświetla informacje o programie
     void Error(QString er);                                                                                                 //Wyświetlenie błędu
 

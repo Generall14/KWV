@@ -1,6 +1,11 @@
 #ifndef KWMOTOR_H
 #define KWMOTOR_H
 
+/**
+ * \class KWMotor
+ */
+//Automatycznie tworzy połączenia z KWPic podanym w konstruktorze
+
 #include "usrc/kwpic.h"
 #include <QObject>
 #include <QDir>
@@ -66,31 +71,32 @@ private:
     void CalcFilesParams(QString adres);                                                                                    //Oblicza parametry plików w folderze
 
 signals:
-    void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu<REF>
-    void Licznik(int c, int a);                                                                                             //Zmiana wartości licznika plików<REF>
-    void Data(QDateTime);                                                                                                   //Zmiana daty<REF>
-    void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru<REF>
-    void Plik(QString p);                                                                                                   //Zmiana pliku<REF>
+    //void Rozdzielczosc(int w, int h, int k, int d);                                                                         //Zmiana rozdzielczości otwartego obrazu<REF>
+    //void Licznik(int c, int a);                                                                                             //Zmiana wartości licznika plików<REF>
+    //void Data(QDateTime);                                                                                                   //Zmiana daty<REF>
+    //void Rozmiar(int KiB);                                                                                                  //Zmiana rozmiaru<REF>
+    //void Plik(QString p);                                                                                                   //Zmiana pliku<REF>
     //void NewOpened(QString ad);                                                                                             //Nowo otwarty plik (tylko poprzez Plik -> Otwórz)
-    void FileOn();                                                                                                          //Otwarto plik<REF>
-    void FileOff();                                                                                                         //Zamknięto plik<REF>
+    void FileOn();                                                                                                          //Otwarto plik<OK>
+    void FileOff();                                                                                                         //Zamknięto plik<OK>
 
-    void Error(QString);                                                                                                    //Zgłoszenie błędu
+    void Error(QString);                                                                                                    //Zgłoszenie błędu<OK>
 
-    void LoadRequest(QString adres, int orderId);                                                                                        //Żądanie odczytu
-    void NewLoaded(const KWPicInfo *pi, int curr, int total);
+    void LoadRequest(QString adres, int orderId);                                                                           //Żądanie odczytu (do KWPic)
+    void ClearRequest(int orderId);                                                                                         //Żądanie zamknięcia pliów (do KWPic)
+    void NewLoaded(const KWPicInfo *pi, int curr, int total);                                                               //Rozsyła informacje o nowo otawrtym pliku
 
 public slots:
-    void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik
+    void Otworz(QString adres) throw(QString);                                                                              //Otwiera nowy plik<OK>
     //void Otworz();                                                                                                          //Wywołuje procedurę otwierania pliku
-    void Clear();                                                                                                           //Zamyka plik i czyści pamięć<REF>
-    void Next();                                                                                                            //Następny plik na liście
-    void Back();                                                                                                            //Poprzedni plik na liście
-    void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście
-    void RandImg();                                                                                                         //Otwiera losowy obraz
+    void Clear();                                                                                                           //Zamyka plik i czyści pamięć
+    void Next();                                                                                                            //Następny plik na liście<OK>
+    void Back();                                                                                                            //Poprzedni plik na liście<OK>
+    void Otworz(int nr);                                                                                                    //Otwiera plik na podstawie numeru na liście<OK>
+    void RandImg();                                                                                                         //Otwiera losowy obraz<OK>
 
-    void PicDone(const KWPicInfo *pi, int orderId);                                                                                      //Odebrano potwierdzenie otwarcia pliku
-    void PicError(QString errorMsg, int orderId);                                                                                        //Odebrano błąd otwarcia pliku
+    void PicDone(const KWPicInfo *pi, int orderId);                                                                                      //Odebrano potwierdzenie otwarcia pliku (z KWPic)
+    void PicError(QString errorMsg, int orderId);                                                                                        //Odebrano błąd otwarcia pliku (z KWPic)
 };
 
 #endif // KWMOTOR_H

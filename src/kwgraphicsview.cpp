@@ -29,6 +29,11 @@ KWGraphicsView::~KWGraphicsView()
     delete timer;
 }
 
+QGraphicsScene* KWGraphicsView::Scena()
+{
+    return scena;
+}
+
 void KWGraphicsView::Wyswietl(QVector<QPixmap> nowyObraz, int tv)
 {
     czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu

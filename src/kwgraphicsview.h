@@ -36,6 +36,8 @@ public:
 
     long getTimeUs();                                                                                                       //Zwraca czas wyświetlania obrazu
 
+    QGraphicsScene* Scena();
+
 private:
     QGraphicsScene* scena;                                                                                                  //Scena obrazu
 

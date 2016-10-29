@@ -29,7 +29,12 @@ public:
     const KWPicInfo* GetPicInfo();                                                                                          //Zwraca informacje o obrazie
 
 public slots:
-    void LoadFile(QString adres, int orderId);                                                                              //Załąduj plik z adresu
+    void LoadFile(QString adres, int orderId);                                                                              //Załaduj plik z adresu
+    void ClearData(int orderId);                                                                                            //Czyści dane
+
+signals:
+    void Done(const KWPicInfo *pi, int orderId);                                                                            //Prawidłowe odczytanie pliku
+    void Error(QString errorMsg, int orderId);                                                                              //Błędne odczytanie pliku
 
 private:
     QVector<QPixmap*> gifVec;                                                                                               //Obraz lub klatki animacji
@@ -45,10 +50,6 @@ private:
     bool OtworzGif(QString adr);                                                                                            //Otwieranie pliku gif
 
     void CalcPicInfo(QString adres);                                                                                        //Oblicza informacje o pliku
-
-signals:
-    void Done(const KWPicInfo *pi, int orderId);                                                                            //Prawidłowe odczytanie pliku
-    void Error(QString errorMsg, int orderId);                                                                              //Błędne odczytanie pliku
 };
 
 #endif // KWPIC_H

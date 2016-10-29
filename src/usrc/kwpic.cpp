@@ -35,6 +35,13 @@ void KWPic::LoadFile(QString adres, int orderId)
     emit Done(&picInfo, orderId);
 }
 
+void KWPic::ClearData(int orderId)
+{
+    ClearGifVec();
+    this->CalcPicInfo("");
+    emit Done(&picInfo, orderId);
+}
+
 QPixmap* KWPic::GetFrame(int nrFrame)
 {
     if((nrFrame<gifVec.length()&&(nrFrame>=0)))

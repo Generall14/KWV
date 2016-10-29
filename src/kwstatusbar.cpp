@@ -78,15 +78,28 @@ void KWStatusBar::Init()
     plikiF->setMinimumWidth(90);
     plikiF->hide();
 
-    zoomF = new QLabel("100%", MWw);                                                //Zoom w trybie pełnoekranowym
+    zoomF = new QLabel("-", MWw);                                                   //Zoom w trybie pełnoekranowym
     zoomF->setGeometry(100, 5, 60, 16);
     zoomF->setMinimumWidth(60);
     zoomF->hide();
 
-    plikF = new QLabel("PLIK", MWw);                                                //Nazwa pliku w trybie pełnoekranowym
+    plikF = new QLabel("-", MWw);                                                   //Nazwa pliku w trybie pełnoekranowym
     plikF->setGeometry(165, 5, 400, 16);
     plikF->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     plikF->hide();
+}
+
+void KWStatusBar::SetNoPicData()
+{
+    res->setText("-");
+    zoom->setText("-");
+    plikia->setText("0");
+    plikib->setText("/0");
+    data->setText("-");
+    rozmiar->setText("-");
+    plikiF->setText("0/0");
+    zoomF->setText("-");
+    plikF->setText("-");
 }
 
 void KWStatusBar::fullscreenOn()
@@ -109,42 +122,42 @@ void KWStatusBar::UstawZoom(int z)
     zoomF->setText(QString::number(z)+"%");
 }
 
-void KWStatusBar::UstawRozdzielczosc(int w, int h, int k, int d)
-{
-    QString temp = QString::number(w)+"x"+QString::number(h);                       //Podstawowy ciąg
-    if(k)
-        temp += " (" + QString::number(k) + "kl)";                                  //Dodawanie informacji o liczbie klatek
-    else if(d)
-        temp += " (" + QString::number(d) + "BPP)";                                 //Dodawanie informacji o głębi
-    res->setText(temp);
-}
+//void KWStatusBar::UstawRozdzielczosc(int w, int h, int k, int d)
+//{
+//    QString temp = QString::number(w)+"x"+QString::number(h);                       //Podstawowy ciąg
+//    if(k)
+//        temp += " (" + QString::number(k) + "kl)";                                  //Dodawanie informacji o liczbie klatek
+//    else if(d)
+//        temp += " (" + QString::number(d) + "BPP)";                                 //Dodawanie informacji o głębi
+//    res->setText(temp);
+//}
 
-void KWStatusBar::UstawLicznik(int c, int a)
-{
-    akt = c;
-    all = a;
-    plikia->setText(QString::number(c));
-    plikib->setText("/"+QString::number(a));
-    plikiF->setText(QString::number(c)+"/"+QString::number(a));
-}
+//void KWStatusBar::UstawLicznik(int c, int a)
+//{
+//    akt = c;
+//    all = a;
+//    plikia->setText(QString::number(c));
+//    plikib->setText("/"+QString::number(a));
+//    plikiF->setText(QString::number(c)+"/"+QString::number(a));
+//}
 
-void KWStatusBar::UstawDate(QDateTime d)
-{
-    data->setText(d.toString("yyyy-MM-dd, H:mm:ss"));
-}
+//void KWStatusBar::UstawDate(QDateTime d)
+//{
+//    data->setText(d.toString("yyyy-MM-dd, H:mm:ss"));
+//}
 
-void KWStatusBar::UstawRozmiar(int KiB)
-{
-    if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
-        rozmiar->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB");
-    else
-        rozmiar->setText(QString::number(KiB)+" KiB");
-}
+//void KWStatusBar::UstawRozmiar(int KiB)
+//{
+//    if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
+//        rozmiar->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB");
+//    else
+//        rozmiar->setText(QString::number(KiB)+" KiB");
+//}
 
-void KWStatusBar::UstawPlik(QString pl)
-{
-    plikF->setText(pl);
-}
+//void KWStatusBar::UstawPlik(QString pl)
+//{
+//    plikF->setText(pl);
+//}
 
 void KWStatusBar::ZmienPlik()
 {
@@ -161,4 +174,36 @@ void KWStatusBar::ZmienPlik()
     }
 
     plikia->setText(QString::number(akt));
+}
+
+void KWStatusBar::SetNewData(const KWPicInfo *pi, int curr, int total)
+{
+    if(!pi->fileInfo.isFile())
+    {
+        SetNoPicData();
+        return;
+    }
+    //Rozdzielczość
+    QString temp = QString::number(pi->resWidth)+"x"+QString::number(pi->resHeight);//Podstawowy ciąg
+    if(pi->isGif)
+        temp += " (" + QString::number(pi->frames) + "kl)";                         //Dodawanie informacji o liczbie klatek
+    else if(pi->picDepth)
+        temp += " (" + QString::number(pi->picDepth) + "BPP)";                      //Dodawanie informacji o głębi
+    res->setText(temp);
+    //Licznik obrazów
+    akt = curr;
+    all = total;
+    plikia->setText(QString::number(curr));
+    plikib->setText("/"+QString::number(total));
+    plikiF->setText(QString::number(curr)+"/"+QString::number(total));
+    //Data
+    data->setText(pi->fileInfo.lastModified().toString("yyyy-MM-dd, H:mm:ss"));
+    //Rozmiar
+    int KiB = pi->fileInfo.size()/1024;
+    if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
+        rozmiar->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB");
+    else
+        rozmiar->setText(QString::number(KiB)+" KiB");
+    //Nazwa pliku
+    plikF->setText(pi->fileInfo.fileName());
 }
