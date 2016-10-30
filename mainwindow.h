@@ -29,6 +29,7 @@
 #include "src/usrc/kwpic.h"
 #include "src/usrc/kwplayer.h"
 #include "src/usrc/kwzoomer.h"
+#include "src/usrc/kwwindowzoomer.h"
 
 class MainWindow : public QMainWindow
 {
@@ -59,6 +60,7 @@ private:
     KWPic* picObj;                                                                                                          //Obiekt obsługujący obraz
     KWPlayer* playerObj;                                                                                                    //Obiekt odtwarzający obrazy
     KWZoomer* zoomerObj;                                                                                                    //Obiekt odpowiedzialny za skalowanie obrazów
+    KWWindowZoomer* windowZoomerObj;                                                                                        //Obiekt odpowiedzialny za skalowanie okna
 
     trybOkna prev;                                                                                                          //Tryb okna przed wejściem do fullscreen
     QPushButton* invisibleCloser;                                                                                           //Służy jako przycisk zamykania trybu fullscreen

@@ -96,6 +96,7 @@ void MainWindow::InitWidgets()
     picObj = new KWPic(this);
     zoomerObj = new KWZoomer(wyswietlacz->Scena(), this);
     playerObj = new KWPlayer(picObj, zoomerObj, this);
+    windowZoomerObj = new KWWindowZoomer(this);
 
     motor = new KWMotor(picObj, this);                                         //Tworzenie silnika
 
@@ -113,7 +114,7 @@ void MainWindow::InitWidgets()
 
 void MainWindow::InitConnections()
 {
-    connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), wyswietlacz, SLOT(InitGeometry()));    //Tylko do inicjalizacji
+    connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), windowZoomerObj, SLOT(InitGeometry()));    //Tylko do inicjalizacji
 
     connect(invisibleCloser, SIGNAL(clicked(bool)), this, SLOT(resetFullscreen()));                             //Zamykanie trybu pełnoekranowego
 
@@ -287,6 +288,7 @@ void MainWindow::setFullsscreen()
     menuBar()->hide();                                                              //Ukrywa pasek menu
 
     showFullScreen();                                                               //Uruchamia tryb fullscreen
+    windowZoomerObj->setFullscreenMode();
 
     QDesktopWidget desktop;
     invisibleCloser->show();                                                        //Uruchamia przycisk wyjście z trybu
@@ -308,9 +310,15 @@ void MainWindow::resetFullscreen()
     menuBar()->show();                                                              //Wyświetla menu
 
     if(prev==Zmaksymalizowany)                                                      //Przywraca poprzedni stan okna
+    {
         showMaximized();
+        windowZoomerObj->setMaximizeMode();
+    }
     else
+    {
         showNormal();
+        windowZoomerObj->setNormalMode();
+    }
 
     invisibleCloser->setGeometry(0, 20, 30, 30);                                    //Ukrywa przycisk zamykania
     invisibleCloser->hide();
