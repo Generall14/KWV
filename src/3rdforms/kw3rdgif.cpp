@@ -50,8 +50,8 @@ void KW3rdGif::InitWidgets()
 
     speedSlider = new QSlider(Qt::Horizontal, this);                                //Zmiana prędkości odtwarzania
     speedSlider->setInvertedAppearance(false);
-    speedSlider->setMinimum(GV->fastest);
-    speedSlider->setMaximum(GV->slowest);
+    speedSlider->setMinimum(1);//<REF>
+    speedSlider->setMaximum(500);//<REF>
     speedSliderLay->addWidget(speedSlider);
 
     speedLabel = new QLabel("- ms", this);                                          //Wyświetlanie prędkości odtwarzania
@@ -100,14 +100,14 @@ void KW3rdGif::InitConnections()
 
 void KW3rdGif::SpeedDef()
 {
-    speedSlider->setValue(GV->DefDelay());
+    speedSlider->setValue(100);//<REF>
 }
 
 void KW3rdGif::Update()
 {
-    speedSlider->setValue(GV->DefDelay());
-    cycCheck->setChecked(GV->GifTryb());
-    this->setEnabled(GV->Animacja());
+//    speedSlider->setValue(GV->DefDelay());
+//    cycCheck->setChecked(GV->GifTryb());
+//    this->setEnabled(GV->Animacja());
 }
 
 void KW3rdGif::SpeedLabel(int s)

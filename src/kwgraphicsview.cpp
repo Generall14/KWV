@@ -13,8 +13,8 @@ KWGraphicsView::KWGraphicsView(MainWindow *mw):
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);                       //Wyłączenie pasków
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(GifUpd()));
+//    timer = new QTimer();
+//    connect(timer, SIGNAL(timeout()), this, SLOT(GifUpd()));
 
     setMouseTracking(true);                                                         //Ustawianie śledzenia myszy
 
@@ -26,7 +26,7 @@ KWGraphicsView::KWGraphicsView(MainWindow *mw):
 
 KWGraphicsView::~KWGraphicsView()
 {
-    delete timer;
+//    delete timer;
 }
 
 QGraphicsScene* KWGraphicsView::Scena()
@@ -34,111 +34,111 @@ QGraphicsScene* KWGraphicsView::Scena()
     return scena;
 }
 
-void KWGraphicsView::Wyswietl(QVector<QPixmap> nowyObraz, int tv)
-{
-    czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu
-    if(nowyObraz.isEmpty())                                                         //Jeżeli obraz jest nieprawidłowy
-        return;
+//void KWGraphicsView::Wyswietl(QVector<QPixmap> nowyObraz, int tv)
+//{
+//    czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu
+//    if(nowyObraz.isEmpty())                                                         //Jeżeli obraz jest nieprawidłowy
+//        return;
 
-    timer->stop();                                                                  //Zatrzymanie timera
-    gifVec.clear();                                                                 //Czyszczenie wektora
-    currFrame=0;                                                                    //Ustawianie klatki
-    forward = true;
+//    timer->stop();                                                                  //Zatrzymanie timera
+//    gifVec.clear();                                                                 //Czyszczenie wektora
+//    currFrame=0;                                                                    //Ustawianie klatki
+//    forward = true;
 
-    if((nowyObraz.length()==1)||(tv==0))                                            //Zwykły obraz
-    {
-        animacja = false;                                                           //Ustawianie flagi
-        gifVec.push_back(nowyObraz.at(0));                                          //Kopiowanie obrazu
-    }
-    else                                                                            //Animacja
-    {
-        animacja = true;                                                            //Ustawianie flagi
-        gifVec = nowyObraz;                                                         //Kopiowanie wektora
-        totalFrame = gifVec.length();                                               //Ustalanie długości animacji
-        defDelay = tv;                                                              //Ustawianie czasku klatki
-        timer->start(defDelay);                                                     //Uruchamianie timera
-    }
+//    if((nowyObraz.length()==1)||(tv==0))                                            //Zwykły obraz
+//    {
+//        animacja = false;                                                           //Ustawianie flagi
+//        gifVec.push_back(nowyObraz.at(0));                                          //Kopiowanie obrazu
+//    }
+//    else                                                                            //Animacja
+//    {
+//        animacja = true;                                                            //Ustawianie flagi
+//        gifVec = nowyObraz;                                                         //Kopiowanie wektora
+//        totalFrame = gifVec.length();                                               //Ustalanie długości animacji
+//        defDelay = tv;                                                              //Ustawianie czasku klatki
+//        timer->start(defDelay);                                                     //Uruchamianie timera
+//    }
 
-    scena->clear();                                                                 //Czyszczenie sceny
-    scena->addPixmap(gifVec.at(0));                                                 //Dodawanie obrazu do sceny
-    scena->setSceneRect(gifVec.at(0).rect());                                       //Ustawianie rozmiaru sceny
-    zum = 1;                                                                        //Zerowanie powiększenia
-    DopasujOkno(gifVec.at(0).rect());                                               //Dopasuj okno
+//    scena->clear();                                                                 //Czyszczenie sceny
+//    scena->addPixmap(gifVec.at(0));                                                 //Dodawanie obrazu do sceny
+//    scena->setSceneRect(gifVec.at(0).rect());                                       //Ustawianie rozmiaru sceny
+////    zum = 1;                                                                        //Zerowanie powiększenia
+//    DopasujOkno(gifVec.at(0).rect());                                               //Dopasuj okno
 
-    emit Zoomed(zum*100);                                                           //Wysyłanie sygnału
-    emit Nowy();
-    czas_end = std::chrono::steady_clock::now();                                    //Pomiar czasu
+////    emit Zoomed(zum*100);                                                           //Wysyłanie sygnału
+//    emit Nowy();
+//    czas_end = std::chrono::steady_clock::now();                                    //Pomiar czasu
 
-    qApp->processEvents();                                                          //Zapewnia wyświetlanie obrazu w stanie zamulenia
-}
+//    qApp->processEvents();                                                          //Zapewnia wyświetlanie obrazu w stanie zamulenia
+//}
 
-void KWGraphicsView::GifNext()
-{
-    ++currFrame;                                                                    //Inkrementacja klatki
-    if(currFrame>=totalFrame)                                                       //Sprawdzanie zakresu klatki
-        currFrame=0;
+//void KWGraphicsView::GifNext()
+//{
+//    ++currFrame;                                                                    //Inkrementacja klatki
+//    if(currFrame>=totalFrame)                                                       //Sprawdzanie zakresu klatki
+//        currFrame=0;
 
-    if(zum!=1.00)
-        Zoom(zum, gifVec.at(currFrame));                                            //Wyświetlanie przeskalowanego obrazu
-    else
-    {
-        scena->clear();                                                             //Czyszczenie sceny
-        scena->addPixmap(gifVec.at(currFrame));                                     //Dodawanie obrazu
-        scena->setSceneRect(gifVec.at(currFrame).rect());
-    }
-}
+//    if(zum!=1.00)
+//        Zoom(zum, gifVec.at(currFrame));                                            //Wyświetlanie przeskalowanego obrazu
+//    else
+//    {
+//        scena->clear();                                                             //Czyszczenie sceny
+//        scena->addPixmap(gifVec.at(currFrame));                                     //Dodawanie obrazu
+//        scena->setSceneRect(gifVec.at(currFrame).rect());
+//    }
+//}
 
-void KWGraphicsView::GifBack()
-{
-    --currFrame;                                                                    //Dekrementacja
-    if(currFrame<0)                                                                 //Sprawdzanie zakresu klatki
-        currFrame = totalFrame-1;
+//void KWGraphicsView::GifBack()
+//{
+//    --currFrame;                                                                    //Dekrementacja
+//    if(currFrame<0)                                                                 //Sprawdzanie zakresu klatki
+//        currFrame = totalFrame-1;
 
-    if(zum!=1.00)
-        Zoom(zum, gifVec.at(currFrame));                                            //Wyświetlanie przeskalowanego obrazu
-    else
-    {
-        scena->clear();                                                             //Czyszczenie sceny
-        scena->addPixmap(gifVec.at(currFrame));                                     //Dodawanie obrazu
-        scena->setSceneRect(gifVec.at(currFrame).rect());
-    }
-}
+//    if(zum!=1.00)
+//        Zoom(zum, gifVec.at(currFrame));                                            //Wyświetlanie przeskalowanego obrazu
+//    else
+//    {
+//        scena->clear();                                                             //Czyszczenie sceny
+//        scena->addPixmap(gifVec.at(currFrame));                                     //Dodawanie obrazu
+//        scena->setSceneRect(gifVec.at(currFrame).rect());
+//    }
+//}
 
-void KWGraphicsView::GifUpd()
-{
-    if(!trybKol)                                                                    //Tryb zwykły
-        GifNext();
-    else
-    {
-        if(forward)                                                                 //Odtwarzanie w przód
-        {
-            if(currFrame>=totalFrame-1)                                             //Zawrót
-            {
-                forward = false;
-                GifBack();
-            }
-            else
-                GifNext();
-        }
-        else                                                                        //Odtwarzanie w tył
-        {
-            if(currFrame<=0)                                                        //Zawrót
-            {
-                forward = true;
-                GifNext();
-            }
-            else
-                GifBack();
-        }
-    }
-}
+//void KWGraphicsView::GifUpd()
+//{
+//    if(!trybKol)                                                                    //Tryb zwykły
+//        GifNext();
+//    else
+//    {
+//        if(forward)                                                                 //Odtwarzanie w przód
+//        {
+//            if(currFrame>=totalFrame-1)                                             //Zawrót
+//            {
+//                forward = false;
+//                GifBack();
+//            }
+//            else
+//                GifNext();
+//        }
+//        else                                                                        //Odtwarzanie w tył
+//        {
+//            if(currFrame<=0)                                                        //Zawrót
+//            {
+//                forward = true;
+//                GifNext();
+//            }
+//            else
+//                GifBack();
+//        }
+//    }
+//}
 
-void KWGraphicsView::GifSetSpeed(int s)
-{
-    timer->stop();                                                                  //Zatrzymanie timera
-    if(animacja)
-        timer->start(s);                                                            //Uruchomienie z nowym interwałem
-}
+//void KWGraphicsView::GifSetSpeed(int s)
+//{
+//    timer->stop();                                                                  //Zatrzymanie timera
+//    if(animacja)
+//        timer->start(s);                                                            //Uruchomienie z nowym interwałem
+//}
 
 void KWGraphicsView::DopasujOkno(QRect trect)
 {
@@ -151,12 +151,12 @@ void KWGraphicsView::DopasujOkno(QRect trect)
     }
 }
 
-void KWGraphicsView::Odswiez()
-{
-    if(gifVec.isEmpty())
-        return;
-    DopasujOkno(gifVec.at(currFrame).rect());
-}
+//void KWGraphicsView::Odswiez()
+//{
+//    if(gifVec.isEmpty())
+//        return;
+//    DopasujOkno(gifVec.at(currFrame).rect());
+//}
 
 void KWGraphicsView::DopasujOknoDoObrazu(QRect trect)
 {
@@ -189,42 +189,42 @@ void KWGraphicsView::DopasujObrazDoOkna(QRect trect)
     float sx = ((float)trect.width())/((float)max.width());                         //Obliczanie krotności przekroczenia szerokości
     float sy = ((float)trect.height())/((float)max.height());                       //Obliczanie krotności przekroczenia wysokości
 
-    if(sx>sy)                                                                       //Wybór większego współczynnika
-    {
-        Zoom(1/sx);                                                                 //Przeskalowanie do szerokości
-        temp.setHeight(gifVec.at(currFrame).height()*zum+1);                        //Przeskalowanie rozmiaru do wysokości obrazu
-    }
-    else
-    {
-        Zoom(1/sy);                                                                 //Przeskalowanie do wysokości
-        temp.setWidth(gifVec.at(currFrame).width()*zum+5);                          //Przeskalowanie rozmiaru do szerokości obrazu
-    }
+//    if(sx>sy)                                                                       //Wybór większego współczynnika
+//    {
+//        Zoom(1/sx);                                                                 //Przeskalowanie do szerokości
+//        temp.setHeight(gifVec.at(currFrame).height()*zum+1);                        //Przeskalowanie rozmiaru do wysokości obrazu
+//    }
+//    else
+//    {
+//        Zoom(1/sy);                                                                 //Przeskalowanie do wysokości
+//        temp.setWidth(gifVec.at(currFrame).width()*zum+5);                          //Przeskalowanie rozmiaru do szerokości obrazu
+//    }
 
     if((!MWw->isMaximized())&&(!MWw->isFullScreen()))                               //Tylko jeżeli okno jest w trybie normalnym
         MWw->setGeometry(DodajMar(temp));                                           //Ustawienie rozmiaru okna
 }
 
-void KWGraphicsView::Zoom(float z, QPixmap px)
-{
-    if((z<minZoom)||(z>maxZoom))                                                    //Sprawdzania czy z przekracza wartości dopuszczalne
-        return;
+//void KWGraphicsView::Zoom(float z, QPixmap px)
+//{
+//    if((z<minZoom)||(z>maxZoom))                                                    //Sprawdzania czy z przekracza wartości dopuszczalne
+//        return;
 
-    if(px.isNull())
-        px = gifVec.at(currFrame);                                                  //Jeżeli nie podano obrazu, użyj aktualnego
+//    if(px.isNull())
+//        px = gifVec.at(currFrame);                                                  //Jeżeli nie podano obrazu, użyj aktualnego
 
-    QPixmap temp = px.scaledToHeight((int)(px.height()*z), Qt::SmoothTransformation);//Przeskalowanie obrazu
+//    QPixmap temp = px.scaledToHeight((int)(px.height()*z), Qt::SmoothTransformation);//Przeskalowanie obrazu
 
-    scena->clear();                                                                 //Czyszczenie sceny
-    scena->addPixmap(temp);                                                         //Dodawanie przeskalowanego obrazu
-    scena->setSceneRect(temp.rect());                                               //Dopasowanie okna do nowego obrazu
-    zum = z;                                                                        //Ustawienie powiększenia
-    emit Zoomed(z*100);                                                             //Wysłanie sygnału o zmianie powiększenia
-}
+//    scena->clear();                                                                 //Czyszczenie sceny
+//    scena->addPixmap(temp);                                                         //Dodawanie przeskalowanego obrazu
+//    scena->setSceneRect(temp.rect());                                               //Dopasowanie okna do nowego obrazu
+//    zum = z;                                                                        //Ustawienie powiększenia
+//    emit Zoomed(z*100);                                                             //Wysłanie sygnału o zmianie powiększenia
+//}
 
-void KWGraphicsView::ResetZoom()
-{
-    SetZoom(1.0);
-}
+//void KWGraphicsView::ResetZoom()
+//{
+//    SetZoom(1.0);
+//}
 
 void KWGraphicsView::InitGeometry()
 {
@@ -268,63 +268,62 @@ QRect KWGraphicsView::DodajMar(QRect rwe)
     return rwe;
 }
 
-void KWGraphicsView::ZoomIn()
-{
-    SetZoom(floor(zum*(1/deltaZoom)+deltaZoom)*deltaZoom+deltaZoom);                //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
-}
+//void KWGraphicsView::ZoomIn()
+//{
+//    SetZoom(floor(zum*(1/deltaZoom)+deltaZoom)*deltaZoom+deltaZoom);                //Dopasowanie wartości do szerego 1 + x*0,1 i powiększenie o jeden stopień
+//}
 
-void KWGraphicsView::ZoomOut()
-{
-    SetZoom(ceil(zum*(1/deltaZoom)-deltaZoom)*deltaZoom-deltaZoom);                 //Dopasowanie wartości do szerego 1 + x*0,1 i zmniejszenie o jeden stopień
-}
+//void KWGraphicsView::ZoomOut()
+//{
+//    SetZoom(ceil(zum*(1/deltaZoom)-deltaZoom)*deltaZoom-deltaZoom);                 //Dopasowanie wartości do szerego 1 + x*0,1 i zmniejszenie o jeden stopień
+//}
 
-void KWGraphicsView::SetZoom(float z)
-{
-    if(gifVec.isEmpty())
-        return;
+//void KWGraphicsView::SetZoom(float z)
+//{
+//    if(gifVec.isEmpty())
+//        return;
 
-    Zoom(z);                                                                        //Przeskalowanie obrazu
+////    Zoom(z);                                                                        //Przeskalowanie obrazu
 
-    QRect temp = scena->sceneRect().toRect();                                       //Pobranie rozmiaru sceny
-    DopasujOknoDoObrazu(temp);                                                      //Dopasowanie okna do obrazu
-}
+//    QRect temp = scena->sceneRect().toRect();                                       //Pobranie rozmiaru sceny
+//    DopasujOknoDoObrazu(temp);                                                      //Dopasowanie okna do obrazu
+//}
 
-int KWGraphicsView::DefDelay()
-{
-    return defDelay;
-}
+//int KWGraphicsView::DefDelay()
+//{
+//    return defDelay;
+//}
 
-bool KWGraphicsView::GifTryb()
-{
-    return trybKol;
-}
+//bool KWGraphicsView::GifTryb()
+//{
+//    return trybKol;
+//}
 
-void KWGraphicsView::GifSetTryb(bool b)
-{
-    trybKol = b;
-}
+//void KWGraphicsView::GifSetTryb(bool b)
+//{
+//    trybKol = b;
+//}
 
-bool KWGraphicsView::Animacja()
-{
-    return animacja;
-}
+//bool KWGraphicsView::Animacja()
+//{
+//    return animacja;
+//}
 
-void KWGraphicsView::GifPlayPause()
-{
-    if(animacja)                                                                    //Jeżeli obrazem jest animacja
-    {
-        if(timer->isActive())
-            timer->stop();
-        else
-            timer->start();
-    }
-}
+//void KWGraphicsView::GifPlayPause()
+//{
+//    if(animacja)                                                                    //Jeżeli obrazem jest animacja
+//    {
+//        if(timer->isActive())
+//            timer->stop();
+//        else
+//            timer->start();
+//    }
+//}
 
-long KWGraphicsView::getTimeUs()
-{
-    return std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-}
-
+//long KWGraphicsView::getTimeUs()
+//{
+//    return std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+//}
 
 void KWGraphicsView::mousePressEvent(QMouseEvent *event)
 {
@@ -377,13 +376,13 @@ void KWGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void KWGraphicsView::keyPressEvent(QKeyEvent *event)
 {
-    if(gifVec.isEmpty())
-    {
-        QGraphicsView::keyPressEvent(event);                                        //Wywołanie standardowej obsługi klawiszy
-        return;
-    }
+//    if(gifVec.isEmpty())
+//    {
+//        QGraphicsView::keyPressEvent(event);                                        //Wywołanie standardowej obsługi klawiszy
+//        return;
+//    }
 
-    QRect trect = gifVec.at(currFrame).rect();
+//    QRect trect = gifVec.at(currFrame).rect();
     QRect max;
 
     if(MWw->isMaximized())                                                          //Dobranie odpowiedniego odniesienia
@@ -394,10 +393,10 @@ void KWGraphicsView::keyPressEvent(QKeyEvent *event)
         max = maxObraz;
 
     bool przeskalowaneW = false, przeskalowaneH = false;                            //Sprawdzanie czy obraz jest powiększony ponad okno
-    if(trect.width()*zum>(max.width()))
-        przeskalowaneW = true;
-    if(trect.height()*zum>(max.height()))
-        przeskalowaneH = true;
+//    if(trect.width()*zum>(max.width()))
+//        przeskalowaneW = true;
+//    if(trect.height()*zum>(max.height()))
+//        przeskalowaneH = true;
 
     if(event->key()==Qt::Key_Right)                                                 //Strzałka w prawo
     {
@@ -436,9 +435,9 @@ void KWGraphicsView::wheelEvent(QWheelEvent* event)
     if((event->modifiers()==Qt::ControlModifier)||(event->buttons()==Qt::MidButton))//Sprawdzanie czy wciśnięto CTRL lub ŚPM
     {
         if(event->angleDelta().y()>0)                                               //Skalowanie obrazu
-            this->ZoomIn();
+            emit ZoomInReq();
         else
-            this->ZoomOut();
+            emit ZoomOutReq();
     }
     else
     {

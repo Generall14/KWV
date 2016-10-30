@@ -276,7 +276,7 @@ QString KWMotor::Filters()
 
 void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
 {
-    qDebug() << "KWMotor: PicDone slot";
+//    qDebug() << "KWMotor: PicDone slot";
 
     if(lastRequestNumber>=0)
     {

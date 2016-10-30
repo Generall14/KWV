@@ -125,7 +125,7 @@ private slots:
 
     void HideCursor();                                                                                                      //Ukrywa kursor
 
-    virtual bool event(QEvent* event);                                                                                      //Obsługa eventów
+    virtual bool event(QEvent* event);                                                                                      //Obsługa eventów<REF>
 };
 
 #endif // MAINWINDOW_H

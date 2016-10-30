@@ -59,11 +59,11 @@ MainWindow::MainWindow(QWidget *parent)
 
         QPushButton* pbminus = new QPushButton("-", this);
         pbminus->setGeometry(100, 30, 30, 30);
-        connect(pbminus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomOut()));
+        connect(pbminus, SIGNAL(clicked(bool)), zoomerObj, SLOT(ZoomOut()));
 
         QPushButton* pbplus = new QPushButton("+", this);
         pbplus->setGeometry(130, 30, 30, 30);
-        connect(pbplus, SIGNAL(clicked(bool)), wyswietlacz, SLOT(ZoomIn()));
+        connect(pbplus, SIGNAL(clicked(bool)), zoomerObj, SLOT(ZoomIn()));
 
         QPushButton* pbtest = new QPushButton("t", this);
         pbtest->setGeometry(160, 30, 30, 30);
@@ -141,22 +141,24 @@ void MainWindow::InitConnections()
     connect(menu, SIGNAL(CloseFile()), motor, SLOT(Clear()));
 
     connect(pasekDolny, SIGNAL(Zmiana(int)), motor, SLOT(Otworz(int)));                                         //Sygnały z paska stanu
-    connect(pasekDolny, SIGNAL(ResetZoom()), wyswietlacz, SLOT(ResetZoom()));
+    connect(pasekDolny, SIGNAL(ResetZoom()), zoomerObj, SLOT(ResetZoom()));
     connect(pasekDolny, SIGNAL(Back()), motor, SLOT(Back()));
     connect(pasekDolny, SIGNAL(Next()), motor, SLOT(Next()));
 
     connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), playerObj, SLOT(NewPic(const KWPicInfo*)));
     connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), this, SLOT(TitleBar(const KWPicInfo*)));
     connect(zoomerObj, SIGNAL(ReZoomed(int)), pasekDolny, SLOT(UstawZoom(int)));
+    connect(wyswietlacz, SIGNAL(ZoomInReq()), zoomerObj, SLOT(ZoomIn()));
+    connect(wyswietlacz, SIGNAL(ZoomOutReq()), zoomerObj, SLOT(ZoomOut()));
 }
 
 void MainWindow::InitShortcuts()
 {
     QShortcut* s =  new QShortcut(QKeySequence(Qt::Key_Plus), this);                //Powiększenie obrazu
-    connect(s, SIGNAL(activated()), wyswietlacz, SLOT(ZoomIn()));
+    connect(s, SIGNAL(activated()), zoomerObj, SLOT(ZoomIn()));
 
     s =  new QShortcut(QKeySequence(Qt::Key_Minus), this);                          //Pomniejszenie obrazu
-    connect(s, SIGNAL(activated()), wyswietlacz, SLOT(ZoomOut()));
+    connect(s, SIGNAL(activated()), zoomerObj, SLOT(ZoomOut()));
 
     s =  new QShortcut(QKeySequence(Qt::Key_Delete), this);                         //Usuń
     connect(s, SIGNAL(activated()), this, SLOT(Usun()));
@@ -172,7 +174,7 @@ void MainWindow::InitShortcuts()
     rep.push_back(s);
 
     s =  new QShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_H), this);        //Zoom reset
-    connect(s, SIGNAL(activated()), wyswietlacz, SLOT(ResetZoom()));
+    connect(s, SIGNAL(activated()), zoomerObj, SLOT(ResetZoom()));
     s->setEnabled(false);
     rep.push_back(s);
 
@@ -348,7 +350,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 bool MainWindow::event(QEvent* event)
 {
     if(event->type()==QEvent::WindowStateChange)                                    //Zmiana stanu okna
-        wyswietlacz->Odswiez();
+        QMainWindow::event(event);            //wyswietlacz->Odswiez();
     else
         QMainWindow::event(event);                                                  //Przekazanie nieprzechwyconych eventów
     return 0;

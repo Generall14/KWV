@@ -106,7 +106,7 @@ void KWMenu::InitMenus()
 
     akcjaResetZoom = new QAction(tr("&Oryginalny rozmiar"), menuWidok);                     //Widok -> Oryginalny rozmiar
     akcjaResetZoom->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_H));
-    connect(akcjaResetZoom, SIGNAL(triggered(bool)), MWw->wyswietlacz, SLOT(ResetZoom()));
+    connect(akcjaResetZoom, SIGNAL(triggered(bool)), MWw->zoomerObj, SLOT(ResetZoom()));
     menuWidok->addAction(akcjaResetZoom);
 
     akcjaLosowy = new QAction(tr("&Losowy obraz"), menuWidok);                      //Widok -> Losowy obraz

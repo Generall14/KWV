@@ -24,7 +24,7 @@ void KWPic::ClearGifVec()
 
 void KWPic::LoadFile(QString adres, int orderId)
 {
-    qDebug() << "KWPic: LoadFile slot";
+//    qDebug() << "KWPic: LoadFile slot";
     if(OtworzPlik(adres))
     {
         emit Error(tr("Nie można otworzyć pliku ") + adres + ".", orderId);

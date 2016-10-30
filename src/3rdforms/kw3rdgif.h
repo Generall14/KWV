@@ -31,15 +31,15 @@ private:
     QToolButton* sterNext = NULL;                                                                                           //Następna klatka
     QToolButton* sterPlay = NULL;                                                                                           //Pauza
 
-    void InitWidgets();                                                                                                     //Tworzenie widgetów
+    void InitWidgets();                                                                                                     //Tworzenie widgetów<REF>
     void InitConnections();                                                                                                 //Tworzenie połączeń
 
 private slots:
     void SpeedLabel(int s);                                                                                                 //Wyświetlanie napisu z prędkością odtwarzania
 
 public slots:
-    void Update();                                                                                                          //Uaktualnienie danych
-    void SpeedDef();                                                                                                        //Domyślna prędkość
+    void Update();                                                                                                          //Uaktualnienie danych<REF>
+    void SpeedDef();                                                                                                        //Domyślna prędkość<REF>
 };
 
 #endif // KW3RDGIF_H
