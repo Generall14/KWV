@@ -15,21 +15,24 @@ public:
     KWPlayer(KWPic* pic, KWZoomer* zoomerPtr, QObject* parent = 0);
     ~KWPlayer();
 
+    static const int FASTEST_GIF = 5;
+    static const int SLOWEST_GIF = 200;
+
     int getFrameDelay() const;
     int getCyclic() const;
     int getReverse() const;
-
-    int RestoreDefaultFrameDelay();
-    void PlayPause();
-
-    void setDelay(int newDelayMs);
-    void setCyclic(bool newCyclic);
-    void setReverse(bool newReverse);
+    bool isGif() const;
 
 public slots:
     void NewPic(const KWPicInfo *pi);                                                                                       //Wyświetlaj nowy obraz
     void NextFrame();                                                                                                       //Kolejna klatka
     void PrevFrame();                                                                                                       //Poprzednia klatka
+
+    void setDelay(int newDelayMs);
+    void setCyclic(bool newCyclic);
+    void setReverse(bool newReverse);
+    int RestoreDefaultFrameDelay();
+    void PlayPause();
 
 signals:
     void LoadedNewPic();                                                                                                    //Rozgłoszenie otrzymania nowego obrazu

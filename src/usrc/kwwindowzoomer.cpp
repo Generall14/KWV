@@ -9,7 +9,6 @@ KWWindowZoomer::KWWindowZoomer(MainWindow *mw):
     QObject(mw),
     MWPtr(mw)
 {
-    currentMode = normalMode;
 }
 
 void KWWindowZoomer::InitGeometry()
@@ -35,6 +34,11 @@ void KWWindowZoomer::InitGeometry()
     maxWindowSize = QSize(screenGeometry.width(), screenGeometry.height()-titleBarHeight);
     maxPicSize = QSize(maxWindowSize.width()-deltaWidth, maxWindowSize.height()-deltaHeight);
     maxPicSizeMaximized = QSize(maxWindowSize.width(), maxWindowSize.height()-deltaHeight+ramkiGora);
+
+    this->setNormalMode();
+
+    if(!MWw->startOpen.isNull())
+        MWw->Otworz(MWw->startOpen);
 }
 
 void KWWindowZoomer::setNormalMode()
@@ -53,4 +57,20 @@ void KWWindowZoomer::setFullscreenMode()
 {
     currentMode = fullscreenMode;
     emit setMaximumPicSize(fullResolution);
+}
+
+void KWWindowZoomer::PicReZoomed(int, QSize newSize)
+{
+    if(currentMode!=normalMode)
+        return;
+
+    newSize.setHeight(newSize.height()+deltaHeight);
+    newSize.setWidth(newSize.width()+deltaWidth);
+
+    if(newSize.height()>maxWindowSize.height())
+        newSize.setHeight(maxWindowSize.height());
+    if(newSize.width()>maxWindowSize.width())
+        newSize.setWidth(maxWindowSize.width());
+
+    MWw->setGeometry(QRect(zeroPoint, newSize));
 }

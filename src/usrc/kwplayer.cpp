@@ -169,3 +169,10 @@ void KWPlayer::setReverse(bool newReverse)
 {
     reverse = newReverse;
 }
+
+bool KWPlayer::isGif() const
+{
+    if(picPtr->GetPicInfo()->frames>1)
+        return true;
+    return false;
+}

@@ -22,6 +22,8 @@ public slots:
     void setMaximizeMode();
     void setFullscreenMode();
 
+    void PicReZoomed(int, QSize newSize);
+
 signals:
     void setMaximumPicSize(QSize size);
 

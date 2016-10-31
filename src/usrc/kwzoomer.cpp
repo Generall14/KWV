@@ -10,30 +10,30 @@ KWZoomer::KWZoomer(QGraphicsScene* ngView, QObject *parent):
     lastPic = NULL;
     currZoom = 1;
     defMode = limScreen;
-    limitWidth = 100;
-    limitHeight = 100;
+    startLimit.setWidth(100);
+    startLimit.setHeight(100);
     tranMode = Qt::SmoothTransformation;
 }
 
-void KWZoomer::SetDefaultMode(defTypes newType, int newWidth, int newHeight)
+void KWZoomer::SetDefaultMode(defTypes newType, QSize newLimit)
 {
-    SetLimits(newWidth, newHeight);
+    SetLimits(newLimit);
     defMode = newType;
 }
 
-void KWZoomer::SetLimits(int newWidth, int newHeight)
+void KWZoomer::SetLimits(QSize newLimit)
 {
-    if(newWidth>100)
-        limitWidth = newWidth;
-    if(newHeight>100)
-        limitHeight = newHeight;
+    if((newLimit.width()>=100)&&(newLimit.height()>=100))
+        startLimit = newLimit;
+    if(!touched)
+        ReCalcZoom();
 }
 
 void KWZoomer::ReCalcZoom()
 {
     if(lastPic==NULL)
     {
-        sendZoom();
+        sendZoom(true);
         return;
     }
 
@@ -41,8 +41,8 @@ void KWZoomer::ReCalcZoom()
     int picWidth = lastPic->width();
     float tempZoom = 1.0;
 
-    float tempZoomH = (float)limitHeight/(float)picHeight;
-    float tempZoomW = (float)limitWidth/(float)picWidth;
+    float tempZoomH = (float)startLimit.height()/(float)picHeight;
+    float tempZoomW = (float)startLimit.width()/(float)picWidth;
 
     if(defMode==limHeight)
         tempZoom = std::min(tempZoom, tempZoomH);
@@ -52,43 +52,43 @@ void KWZoomer::ReCalcZoom()
         tempZoom = std::min(tempZoom, std::min(tempZoomH, tempZoomW));
 //    qDebug() << "WKZoomer, zoom = " << tempZoom;
     currZoom = tempZoom;
-    sendZoom();
-    emit ReZoomed(currZoom*100);
+    sendZoom(true);
+    //emit ReZoomed(currZoom*100);
 }
 
 void KWZoomer::ResetZoom()
 {
     SetZoom(1.0);
+    touched = true;
 }
 
 void KWZoomer::NewPic(QPixmap* newPic, bool resetZoom)
 {
     lastPic = newPic;
 
-//    if(newPic==NULL)
-//    {
-//        currZoom = 1;
-//        return;
-//    }
-
     if(resetZoom)
         ReCalcZoom();
     else
         sendZoom();
+    touched = false;
 }
 
-void KWZoomer::sendZoom()
+void KWZoomer::sendZoom(bool sendSig)
 {
     gView->clear();
 
     if(lastPic==NULL)
+    {
+        emit ReZoomed(100, QSize(0, 0));
         return;
+    }
 
     QPixmap temp = lastPic->scaledToHeight(lastPic->height()*currZoom, tranMode);
 
     gView->addPixmap(temp);
     gView->setSceneRect(temp.rect());
-    emit ReZoomed(currZoom*100);
+    if(sendSig)
+        emit ReZoomed(currZoom*100, temp.size());
     qApp->processEvents();                                                          //Zapewnia wyświetlanie obrazu w stanie zamulenia
 }
 
@@ -98,16 +98,19 @@ void KWZoomer::SetZoom(float newZoom)
         return;
 
     currZoom = newZoom;
-    sendZoom();
+    sendZoom(true);
+    touched = true;
 }
 
 void KWZoomer::ZoomIn()
 {
     SetZoom(floor(currZoom*(1/DELTA_ZOOM)+DELTA_ZOOM)*DELTA_ZOOM+DELTA_ZOOM);
+    touched = true;
 }
 
 void KWZoomer::ZoomOut()
 {
     SetZoom(ceil(currZoom*(1/DELTA_ZOOM)-DELTA_ZOOM)*DELTA_ZOOM-DELTA_ZOOM);
+    touched = true;
 }
 

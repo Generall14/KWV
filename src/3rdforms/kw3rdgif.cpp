@@ -7,8 +7,8 @@
 #include <QLine>
 #include <QSpacerItem>
 
-KW3rdGif::KW3rdGif(KWGraphicsView* gg):
-    QDialog(gg),
+KW3rdGif::KW3rdGif(KWPlayer *gg, QWidget *parent):
+    QDialog(parent),
     GV(gg)
 {
     InitWidgets();                                                                  //Tworzenie widgetów
@@ -31,6 +31,9 @@ void KW3rdGif::InitWidgets()
     cycCheck = new QCheckBox(tr("Odtwarzanie cykliczne / kołowe"), this);           //Zmiana trybu odtwarzania
     mainLay->addWidget(cycCheck);
 
+    revCheck = new QCheckBox(tr("Odwrotny kierunek odtwarzania"), this);
+    mainLay->addWidget(revCheck);
+
     //Prędkość odtwarzania
     QVBoxLayout* speedLay = new QVBoxLayout();
     mainLay->addLayout(speedLay);
@@ -50,8 +53,8 @@ void KW3rdGif::InitWidgets()
 
     speedSlider = new QSlider(Qt::Horizontal, this);                                //Zmiana prędkości odtwarzania
     speedSlider->setInvertedAppearance(false);
-    speedSlider->setMinimum(1);//<REF>
-    speedSlider->setMaximum(500);//<REF>
+    speedSlider->setMinimum(GV->FASTEST_GIF);
+    speedSlider->setMaximum(GV->SLOWEST_GIF);
     speedSliderLay->addWidget(speedSlider);
 
     speedLabel = new QLabel("- ms", this);                                          //Wyświetlanie prędkości odtwarzania
@@ -84,30 +87,32 @@ void KW3rdGif::InitWidgets()
 
 void KW3rdGif::InitConnections()
 {
-    connect(speedSlider, SIGNAL(valueChanged(int)), GV, SLOT(GifSetSpeed(int)));    //Zmiana prędkości
+    connect(speedSlider, SIGNAL(valueChanged(int)), GV, SLOT(setDelay(int)));       //Zmiana prędkości
     connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(SpeedLabel(int)));
 
-    connect(cycCheck, SIGNAL(toggled(bool)), GV, SLOT(GifSetTryb(bool)));           //Zmiana trybu
+    connect(cycCheck, SIGNAL(toggled(bool)), GV, SLOT(setCyclic(bool)));            //Zmiana trybu
+    connect(revCheck, SIGNAL(toggled(bool)), GV, SLOT(setReverse(bool)));
 
     connect(speedButtonDef, SIGNAL(clicked(bool)), this, SLOT(SpeedDef()));         //Domyslna prędkość
 
-    connect(sterPlay, SIGNAL(clicked(bool)), GV, SLOT(GifPlayPause()));             //Sterowanie odtwarzaniem
-    connect(sterBack, SIGNAL(clicked(bool)), GV, SLOT(GifBack()));
-    connect(sterNext, SIGNAL(clicked(bool)), GV, SLOT(GifNext()));
+    connect(sterPlay, SIGNAL(clicked(bool)), GV, SLOT(PlayPause()));                //Sterowanie odtwarzaniem
+    connect(sterBack, SIGNAL(clicked(bool)), GV, SLOT(PrevFrame()));
+    connect(sterNext, SIGNAL(clicked(bool)), GV, SLOT(NextFrame()));
 
-    connect(GV, SIGNAL(Nowy()), this, SLOT(Update()));                              //Nowy obraz
+    connect(GV, SIGNAL(LoadedNewPic()), this, SLOT(Update()));                      //Nowy obraz
 }
 
 void KW3rdGif::SpeedDef()
 {
-    speedSlider->setValue(100);//<REF>
+    speedSlider->setValue(GV->RestoreDefaultFrameDelay());
 }
 
 void KW3rdGif::Update()
 {
-//    speedSlider->setValue(GV->DefDelay());
-//    cycCheck->setChecked(GV->GifTryb());
-//    this->setEnabled(GV->Animacja());
+    speedSlider->setValue(GV->getFrameDelay());
+    cycCheck->setChecked(GV->getCyclic());
+    revCheck->setChecked(GV->getReverse());
+    this->setEnabled(GV->isGif());
 }
 
 void KW3rdGif::SpeedLabel(int s)

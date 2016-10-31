@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QPixmap>
 #include <QGraphicsScene>
+#include <QSize>
 
 class KWZoomer : public QObject
 {
@@ -33,8 +34,8 @@ public:
         limHeight
     };
 
-    void SetDefaultMode(defTypes newType, int newWidth=-1, int newHeight=-1);                                               //Ustawia domyślny trub powiększenia
-    void SetLimits(int newWidth, int newHeight);                                                                            //Ustawia nowe limity startowe obrazu
+    void SetDefaultMode(defTypes newType, QSize newLimit=QSize(-1,-1));                                                     //Ustawia domyślny trub powiększenia
+
 
 public slots:
     void NewPic(QPixmap* newPic, bool resetZoom=true);                                                                      //Ustawia nowy obraz oraz resetuje powiększenie
@@ -44,8 +45,10 @@ public slots:
     void ZoomIn();                                                                                                          //Powiększenie o jeden krok
     void ZoomOut();                                                                                                         //Pomniejszenie o jeden krok
 
+    void SetLimits(QSize newLimit);                                                                                         //Ustawia nowe limity startowe obrazu
+
 signals:
-    void ReZoomed(int newZoom);                                                                                             //Sygnał zmiany powiększenia
+    void ReZoomed(int newZoom, QSize newSize);                                                                              //Sygnał zmiany powiększenia
 
 private:
     QGraphicsScene* gView;                                                                                                  //Wskaźnik na wyświetlacz
@@ -53,12 +56,13 @@ private:
     QPixmap* lastPic;                                                                                                       //Wskaźnik na ostatnio używany obraz
     float currZoom;                                                                                                         //Aktualne powiększenie
     defTypes defMode;                                                                                                       //Domyślny tryb powiększania
-    int limitWidth;                                                                                                         //Początkowy limit szerokości obrazu
-    int limitHeight;                                                                                                        //Początkowy limit wysokoście obrazu
+    QSize startLimit;                                                                                                       //Początkowy limit rozmiaru obrazu
 
     Qt::TransformationMode tranMode;                                                                                        //Metoda skalowania
 
-    void sendZoom();                                                                                                        //Wysyła przeskalowany obraz
+    void sendZoom(bool sendSig=false);                                                                                      //Wysyła przeskalowany obraz
+
+    bool touched;                                                                                                           //flaga określa czy rozmiar był zmieniany przez użytkownika
 };
 
 #endif // KWZOOMER_H

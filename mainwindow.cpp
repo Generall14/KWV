@@ -123,7 +123,6 @@ void MainWindow::InitConnections()
     connect(wyswietlacz, SIGNAL(Back()), motor, SLOT(Back()));
     connect(wyswietlacz, SIGNAL(ToggleFullscreen()), this, SLOT(ToggleFullscreen()));
 
-
     //connect(motor, SIGNAL(Rozdzielczosc(int,int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int,int)));  //Sygnały po otworzeniu nowego pliku
     //connect(motor, SIGNAL(Rozmiar(int)), pasekDolny, SLOT(UstawRozmiar(int)));
     //connect(motor, SIGNAL(Licznik(int,int)), pasekDolny, SLOT(UstawLicznik(int,int)));
@@ -148,9 +147,12 @@ void MainWindow::InitConnections()
 
     connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), playerObj, SLOT(NewPic(const KWPicInfo*)));
     connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), this, SLOT(TitleBar(const KWPicInfo*)));
-    connect(zoomerObj, SIGNAL(ReZoomed(int)), pasekDolny, SLOT(UstawZoom(int)));
+//    connect(zoomerObj, SIGNAL(ReZoomed(int)), pasekDolny, SLOT(UstawZoom(int)));
+    connect(zoomerObj, SIGNAL(ReZoomed(int,QSize)), pasekDolny, SLOT(UstawZoom(int)));
+    connect(zoomerObj, SIGNAL(ReZoomed(int,QSize)), windowZoomerObj, SLOT(PicReZoomed(int,QSize)));
     connect(wyswietlacz, SIGNAL(ZoomInReq()), zoomerObj, SLOT(ZoomIn()));
     connect(wyswietlacz, SIGNAL(ZoomOutReq()), zoomerObj, SLOT(ZoomOut()));
+    connect(windowZoomerObj, SIGNAL(setMaximumPicSize(QSize)), zoomerObj, SLOT(SetLimits(QSize)));
 }
 
 void MainWindow::InitShortcuts()
@@ -382,7 +384,7 @@ void MainWindow::Otworz()
 
 void MainWindow::Reopen()
 {
-    motor->Otworz(picObj->GetPicInfo()->fileInfo.filePath());
+    motor->Otworz(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
 }
 
 void MainWindow::Error(QString er)
@@ -395,7 +397,7 @@ void MainWindow::Error(QString er)
 void MainWindow::GifManager()
 {
     if(!okno)
-        okno = new KW3rdGif(wyswietlacz);
+        okno = new KW3rdGif(playerObj, wyswietlacz);
     okno->show();
 }
 
@@ -429,11 +431,11 @@ void MainWindow::OpenRec(int i)
 void MainWindow::Rename()
 {
     bool ok;
-    QString oldName = picObj->GetPicInfo()->fileInfo.filePath();
+    QString oldName = picObj->GetPicInfo()->fileInfo.absoluteFilePath();
     QFile plik(oldName);                                                            //Obiekt pliku
     QFileInfo fi(plik);
 
-    QString newName = QInputDialog::getText(this, tr("Zmiana nazwy"), tr("Podaj nową nazwę"), QLineEdit::Normal, fi.baseName(), &ok);
+    QString newName = fi.absolutePath()+QDir::separator()+QInputDialog::getText(this, tr("Zmiana nazwy"), tr("Podaj nową nazwę"), QLineEdit::Normal, fi.baseName(), &ok);
     if (ok && !newName.isEmpty())
     {
         if(!newName.endsWith("."+fi.suffix()))
@@ -537,21 +539,24 @@ void MainWindow::Usun()
     if(msgBox.exec() == QMessageBox::No)                                            //Anuluj -> wyjście
         return;
 
-    QFile plik(picObj->GetPicInfo()->fileInfo.filePath());                          //Usuwanie pliku
-    plik.remove();
+    QFile plik(picObj->GetPicInfo()->fileInfo.absoluteFilePath());                  //Usuwanie pliku
+    if(!plik.remove())
+        QMessageBox::information(this, tr("Błąd usuwania"), tr("Nie udało sie usunąć pliku")+picObj->GetPicInfo()->fileInfo.absoluteFilePath()+".");
 
     if(motor->DlugoscListy()>1)                                                     //Jeżeli na liście były inne pliki
     {
         motor->Next();                                                              //Otwórz kolejny obraz
-//        motor->Otworz(motor->Adres());
+        motor->Otworz(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
     }
+    else
+        motor->Clear();
 }
 
 void MainWindow::Kopiuj()
 {
     if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku do skopiowania
         return;
-    QFile startPlik(picObj->GetPicInfo()->fileInfo.filePath());
+    QFile startPlik(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
 
     QString startString = lastCopyDir+"/"+startPlik.fileName();                     //Początkowy adres
     QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
@@ -571,7 +576,7 @@ void MainWindow::Przenies()
 {
     if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku
         return;
-    QFile startPlik(picObj->GetPicInfo()->fileInfo.filePath());
+    QFile startPlik(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
 
     QString startString = lastMoveDir+"/"+startPlik.fileName();                     //Początkowy adres
     QString suffixes = "Pliki " + QFileInfo(startPlik).suffix() + " (*." + QFileInfo(startPlik).suffix() + ")";
@@ -601,13 +606,23 @@ void MainWindow::Przenies()
 
         QMessageBox::information(this, tr("Błąd przenoszenia"), tr("Nie można przenieść pliku ")+startPlik.fileName()+".");
     }
+    else
+    {
+        if(motor->DlugoscListy()>1)                                                     //Jeżeli na liście były inne pliki
+        {
+            motor->Next();                                                              //Otwórz kolejny obraz
+            motor->Otworz(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
+        }
+        else
+            motor->Clear();
+    }
 }
 
 void MainWindow::NoweOkno()
 {
     QStringList arguments;
     if(picObj->GetPicInfo()->fileInfo.isFile())
-        arguments << picObj->GetPicInfo()->fileInfo.filePath();                     //Tworzenie argumentów programu
+        arguments << picObj->GetPicInfo()->fileInfo.absoluteFilePath();                     //Tworzenie argumentów programu
 
     if(testRun)
         arguments << "--test";
