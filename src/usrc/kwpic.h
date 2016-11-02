@@ -7,7 +7,7 @@
  *
  * Przechowuje obrazy w wektorze KWPic::gifVec (obraz lub klatki animacji), zwraca obrazy poprzez funkcję KWPic::GetFrame.
  *
- * Zlecenie otwarcia pliku odbywa się poprzez funkcje KWPic::LoadFile, po zakończeniu operacji jest wysyłany sygnał KWPic::Done lub KWPic::Error w zależności od wyniku.<REF>
+ * Zlecenie otwarcia pliku odbywa się poprzez funkcje KWPic::LoadFile, po zakończeniu operacji jest wysyłany sygnał KWPic::Done lub KWPic::Error w zależności od wyniku.
  */
 
 #include <QObject>

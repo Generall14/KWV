@@ -13,10 +13,10 @@
 
 struct about
 {
-    QString wersja = "v0.11.10r";
-    QString data = "2016.10.31";
+    QString wersja = "v0.12.00";
+    QString data = "2016.11.02";
     QString autor = "Kogut Wojciech";
-    QString stan = "Prymitywnie kompletny, próby poważnej refaktoryzacji.";
+    QString stan = "Prymitywnie kompletny.";
 };
 
 #endif // HPLIK

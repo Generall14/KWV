@@ -43,9 +43,9 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static const int minSzerokosc = 600;                                                                                    //Minimalna szerokość okna
-    static const int minWysokosc = 700;                                                                                     //Maksymalna wysokość okna
-    static const int maxRecentFiles = 8;                                                                                    //Liczba pamiętanych plików
+    static const int MIN_SZEROKOSC = 600;                                                                                   //Minimalna szerokość okna
+    static const int MIN_WYSOKOSC = 700;                                                                                    //Minimalna wysokość okna
+    static const int MAX_RECENT_FILES = 8;                                                                                  //Liczba pamiętanych plików
 
     QString startOpen;                                                                                                      //Adres obrazu podanego jako argument
 
@@ -88,7 +88,7 @@ private:
 
     virtual void keyPressEvent(QKeyEvent *event);                                                                           //Wciśnięcie klawisza klawiatury
 
-    void Benchmark();                                                                                                       //Testy prędkości<REF>
+    void Benchmark();                                                                                                       //Testy prędkości
 
     void LoadRecentFIles();                                                                                                 //Otwiera listę ostatnich plików z pliku
     void SaveRecentFIles();                                                                                                 //Zapisuje listę ostatnich plików z pliku
@@ -113,7 +113,7 @@ public slots:
     void Error(QString er);                                                                                                 //Wyświetlenie błędu
 
     void GifManager();                                                                                                      //Wyświetla okno menedżera animacji
-    void FileInfo();                                                                                                        //Wyświetla informacje o obrazie<REF>
+    void FileInfo();                                                                                                        //Wyświetla informacje o obrazie
 
     void AddToRec(QString rec);                                                                                             //Dodaj plik do listy ostatnio otwieranych
     void OpenRec(int i);                                                                                                    //Otwiera plik z listy recentFiles
@@ -127,7 +127,7 @@ private slots:
 
     void HideCursor();                                                                                                      //Ukrywa kursor
 
-    virtual bool event(QEvent* event);                                                                                      //Obsługa eventów<REF>
+//    virtual bool event(QEvent* event);                                                                                      //Obsługa eventów
 };
 
 #endif // MAINWINDOW_H

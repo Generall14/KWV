@@ -75,109 +75,14 @@ void KWMotor::Otworz(QString adres) throw(QString)
     lastRequestPath = adres;
     lastRequestNumber = -1;
     emit LoadRequest(adres, 0);
-//    if(OtworzPlik(adres))                                                           //Otwieranie pliku
-//        return;
-
-//    Sygnaly();                                                                      //Rozsyłanie sygnałów
 }
-
-//bool KWMotor::OtworzPlik(QString adr)
-//{
-//    czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu
-//    if(adr.split('.').last()=="gif")                                                //Odczytywanie rozszerzenia
-//    {
-//        if(OtworzGif(adr))                                                          //Jeżeli plik ma rozszerzenie *.gif
-//            return 666;
-//    }
-//    else
-//    {
-//        if(OtworzImg(adr))                                                          //Dla pozostałych plików
-//            return 666;
-//    }
-//    czas_end = std::chrono::steady_clock::now();                                    //Pomiar czasu
-//    return 0;
-//}
-
-//bool KWMotor::OtworzGif(QString adr)
-//{
-//    QMovie* mv = new QMovie(adr);                                                   //Otwieranie pliku gif za pomocą QMovie
-
-//    if(mv->isValid())                                                               //Poprawny obiekt?
-//    {
-//        gifVec.clear();                                                             //Czyszczenie wektora
-//        for(int i=0;i<mv->frameCount();++i)                                         //Zapisywanie klatek do wektora
-//        {
-//            mv->jumpToFrame(i);
-//            gifVec.push_back(mv->currentPixmap());
-//        }
-//        delete mv;                                                                  //Niszczenie obiektu QMovie
-//        int tv= mv->nextFrameDelay();                                               //Odczytywanie czasu klatki
-//        if(tv>0)
-//        {
-//            GV->Wyswietl(gifVec, tv);                                               //Wyświetlanie animacji
-//            return 0;
-//        }
-//        else return 666;
-//    }
-//    GV->Wyswietl(gifVec);
-//    emit Error("Nie można otworzyć pliku " + adr + ".");                            //Zgłoszenie błędu
-//    emit FileOff();
-//    delete mv;
-//    return 666;
-//}
-
-//bool KWMotor::OtworzImg(QString adr)
-//{
-//    gifVec.clear();                                                                 //Czyszczenie wektora
-//    gifVec.push_back(QPixmap(adr));                                                 //Odczytywanie obrazu
-//    if(gifVec.at(0).isNull())                                                       //Sprawdzanie poprawności
-//    {
-//        GV->Wyswietl(gifVec);
-//        emit Error("Nie można otworzyć pliku " + adr + ".");                        //Zgłaszanie błędu
-//        emit FileOff();
-//        return 666;
-//    }
-//    GV->Wyswietl(gifVec);                                                           //Wyświetlanie obrazu
-//    return 0;
-//}
 
 void KWMotor::Clear()
 {
-//    gifVec.clear();                                                                 //Czyszczenie danych
-//    gifVec.push_back(QPixmap());
-//    pliki.clear();
-//    plik.setFile("");
-
-//    GV->Wyswietl(gifVec);                                                           //Wyświetlanie nicości
-
-    //emit Rozdzielczosc(0, 0, 0, 0);                                                 //Sygnały
-    //emit Licznik(0, 0);
-    //emit Data(QDateTime());
-    //emit Rozmiar(0);
-    //emit Plik("-");
-//    emit FileOff();
     lastRequestPath.clear();
     lastRequestNumber = -1;
     emit ClearRequest(0);
 }
-
-//void KWMotor::Otworz()
-//{
-//    QString adres = QFileDialog::getOpenFileName(0, tr("Otwórz plik"), "", filtr);  //Wyświetlanie okna wybierania pliku
-//    if(!adres.isEmpty())
-//        this->Otworz(adres);
-//    emit NewOpened(adres);
-//}
-
-//void KWMotor::Sygnaly()
-//{
-//    //emit Rozdzielczosc(gifVec.at(0).width(), gifVec.at(0).height(), gifVec.length()>1?gifVec.length():0, gifVec.at(0).defaultDepth());//Zmiana rozdzielczości
-//    //emit Licznik(aktualny+1, pliki.length());                                       //Zmiana listy plików
-//    //emit Data(plik.created());                                                      //Zmiana daty
-//    //emit Rozmiar(plik.size()/1024);                                                 //Zmiana rozmiaru
-//    //emit Plik(plik.fileName());                                                     //ZMiana nazwy pliku
-//    emit FileOn();
-//}
 
 void KWMotor::Next()
 {
@@ -230,44 +135,10 @@ void KWMotor::RandImg()
     this->Otworz((aktualny+qrand())%pliki.length());
 }
 
-//QString KWMotor::Adres()
-//{
-//    if(plik.exists())
-//        return plik.filePath();
-//    return QString();
-//}
-
-//bool KWMotor::isOpened()
-//{
-//    return plik.exists();
-//}
-
 int KWMotor::DlugoscListy()
 {
     return pliki.length();
 }
-
-//QFileInfo KWMotor::fileInfo() const
-//{
-//    return plik;
-//}
-
-//QPixmap KWMotor::fileSample() const
-//{
-//    if(!gifVec.isEmpty())
-//        return gifVec.at(0);
-//    return QPixmap();
-//}
-
-//int KWMotor::fileFrames() const
-//{
-//    return gifVec.length();
-//}
-
-//long KWMotor::getTimeUs()
-//{
-//    return std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-//}
 
 QString KWMotor::Filters()
 {
@@ -276,8 +147,6 @@ QString KWMotor::Filters()
 
 void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
 {
-//    qDebug() << "KWMotor: PicDone slot";
-
     if(lastRequestNumber>=0)
     {
         aktualny = lastRequestNumber;

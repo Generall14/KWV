@@ -75,6 +75,7 @@ void KWZoomer::NewPic(QPixmap* newPic, bool resetZoom)
 
 void KWZoomer::sendZoom(bool sendSig)
 {
+    czas_start = std::chrono::steady_clock::now();
     gView->clear();
 
     if(lastPic==NULL)
@@ -89,6 +90,7 @@ void KWZoomer::sendZoom(bool sendSig)
     gView->setSceneRect(temp.rect());
     if(sendSig)
         emit ReZoomed(currZoom*100, temp.size());
+    czas_end = std::chrono::steady_clock::now();
     qApp->processEvents();                                                          //Zapewnia wyświetlanie obrazu w stanie zamulenia
 }
 
@@ -112,5 +114,15 @@ void KWZoomer::ZoomOut()
 {
     SetZoom(ceil(currZoom*(1/DELTA_ZOOM)-DELTA_ZOOM)*DELTA_ZOOM-DELTA_ZOOM);
     touched = true;
+}
+
+int KWZoomer::getLastWorkDurationUs() const
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+}
+
+float KWZoomer::getCurrentZoom() const
+{
+    return currZoom;
 }
 

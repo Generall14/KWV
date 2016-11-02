@@ -74,3 +74,18 @@ void KWWindowZoomer::PicReZoomed(int, QSize newSize)
 
     MWw->setGeometry(QRect(zeroPoint, newSize));
 }
+
+QSize KWWindowZoomer::getMaxPicSize() const
+{
+    return maxPicSize;
+}
+
+QSize KWWindowZoomer::getMaxPicSizeMaximized() const
+{
+    return maxPicSizeMaximized;
+}
+
+QSize KWWindowZoomer::getMaxPicSizeFullscreen() const
+{
+    return fullResolution;
+}

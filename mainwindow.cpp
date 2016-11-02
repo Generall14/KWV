@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->setGeometry(0, 0, 100, 100);                                              //Ustawianie w początkowej pozycji (górna lewa strona ekranu)
 
-    setMinimumSize(QSize(minSzerokosc, minWysokosc));                               //Ustawianie minimalnego rozmiaru okna
+    setMinimumSize(QSize(MIN_SZEROKOSC, MIN_WYSOKOSC));                             //Ustawianie minimalnego rozmiaru okna
 
     QStringList lista =  qApp->arguments();                                         //Pobieranie listy argumentów
     for(int i=0;i<lista.length();++i)                                               //Przeszukiwanie argumentów
@@ -118,22 +118,18 @@ void MainWindow::InitConnections()
 
     connect(invisibleCloser, SIGNAL(clicked(bool)), this, SLOT(resetFullscreen()));                             //Zamykanie trybu pełnoekranowego
 
-    //connect(wyswietlacz, SIGNAL(Zoomed(int)), pasekDolny, SLOT(UstawZoom(int)));                                //Sygnały z wyświetlacza
     connect(wyswietlacz, SIGNAL(Next()), motor, SLOT(Next()));
     connect(wyswietlacz, SIGNAL(Back()), motor, SLOT(Back()));
     connect(wyswietlacz, SIGNAL(ToggleFullscreen()), this, SLOT(ToggleFullscreen()));
+    connect(wyswietlacz, SIGNAL(ZoomInReq()), zoomerObj, SLOT(ZoomIn()));
+    connect(wyswietlacz, SIGNAL(ZoomOutReq()), zoomerObj, SLOT(ZoomOut()));
 
-    //connect(motor, SIGNAL(Rozdzielczosc(int,int,int,int)), pasekDolny, SLOT(UstawRozdzielczosc(int,int,int,int)));  //Sygnały po otworzeniu nowego pliku
-    //connect(motor, SIGNAL(Rozmiar(int)), pasekDolny, SLOT(UstawRozmiar(int)));
-    //connect(motor, SIGNAL(Licznik(int,int)), pasekDolny, SLOT(UstawLicznik(int,int)));
-    //connect(motor, SIGNAL(Data(QDateTime)), pasekDolny, SLOT(UstawDate(QDateTime)));
-//    connect(motor, SIGNAL(Plik(QString)), this, SLOT(TitleBar(QString)));
-    //connect(motor, SIGNAL(Plik(QString)), pasekDolny, SLOT(UstawPlik(QString)));
     connect(motor, SIGNAL(Error(QString)), this, SLOT(Error(QString)));
-    //connect(motor, SIGNAL(NewOpened(QString)), this, SLOT(AddToRec(QString)));
     connect(motor, SIGNAL(FileOn()), menu, SLOT(FileOn()));
     connect(motor, SIGNAL(FileOff()), menu, SLOT(FileOff()));
     connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), pasekDolny, SLOT(SetNewData(const KWPicInfo*,int,int)));
+    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), playerObj, SLOT(NewPic(const KWPicInfo*)));
+    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), this, SLOT(TitleBar(const KWPicInfo*)));
 
     connect(menu, SIGNAL(About()), this, SLOT(About()));                                                        //Połączenia z menu
     connect(menu, SIGNAL(Otworz()), this, SLOT(Otworz()));
@@ -145,13 +141,9 @@ void MainWindow::InitConnections()
     connect(pasekDolny, SIGNAL(Back()), motor, SLOT(Back()));
     connect(pasekDolny, SIGNAL(Next()), motor, SLOT(Next()));
 
-    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), playerObj, SLOT(NewPic(const KWPicInfo*)));
-    connect(motor, SIGNAL(NewLoaded(const KWPicInfo*,int,int)), this, SLOT(TitleBar(const KWPicInfo*)));
-//    connect(zoomerObj, SIGNAL(ReZoomed(int)), pasekDolny, SLOT(UstawZoom(int)));
     connect(zoomerObj, SIGNAL(ReZoomed(int,QSize)), pasekDolny, SLOT(UstawZoom(int)));
     connect(zoomerObj, SIGNAL(ReZoomed(int,QSize)), windowZoomerObj, SLOT(PicReZoomed(int,QSize)));
-    connect(wyswietlacz, SIGNAL(ZoomInReq()), zoomerObj, SLOT(ZoomIn()));
-    connect(wyswietlacz, SIGNAL(ZoomOutReq()), zoomerObj, SLOT(ZoomOut()));
+
     connect(windowZoomerObj, SIGNAL(setMaximumPicSize(QSize)), zoomerObj, SLOT(SetLimits(QSize)));
 }
 
@@ -232,43 +224,31 @@ void MainWindow::About()
 
 void MainWindow::publicTest()
 {
-//    std::chrono::steady_clock::time_point czas_start, czas_end;
-//    //ToggleFullscreen();
-//    //GifManager();
-//    czas_start = std::chrono::steady_clock::now();                                  //Pomiar czasu
-//    motor->Next();
-//    czas_end = std::chrono::steady_clock::now();                                  //Pomiar czasu
-//    long open = motor->getTimeUs();
-//    long show = wyswietlacz->getTimeUs();
-//    long total = std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-//    long narzut = total - show - open;
-//    qDebug() << "total: " << total << ", open: " << open << ", show: " << show << ", narzut: " << narzut;
     Benchmark();
 }
 
 void MainWindow::Benchmark()
 {
-//    long long total=0, open=0, show=0, zoom=0;
-//    std::chrono::steady_clock::time_point czas_start, czas_end;
-//    motor->Otworz("bench/imga.jpg");
+    long long total=0, open=0, show=0, zoom=0;
+    std::chrono::steady_clock::time_point czas_start, czas_end;
+    motor->Otworz("bench/imga.jpg");
 
-//    for(int i=0;i<43;i++)
-//    {
-//        czas_start = std::chrono::steady_clock::now();
-//        motor->Next();
-//        czas_end = std::chrono::steady_clock::now();
-//        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-//        open += motor->getTimeUs();
-//        show += wyswietlacz->getTimeUs();
+    for(int i=0;i<43;i++)
+    {
+        czas_start = std::chrono::steady_clock::now();
+        motor->Next();
+        czas_end = std::chrono::steady_clock::now();
+        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
+        open += picObj->GetPicInfo()->loadTimeUs;
 
-//        wyswietlacz->SetZoom(1.95);
-//        zoom += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-//        total += std::chrono::duration_cast<std::chrono::microseconds>(czas_end - czas_start).count();
-//    }
-//    printf("Wyniki pomiaru:\nCałkowity czas: %d ms\n", (int)(total/1000));
-//    printf("Czas otwierania:: %d ms\n", (int)(open/1000));
-//    printf("Czas wyświetlania:: %d ms\n", (int)(show/1000));
-//    printf("Czas skalowania:: %d ms\n", (int)(zoom/1000));
+        zoomerObj->SetZoom(1.95);
+        zoom += zoomerObj->getLastWorkDurationUs();
+        total += zoomerObj->getLastWorkDurationUs();
+    }
+    printf("Wyniki pomiaru:\nCałkowity czas: %d ms\n", (int)(total/1000));
+    printf("Czas otwierania:: %d ms\n", (int)(open/1000));
+    printf("Czas wyświetlania:: %d ms\n", (int)(show/1000));
+    printf("Czas skalowania:: %d ms\n", (int)(zoom/1000));
 }
 
 void MainWindow::ToggleFullscreen()
@@ -302,8 +282,6 @@ void MainWindow::setFullsscreen()
         rep[i]->setEnabled(true);
 
     cursorTimer->start();                                                           //Uruchamianie timera
-
-    //wyswietlacz->ResetZoom();
 }
 
 void MainWindow::resetFullscreen()
@@ -332,8 +310,6 @@ void MainWindow::resetFullscreen()
 
     cursorTimer->stop();                                                            //Zatrzymywanie timera
     QApplication::restoreOverrideCursor();                                          //Przywracanie kursora
-
-    //wyswietlacz->ResetZoom();
 }
 
 void MainWindow::HideCursor()
@@ -357,14 +333,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         QMainWindow::keyPressEvent(event);                                          //Przekazanie nieprzechwyconych eventów
 }
 
-bool MainWindow::event(QEvent* event)
-{
-    if(event->type()==QEvent::WindowStateChange)                                    //Zmiana stanu okna
-        QMainWindow::event(event);            //wyswietlacz->Odswiez();
-    else
-        QMainWindow::event(event);                                                  //Przekazanie nieprzechwyconych eventów
-    return 0;
-}
+//bool MainWindow::event(QEvent* event)
+//{
+//    if(event->type()==QEvent::WindowStateChange)                                    //Zmiana stanu okna
+//        QMainWindow::event(event);            //wyswietlacz->Odswiez();
+//    else
+//        QMainWindow::event(event);                                                  //Przekazanie nieprzechwyconych eventów
+//    return 0;
+//}
 
 void MainWindow::Otworz(QString adres)
 {
@@ -405,10 +381,7 @@ void MainWindow::FileInfo()
 {
     if(!fileInfo)
         fileInfo = new KW3rdFileInfo(this);
-//    if(motor->isOpened())
-        fileInfo->GenInfo(picObj->GetPicInfo());
-//    else
-//        fileInfo->GenInfo(QFileInfo(), QPixmap(), 0, 0);
+    fileInfo->GenInfo(picObj->GetPicInfo());
     fileInfo->show();
 }
 
@@ -416,7 +389,7 @@ void MainWindow::AddToRec(QString rec)
 {
     if(!rec.isEmpty())
         recentFiles.push_back(rec);                                                 //Dodawanie adresu
-    while(recentFiles.length()>maxRecentFiles)
+    while(recentFiles.length()>MAX_RECENT_FILES)
         recentFiles.removeFirst();                                                  //Usuwanie najstarszych elementów po przekroczeniu limitu
 
     menu->UpdateRecent(recentFiles);                                                //Uaktualnianie menu

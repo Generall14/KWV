@@ -24,6 +24,10 @@ public slots:
 
     void PicReZoomed(int, QSize newSize);
 
+    QSize getMaxPicSize() const;
+    QSize getMaxPicSizeMaximized() const;
+    QSize getMaxPicSizeFullscreen() const;
+
 signals:
     void setMaximumPicSize(QSize size);
 

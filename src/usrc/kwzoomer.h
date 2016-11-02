@@ -15,6 +15,7 @@
 #include <QPixmap>
 #include <QGraphicsScene>
 #include <QSize>
+#include <chrono>
 
 class KWZoomer : public QObject
 {
@@ -35,7 +36,8 @@ public:
     };
 
     void SetDefaultMode(defTypes newType, QSize newLimit=QSize(-1,-1));                                                     //Ustawia domyślny trub powiększenia
-
+    int getLastWorkDurationUs() const;                                                                                      //Zwraca czas wykonania ostatniego zadania
+    float getCurrentZoom() const;
 
 public slots:
     void NewPic(QPixmap* newPic, bool resetZoom=true);                                                                      //Ustawia nowy obraz oraz resetuje powiększenie
@@ -57,6 +59,8 @@ private:
     float currZoom;                                                                                                         //Aktualne powiększenie
     defTypes defMode;                                                                                                       //Domyślny tryb powiększania
     QSize startLimit;                                                                                                       //Początkowy limit rozmiaru obrazu
+
+    std::chrono::steady_clock::time_point czas_start, czas_end;                                                             //Pomiar czasu
 
     Qt::TransformationMode tranMode;                                                                                        //Metoda skalowania
 

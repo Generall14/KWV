@@ -122,43 +122,6 @@ void KWStatusBar::UstawZoom(int z)
     zoomF->setText(QString::number(z)+"%");
 }
 
-//void KWStatusBar::UstawRozdzielczosc(int w, int h, int k, int d)
-//{
-//    QString temp = QString::number(w)+"x"+QString::number(h);                       //Podstawowy ciąg
-//    if(k)
-//        temp += " (" + QString::number(k) + "kl)";                                  //Dodawanie informacji o liczbie klatek
-//    else if(d)
-//        temp += " (" + QString::number(d) + "BPP)";                                 //Dodawanie informacji o głębi
-//    res->setText(temp);
-//}
-
-//void KWStatusBar::UstawLicznik(int c, int a)
-//{
-//    akt = c;
-//    all = a;
-//    plikia->setText(QString::number(c));
-//    plikib->setText("/"+QString::number(a));
-//    plikiF->setText(QString::number(c)+"/"+QString::number(a));
-//}
-
-//void KWStatusBar::UstawDate(QDateTime d)
-//{
-//    data->setText(d.toString("yyyy-MM-dd, H:mm:ss"));
-//}
-
-//void KWStatusBar::UstawRozmiar(int KiB)
-//{
-//    if(int(KiB/1024))                                                               //Sprawdza czy wyświetlić wartość w KiB czy konwertować na MiB
-//        rozmiar->setText(QString::number(float((float)KiB/1024.0), 'g', 2)+" MiB");
-//    else
-//        rozmiar->setText(QString::number(KiB)+" KiB");
-//}
-
-//void KWStatusBar::UstawPlik(QString pl)
-//{
-//    plikF->setText(pl);
-//}
-
 void KWStatusBar::ZmienPlik()
 {
     bool ok = false;

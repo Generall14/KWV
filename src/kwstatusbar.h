@@ -25,45 +25,38 @@ private:
     QStatusBar* pasek;                                                                                                      //Wskaźnik na pasek głównego okna
 
     //-----------------------------------------------Obiekty QLabel do wyświetlania tekstu----------------------------------
-    QLabel* zoom;                                                                                                           //Powiększenie<REF>
-    QLabel* res;                                                                                                            //Rozdzielczość<REF>
-    MyQLineEdit* plikia;                                                                                                      //Aktualny plik<REF>
-    QLabel* plikib;                                                                                                         //Liczba plików<REF>
-    QLabel* data;                                                                                                           //Data modyfikacji<REF>
-    QLabel* rozmiar;                                                                                                        //Rozmiar pliku<REF>
+    QLabel* zoom;                                                                                                           //Powiększenie
+    QLabel* res;                                                                                                            //Rozdzielczość
+    MyQLineEdit* plikia;                                                                                                    //Aktualny plik
+    QLabel* plikib;                                                                                                         //Liczba plików
+    QLabel* data;                                                                                                           //Data modyfikacji
+    QLabel* rozmiar;                                                                                                        //Rozmiar pliku
 
     //-----------------------------------------------Obiekty QPushButton na pasku-------------------------------------------
-    QToolButton* resetZoom;                                                                                                 //Przycisk resetujący zoom<REF>
-    QToolButton* btnNext;                                                                                                   //Następny obraz<REF>
-    QToolButton* btnBack;                                                                                                   //Poprzedni obraz<REF>
+    QToolButton* resetZoom;                                                                                                 //Przycisk resetujący zoom
+    QToolButton* btnNext;                                                                                                   //Następny obraz
+    QToolButton* btnBack;                                                                                                   //Poprzedni obraz
 
     //-----------------------------------------------Obiekty QLabel dla trybu pełnoekranowego-------------------------------
-    QLabel* plikiF;                                                                                                         //Liczba plików w trybie fullscreen<REF>
-    QLabel* plikF;                                                                                                          //Nazwa pliku w trybie fullscreen<REF>
-    QLabel* zoomF;                                                                                                          //Powiększenie w trybie fullscreen<REF>
+    QLabel* plikiF;                                                                                                         //Liczba plików w trybie fullscreen
+    QLabel* plikF;                                                                                                          //Nazwa pliku w trybie fullscreen
+    QLabel* zoomF;                                                                                                          //Powiększenie w trybie fullscreen
 
-    int akt=0;                                                                                                              //Aktualny plik<REF>
-    int all=0;                                                                                                              //Liczba plików<REF>
+    int akt=0;                                                                                                              //Aktualny plik
+    int all=0;                                                                                                              //Liczba plików
 
-    void Init();                                                                                                            //Inicjalizacja obiektu<REF>
+    void Init();                                                                                                            //Inicjalizacja obiektu
     void SetNoPicData();                                                                                                    //Zeruje informacje na pasku
 
 signals:
-    void Zmiana(int nr);                                                                                                    //Żądanie zmiany pliku<REF>
-    void ResetZoom();                                                                                                       //Oryginalny rozmiar<REF>
-    void Next();                                                                                                            //Żądanie kolejnego obrazu<REF>
-    void Back();                                                                                                            //Żądanie poprzedniego obrazu<REF>
+    void Zmiana(int nr);                                                                                                    //Żądanie zmiany pliku
+    void ResetZoom();                                                                                                       //Oryginalny rozmiar
+    void Next();                                                                                                            //Żądanie kolejnego obrazu
+    void Back();                                                                                                            //Żądanie poprzedniego obrazu
 
 public slots:
-
-    //void UstawRozdzielczosc(int w, int h, int k=0, int d=0);                                                                //Ustawia wyświetlaną rozdzielczość<REF>
-    //void UstawLicznik(int c, int a);                                                                                        //Ustawia wyświetlany licznik plików<REF>
-    //void UstawDate(QDateTime d);                                                                                            //Ustawia wyświetlaną datę<REF>
-    //void UstawRozmiar(int KiB);                                                                                             //Ustawia wyświetlany rozmiar<REF>
-    //void UstawPlik(QString pl);                                                                                             //Ustawia nazwę pliku<REF>
-
-    void fullscreenOn();                                                                                                    //Wyświetla napisy pełnoekranowe<REF>
-    void fullscreenOff();                                                                                                   //Usuwa napisy pełnoekranowe<REF>
+    void fullscreenOn();                                                                                                    //Wyświetla napisy pełnoekranowe
+    void fullscreenOff();                                                                                                   //Usuwa napisy pełnoekranowe
 
     void ZmienPlik();                                                                                                       //Zmienia plik po wpisaniu nmeru
 
