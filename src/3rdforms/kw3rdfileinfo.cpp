@@ -18,7 +18,7 @@ KW3rdFileInfo::KW3rdFileInfo(QWidget *parent):
 void KW3rdFileInfo::GenInfo(const KWPicInfo* pi)
 {
     //QFileInfo fi, QPixmap ob, int kl, int ms
-    if(pi->fileInfo.isFile())
+    if(pi->isOk)
     {
         nazwaPliku->setText(pi->fileInfo.fileName());
         katalog->setText(pi->fileInfo.dir().absolutePath());

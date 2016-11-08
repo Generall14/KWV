@@ -500,7 +500,7 @@ void MainWindow::SaveRecentPlaces()
 
 void MainWindow::Usun()
 {
-    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Jeżeli żaden obraz nie jest wczytany
+    if(!picObj->GetPicInfo()->isOk)                                    //Jeżeli żaden obraz nie jest wczytany
         return;
 
     QMessageBox msgBox(QMessageBox::Question, tr("Potwierdź"), tr("Czy jesteś pewien, że chcesz usunąć obraz ") + picObj->GetPicInfo()->fileInfo.filePath() + "?",
@@ -527,7 +527,7 @@ void MainWindow::Usun()
 
 void MainWindow::Kopiuj()
 {
-    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku do skopiowania
+    if(!picObj->GetPicInfo()->isOk)                                    //Brak pliku do skopiowania
         return;
     QFile startPlik(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
 
@@ -547,7 +547,7 @@ void MainWindow::Kopiuj()
 
 void MainWindow::Przenies()
 {
-    if(!picObj->GetPicInfo()->fileInfo.isFile())                                    //Brak pliku
+    if(!picObj->GetPicInfo()->isOk)                                    //Brak pliku
         return;
     QFile startPlik(picObj->GetPicInfo()->fileInfo.absoluteFilePath());
 
@@ -594,7 +594,7 @@ void MainWindow::Przenies()
 void MainWindow::NoweOkno()
 {
     QStringList arguments;
-    if(picObj->GetPicInfo()->fileInfo.isFile())
+    if(picObj->GetPicInfo()->isOk)
         arguments << picObj->GetPicInfo()->fileInfo.absoluteFilePath();                     //Tworzenie argumentów programu
 
     if(testRun)

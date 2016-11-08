@@ -50,10 +50,10 @@ private:
     void CalcFilesParams(QString adres);                                                                                    //Oblicza parametry plików w folderze
 
 signals:
-    void FileOn();                                                                                                          //Otwarto plik<OK>
-    void FileOff();                                                                                                         //Zamknięto plik<OK>
+    void FileOn();                                                                                                          //Otwarto plik
+    void FileOff();                                                                                                         //Zamknięto plik
 
-    void Error(QString);                                                                                                    //Zgłoszenie błędu<OK>
+    void Error(QString);                                                                                                    //Zgłoszenie błędu
 
     void LoadRequest(QString adres, int orderId);                                                                           //Żądanie odczytu (do KWPic)
     void ClearRequest(int orderId);                                                                                         //Żądanie zamknięcia pliów (do KWPic)
@@ -68,7 +68,7 @@ public slots:
     void RandImg();                                                                                                         //Otwiera losowy obraz<OK>
 
     void PicDone(const KWPicInfo *pi, int orderId);                                                                         //Odebrano potwierdzenie otwarcia pliku (z KWPic)
-    void PicError(QString errorMsg, int orderId);                                                                           //Odebrano błąd otwarcia pliku (z KWPic)
+    void PicError(const KWPicInfo *pi, QString errorMsg, int orderId);                                                                           //Odebrano błąd otwarcia pliku (z KWPic)
 };
 
 #endif // KWMOTOR_H

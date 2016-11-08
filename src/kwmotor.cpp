@@ -38,7 +38,7 @@ KWMotor::KWMotor(KWPic *kp, QObject *parent):
     connect(this, SIGNAL(LoadRequest(QString, int)), kp, SLOT(LoadFile(QString, int)));
     connect(this, SIGNAL(ClearRequest(int)), kp, SLOT(ClearData(int)));
     connect(kp, SIGNAL(Done(const KWPicInfo*, int)), this, SLOT(PicDone(const KWPicInfo*, int)));
-    connect(kp, SIGNAL(Error(QString, int)), this, SLOT(PicError(QString, int)));
+    connect(kp, SIGNAL(Error(const KWPicInfo*, QString, int)), this, SLOT(PicError(const KWPicInfo*, QString, int)));
 }
 
 void KWMotor::CalcFilesParams(QString adres)
@@ -159,7 +159,7 @@ void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
         CalcFilesParams("");
 
     emit NewLoaded(pi, aktualny+1, pliki.length());
-    if(pi->fileInfo.isFile())
+    if(pi->isOk)
     {
         emit FileOn();
     }
@@ -170,9 +170,14 @@ void KWMotor::PicDone(const KWPicInfo *pi, int orderId)
     lastRequestPath.clear();
 }
 
-void KWMotor::PicError(QString errorMsg, int orderId)
+void KWMotor::PicError(const KWPicInfo *pi, QString errorMsg, int orderId)
 {
-    qDebug() << "KWMotor: PicError slot";
+    if(lastRequestNumber>=0)
+    {
+        aktualny = lastRequestNumber;
+        emit NewLoaded(pi, aktualny+1, pliki.length());
+        emit FileOff();
+    }
     emit Error(errorMsg);
     emit FileOff();
 }

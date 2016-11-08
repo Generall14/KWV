@@ -17,6 +17,7 @@ public:
 
     QFileInfo fileInfo;                                                                                                     //Informacje o pliku
     bool isGif;                                                                                                             //Plik jest animacją
+    bool isOk;                                                                                                              //Obraz został prawidłowo otwarty
     int frames;                                                                                                             //Liczba klatek animacji
     int frameDelay;                                                                                                         //Opóźnienie klatki
     int resWidth;                                                                                                           //Szerokość obrazu

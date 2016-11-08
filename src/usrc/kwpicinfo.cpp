@@ -9,6 +9,7 @@ void KWPicInfo::Clear()
 {
     fileInfo = QFileInfo();
     isGif = false;
+    isOk = false;
     frames = -1;
     frameDelay = -1;
     resWidth = -1;

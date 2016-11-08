@@ -33,7 +33,7 @@ void KWPlayer::NewPic(const KWPicInfo *pi)
 {
     Halt();
 
-    if(!pi->fileInfo.isFile())
+    if(!pi->isOk)
     {
         emit ShowNewPic(NULL, true);
         emit LoadedNewPic();

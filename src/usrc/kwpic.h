@@ -34,7 +34,7 @@ public slots:
 
 signals:
     void Done(const KWPicInfo *pi, int orderId);                                                                            //Prawidłowe odczytanie pliku
-    void Error(QString errorMsg, int orderId);                                                                              //Błędne odczytanie pliku
+    void Error(const KWPicInfo *pi, QString errorMsg, int orderId);                                                         //Błędne odczytanie pliku
 
 private:
     QVector<QPixmap*> gifVec;                                                                                               //Obraz lub klatki animacji

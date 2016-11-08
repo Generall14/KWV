@@ -79,13 +79,16 @@ void KWGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void KWGraphicsView::keyPressEvent(QKeyEvent *event)
 {
-    if(!MWw->picObj->GetPicInfo()->fileInfo.isFile())
+    if(!MWw->picObj->GetPicInfo()->isOk)
     {
         QGraphicsView::keyPressEvent(event);                                        //Wywołanie standardowej obsługi klawiszy
         return;
     }
 
-    QSize trect = MWw->picObj->GetFrame()->size();
+    QPixmap* qpt = MWw->picObj->GetFrame();
+    QSize trect;
+    if(qpt)
+        trect = qpt->size();
     QSize max;
 
     if(MWw->isMaximized())                                                          //Dobranie odpowiedniego odniesienia
