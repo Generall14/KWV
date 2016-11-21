@@ -77,14 +77,13 @@ bool KWPic::OtworzPlik(QString adr)
 bool KWPic::OtworzImg(QString adr)
 {
     QPixmap* tpm = new QPixmap(adr);                                                //Odczytywanie obrazu
-    ClearGifVec();
+    //ClearGifVec();
 
     if(tpm->isNull())
     {
         delete tpm;
         return 666;
     }
-
 
     gifVec.push_back(tpm);
     tv = 0;
@@ -97,8 +96,9 @@ bool KWPic::OtworzGif(QString adr)
 
     if(mv->isValid())                                                               //Poprawny obiekt?
     {
-        ClearGifVec();
+        //ClearGifVec();
 
+        gifVec.reserve(mv->frameCount());
         for(int i=0;i<mv->frameCount();++i)                                         //Zapisywanie klatek do wektora
         {
             mv->jumpToFrame(i);

@@ -19,14 +19,14 @@ KWGraphicsView::KWGraphicsView(MainWindow *mw):
         scena->setBackgroundBrush(QBrush(QColor(100, 200, 150)));
     else
         scena->setBackgroundBrush(QBrush(QColor(0, 0, 0)));                         //Ustawianie tła
+
+    przeciaganie = false;
 }
 
 QGraphicsScene* KWGraphicsView::Scena()
 {
     return scena;
 }
-
-
 
 void KWGraphicsView::mousePressEvent(QMouseEvent *event)
 {
