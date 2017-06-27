@@ -5,8 +5,9 @@
 #include <QSpacerItem>
 #include <QLabel>
 #include <QDir>
-#include <algorithm>
+//#include <algorithm>
 #include <QDateTime>
+#include <cmath>
 
 KW3rdFileInfo::KW3rdFileInfo(QWidget *parent):
     QDialog(parent)

@@ -1,5 +1,5 @@
 #include "kwzoomer.h"
-#include <algorithm>
+#include <cmath>
 #include <QDebug>
 #include <QApplication>
 
