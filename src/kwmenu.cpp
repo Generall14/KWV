@@ -65,7 +65,7 @@ void KWMenu::InitMenus()
     connect(akcjaPrzeniesPlik, SIGNAL(triggered(bool)), MWw, SLOT(Przenies()));
     menuPlik->addAction(akcjaPrzeniesPlik);
 
-    akcjaUsun = new QAction(tr("&Usuń"), menuEdycja);                                       //Edycja -> Usuń
+    akcjaUsun = new QAction(tr("&Usuń"), menuPlik);                                       //Edycja -> Usuń
     connect(akcjaUsun, SIGNAL(triggered(bool)), MWw, SLOT(Usun()));
     menuPlik->addAction(akcjaUsun);
 

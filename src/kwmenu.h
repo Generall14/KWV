@@ -32,7 +32,7 @@ private:
     QAction* akcjaZamknij;
 
     QMenu* menuEdycja;
-    QAction* akcjaUsun;
+    QAction* akcjaUsun=nullptr;
     QAction* akcjaGifManager;
 
     QMenu* menuObraz;
